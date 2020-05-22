@@ -1,0 +1,8 @@
+Trello Link:::
+https://trello.com/invite/b/fJWDPE66/a87d3af2538a967085ed6c858cae13f3/p2-character-sheet-development
+
+PDF converter API link:::
+https://pdflayer.com/
+
+Login With and Share to Facebook API:::
+https://developers.facebook.com/
