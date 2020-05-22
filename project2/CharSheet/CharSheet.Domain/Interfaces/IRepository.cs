@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace CharSheet.Domain.Interfaces
 {
-    public interface IRepository<TEntity>
+    public interface IRepository<TEntity> where TEntity : class
     {
         Task<IEnumerable<TEntity>> All();
         Task<TEntity> Insert(TEntity entity);
