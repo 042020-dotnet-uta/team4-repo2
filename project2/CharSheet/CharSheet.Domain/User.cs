@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CharSheet.Domain
 {
@@ -9,10 +9,7 @@ namespace CharSheet.Domain
         [Key]
         public Guid UserId { get; set; }
 
-        public Login Login { get; set; }
-
-        public ICollection<Template> Templates { get; set; }
-
-        public ICollection<Sheet> Sheets { get; set; }
+        [ForeignKey("Login")]
+        public Guid LoginId { get; set; }
     }
 }

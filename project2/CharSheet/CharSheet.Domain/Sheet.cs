@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace CharSheet.Domain
 {
@@ -12,7 +13,6 @@ namespace CharSheet.Domain
         [ForeignKey("User")]
         public Guid UserId { get; set; }
 
-        [ForeignKey("Template")]
-        public Guid TemplateId { get; set; }
+        public ICollection<FormInputGroup> FormInputGroups { get; set; }
     }
 }
