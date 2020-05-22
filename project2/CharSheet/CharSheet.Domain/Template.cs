@@ -13,8 +13,6 @@ namespace CharSheet.Domain
         [ForeignKey("User")]
         public Guid UserId { get; set; }
 
-        public ICollection<Form> Forms { get; set; }
-
-        public ICollection<Sheet> Sheets { get; set; }
+        public ICollection<FormTemplate> FormTemplates { get; set; }
     }
 }
