@@ -99,6 +99,11 @@ namespace CharSheet.Data
         }
         #endregion
 
+        public async Task Save()
+        {
+            await _context.SaveChangesAsync();
+        }
+
         #region IDisposable
         private bool disposed = false;
 

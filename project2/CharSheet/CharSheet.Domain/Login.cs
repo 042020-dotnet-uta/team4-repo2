@@ -13,6 +13,8 @@ namespace CharSheet.Domain
         public Guid UserId { get; set; }
 
         public byte[] Salt { get; set; }
+
+        public int IterationCount { get; set; }
         
         public string Hashed { get; set; }
     }
