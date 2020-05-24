@@ -14,5 +14,10 @@ namespace CharSheet.Data.Repositories
         public SheetRepository(CharSheetContext context)
             : base(context)
         { }
+
+        public async Task<IEnumerable<FormInputGroup>> GetFormInputGroups(object id)
+        {
+            return await base._context.FormInputGroups.Where(formInputGroup => formInputGroup.SheetId == (Guid) id).ToListAsync();
+        }
     }
 }

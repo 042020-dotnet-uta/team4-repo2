@@ -1,0 +1,124 @@
+using System;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using CharSheet.Data.Repositories;
+using CharSheet.Domain.Interfaces;
+using CharSheet.Domain;
+
+namespace CharSheet.Data
+{
+    public class UnitOfWork : IDisposable
+    {
+        #region Repository Properties
+        private CharSheetContext _context;
+
+        private IFormInputGroupRepository _formInputGroupRepository;
+        public IFormInputGroupRepository FormInputGroupRepository
+        {
+            get
+            {
+                if (this._formInputGroupRepository == null)
+                {
+                    this._formInputGroupRepository = new FormInputGroupRepository(this._context);
+                }
+                return _formInputGroupRepository;
+            }
+        }
+
+        private IFormTemplateRepository _formTemplateRepository;
+        public IFormTemplateRepository FormTemplateRepository
+        {
+            get
+            {
+                if (this._formTemplateRepository == null)
+                {
+                    this._formTemplateRepository = new FormTemplateRepository(this._context);
+                }
+                return this._formTemplateRepository;
+            }
+        }
+
+        private ILoginRepository _loginRepository;
+        public ILoginRepository LoginRepository
+        {
+            get
+            {
+                if (this._loginRepository == null)
+                {
+                    this._loginRepository = new LoginRepository(this._context);
+                }
+                return this._loginRepository;
+            }
+        }
+
+        private ISheetRepository _sheetRepository;
+        public ISheetRepository SheetRepository
+        {
+            get
+            {
+                if (this._sheetRepository == null)
+                {
+                    this._sheetRepository = new SheetRepository(this._context);
+                }
+                return this._sheetRepository;
+            }
+        }
+
+        private ITemplateRepository _templateRepository;
+        public ITemplateRepository templateRepository
+        {
+            get
+            {
+                if (this._templateRepository == null)
+                {
+                    this._templateRepository = new TemplateRepository(this._context);
+                }
+                return this._templateRepository;
+            }
+        }
+
+        private IUserRepository _userRepository;
+        public IUserRepository UserRepository
+        {
+            get
+            {
+                if (this._userRepository == null)
+                {
+                    this._userRepository = new UserRepository(this._context);
+                }
+                return _userRepository;
+            }
+        }
+        #endregion
+
+        #region Constructor
+        public UnitOfWork(CharSheetContext context)
+        {
+            this._context = context;
+        }
+        #endregion
+
+        #region IDisposable
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
+    }
+}

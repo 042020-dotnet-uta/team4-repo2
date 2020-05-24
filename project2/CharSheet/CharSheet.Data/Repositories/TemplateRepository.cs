@@ -14,5 +14,10 @@ namespace CharSheet.Data.Repositories
         public TemplateRepository(CharSheetContext context)
             : base(context)
         { }
+
+        public async Task<IEnumerable<FormTemplate>> GetFormTemplates(object id)
+        {
+            return await _context.FormTemplates.Where(FormTemplate => FormTemplate.TemplateId == (Guid) id).ToListAsync();
+        }
     }
 }
