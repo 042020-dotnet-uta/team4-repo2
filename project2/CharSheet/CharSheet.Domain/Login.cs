@@ -12,8 +12,6 @@ namespace CharSheet.Domain
         [ForeignKey("User")]
         public Guid UserId { get; set; }
 
-        public string Username { get; set; }
-
         public byte[] Salt { get; set; }
         
         public string Hashed { get; set; }

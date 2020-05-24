@@ -11,5 +11,9 @@ namespace CharSheet.Domain
 
         [ForeignKey("Login")]
         public Guid LoginId { get; set; }
+
+        public string Username { get; set; }
+
+        public string Email { get; set; }
     }
 }
