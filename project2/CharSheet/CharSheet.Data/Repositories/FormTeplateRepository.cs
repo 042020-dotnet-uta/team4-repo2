@@ -22,7 +22,7 @@ namespace CharSheet.Data.Repositories
 
         public async Task<IEnumerable<FormLabel>> GetFormLabels(object id)
         {
-            return await base._context.FormLabels.Where(formLabel => formLabel.FormTemplateId == (Guid) id).ToListAsync();
+            return await base._context.FormLabels.Where(formLabel => formLabel.FormTemplateId == (Guid) id).OrderBy(formLabel => formLabel.Index).ToListAsync();
         }
     }
 }

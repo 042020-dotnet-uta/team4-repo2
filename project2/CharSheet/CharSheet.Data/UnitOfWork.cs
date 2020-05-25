@@ -66,7 +66,7 @@ namespace CharSheet.Data
         }
 
         private ITemplateRepository _templateRepository;
-        public ITemplateRepository templateRepository
+        public ITemplateRepository TemplateRepository
         {
             get
             {

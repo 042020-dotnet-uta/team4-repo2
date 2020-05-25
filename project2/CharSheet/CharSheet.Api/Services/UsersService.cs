@@ -74,6 +74,8 @@ namespace CharSheet.Api.Services
                 await _unitOfWork.UserRepository.Insert(user);
                 await _unitOfWork.Save();
 
+                _logger.LogInformation($"New User: {user.UserId} - {user.Username}.");
+
                 return new UserModel
                 {
                     UserId = user.UserId,
@@ -105,6 +107,8 @@ namespace CharSheet.Api.Services
                 // Verify hashed password matches database.
                 if (hashed == user.Login.Hashed)
                 {
+                    _logger.LogInformation($"Login: {user.UserId} - {user.Username}.");
+
                     return new UserModel
                     {
                         UserId = user.UserId,
