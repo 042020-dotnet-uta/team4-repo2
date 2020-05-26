@@ -6,8 +6,12 @@ namespace CharSheet.Api.Models
     public class FormTemplateModel
     {
         public Guid FormTemplateId { get; set; }
+
         // Form type.
         public string Type { get; set; }
+
+        // Form title.
+        public string Title { get; set; }
 
         // Positional properties.
         public int OffsetTop { get; set; }
