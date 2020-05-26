@@ -25,16 +25,42 @@ namespace CharSheet.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TemplateModel>> GetTemplate(Guid? id)
+        public async Task<ActionResult<TemplateModel>> GetTemplate(Guid? id, Guid? userId = null)
         {
             try
             {
-                return await _service.GetTemplate(id);
+                // No user id query.
+                if (userId == null)
+                    return Ok(await _service.GetTemplate(id));
+
+                // User id query.
+                var templateModels = await _service.GetTemplates(userId);
+                if (id == null)
+                    return Ok(templateModels);
+                return Ok(templateModels.Where(template => template.UserId == userId));
             }
             catch
             {
                 return NotFound();
             }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<TemplateModel>> CreateTemplate(TemplateModel templateModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    templateModel = await _service.CreateTemplate(templateModel);
+                    return CreatedAtAction(nameof(GetTemplate), new { id = templateModel.TemplateId }, templateModel);
+                }
+                catch
+                {
+                    return BadRequest();
+                }
+            }
+            return BadRequest();
         }
     }
 }

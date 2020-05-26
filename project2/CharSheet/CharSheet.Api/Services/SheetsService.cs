@@ -116,6 +116,8 @@ namespace CharSheet.Api.Services
 
             await _unitOfWork.SheetRepository.Insert(sheet);
             await _unitOfWork.Save();
+
+            _logger.LogInformation($"New Sheet: {sheet.SheetId} by {sheet.SheetId}");
             return await ToModel(sheet);
         }
         #endregion

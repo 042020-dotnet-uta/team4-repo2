@@ -13,10 +13,16 @@ namespace CharSheet.Api.Services
 {
     public partial interface IBusinessService
     {
+        #region GET
         Task<IEnumerable<TemplateModel>> GetTemplates(object id);
         Task<TemplateModel> GetTemplate(object id);
         Task<FormTemplateModel> GetFormTemplate(FormTemplate formTemplate);
         Task<FormTemplateModel> GetFormTemplate(object id);
+        #endregion
+
+        #region POST
+        Task<TemplateModel> CreateTemplate(TemplateModel templateModel);
+        #endregion
     }
 
     public partial class BusinessService : IBusinessService
@@ -26,6 +32,8 @@ namespace CharSheet.Api.Services
         {
             // Load templates from database, filter by user id.
             var templates = (await _unitOfWork.TemplateRepository.Get(template => template.UserId == (Guid)id)).Select(template => template.TemplateId);
+            if (templates.Count() == 0)
+                throw new InvalidOperationException("Templates no found.");
 
             // Templates as template models.
             var templateModels = new List<TemplateModel>();
@@ -121,6 +129,8 @@ namespace CharSheet.Api.Services
 
             await _unitOfWork.TemplateRepository.Insert(template);
             await _unitOfWork.Save();
+
+            _logger.LogInformation($"New Template: {template.TemplateId} by {template.UserId}");
             return await ToModel(template);
         }
         #endregion
