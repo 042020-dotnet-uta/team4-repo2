@@ -47,7 +47,7 @@ stages:
           - task: PublishPipelineArtifact@0
             inputs:
               artifactName: 'angular'
-              targetPath: '$(workingDirectory)/app'
+              targetPath: '$(workingDirectory)/web-app'
             displayName: artifact publish app
 
   - stage: 'sonarCloud'
@@ -123,4 +123,4 @@ stages:
                   azureSubscription: 'Azure subscription 1(c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
                   appType: 'webApp'
                   WebAppName: JohnsSite
-                  packageForLinux: '$(Pipeline.Workspace)/app'
+                  packageForLinux: '$(Pipeline.Workspace)/web-app'
