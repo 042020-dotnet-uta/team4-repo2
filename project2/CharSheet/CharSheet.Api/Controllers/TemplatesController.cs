@@ -31,9 +31,11 @@ namespace CharSheet.Api.Controllers
                 if (userId == null && id == null)
                     return BadRequest();
 
+                // Find by id.
                 if (id != null)
                     return Ok(await _service.GetTemplate(id));
                 
+                // User id query.
                 return Ok(await _service.GetTemplates(userId));
             }
             catch
@@ -42,7 +44,7 @@ namespace CharSheet.Api.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("")]
         public async Task<ActionResult<TemplateModel>> CreateTemplate(TemplateModel templateModel)
         {
             if (ModelState.IsValid)
