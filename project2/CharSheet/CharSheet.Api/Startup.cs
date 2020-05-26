@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using CharSheet.Api.Services;
 
 namespace CharSheet.Api
 {
@@ -27,6 +28,8 @@ namespace CharSheet.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddScoped<IBusinessService, BusinessService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
