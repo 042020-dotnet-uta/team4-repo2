@@ -11,23 +11,15 @@ using CharSheet.Api.Models;
 
 namespace CharSheet.Api.Services
 {
-    public interface ITemplatesService
+    public partial interface IBusinessService
     {
         Task<TemplateModel> GetTemplate(object id);
+        Task<FormTemplateModel> GetFormTemplate(FormTemplate formTemplate);
         Task<FormTemplateModel> GetFormTemplate(object id);
     }
 
-    public class TemplatesService : ITemplatesService
+    public partial class BusinessService : IBusinessService
     {
-        private readonly UnitOfWork _unitOfWork;
-        private readonly ILogger<TemplatesService> _logger;
-
-        public TemplatesService(ILogger<TemplatesService> logger, CharSheetContext context)
-        {
-            this._logger = logger;
-            this._unitOfWork = new UnitOfWork(context);
-        }
-
         public async Task<TemplateModel> GetTemplate(object id)
         {
             // Load template from database.
@@ -35,19 +27,32 @@ namespace CharSheet.Api.Services
             if (template == null)
                 throw new InvalidOperationException("Template not found.");
             var formTemplates = await _unitOfWork.TemplateRepository.GetFormTemplates(id);
+
+            var templateModel = new TemplateModel
+            {
+                TemplateId = template.TemplateId,
+            };
+
+            // Instantiate a form template model for each form template.
+            var formTemplateModels = new List<FormTemplateModel>();
+            foreach (var formTemplate in formTemplates)
+            {
+                // Convert form template object to model.
+                var formTemplateModel = await GetFormTemplate(formTemplate);
+                formTemplateModels.Add(formTemplateModel);
+            }
+
+            templateModel.FormTemplates = formTemplateModels.AsEnumerable();
+            return templateModel;
         }
 
-        public async Task<FormTemplateModel> GetFormTemplate(object id)
+        public async Task<FormTemplateModel> GetFormTemplate(FormTemplate formTemplate)
         {
-            // Load form template from database.
-            var formTemplate = await _unitOfWork.FormTemplateRepository.Find(id);
-            if (formTemplate != null)
-                throw new InvalidOperationException("Form template not found.");
-            var labels = await _unitOfWork.FormTemplateRepository.GetFormLabels(id);
+            var labels = await _unitOfWork.FormTemplateRepository.GetFormLabels(formTemplate.FormTemplateId);
             return new FormTemplateModel
             {
                 FormTemplateId = formTemplate.FormTemplateId,
-                Type = formTemplate.FormStlye.Type,
+                Type = formTemplate.Type,
 
                 OffsetTop = formTemplate.FormPosition.OffsetTop,
                 OffsetLeft = formTemplate.FormPosition.OffsetLeft,
@@ -56,6 +61,15 @@ namespace CharSheet.Api.Services
 
                 Labels = labels.Select(formLabel => formLabel.Value)
             };
+        }
+
+        public async Task<FormTemplateModel> GetFormTemplate(object id)
+        {
+            // Load form template from database.
+            var formTemplate = await _unitOfWork.FormTemplateRepository.Find(id);
+            if (formTemplate == null)
+                throw new InvalidOperationException("Form template not found.");
+            return await GetFormTemplate(formTemplate);
         }
     }
 }

@@ -13,9 +13,7 @@ namespace CharSheet.Domain
         [ForeignKey("Template")]
         public Guid TemplateId { get; set; }
 
-        [ForeignKey("FormStyle")]
-        public Guid FormStyleId { get; set; }
-        public FormStyle FormStlye { get; set; }
+        public string Type { get; set; }
 
         [ForeignKey("FormPosition")]
         public Guid FormPositionId { get; set; }

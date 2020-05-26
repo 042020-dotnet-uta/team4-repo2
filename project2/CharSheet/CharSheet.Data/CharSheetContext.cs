@@ -15,7 +15,6 @@ namespace CharSheet.Data
         public DbSet<FormInput> FormInputs { get; set; }
         public DbSet<FormPosition> FormPositions { get; set; }
         public DbSet<FormLabel> FormLabels { get; set; }
-        public DbSet<FormStyle> FormStyles { get; set; }
 
         public CharSheetContext(DbContextOptions<CharSheetContext> options)
             : base(options)
