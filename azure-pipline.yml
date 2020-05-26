@@ -17,7 +17,7 @@ pool:
 
 variables:
   sdkVersion: '3.1.x'
-  workingDirectory: project2/CharSheet/CharSheetWeb/src/Angular9
+  workingDirectory: project2/CharSheet/CharSheetWeb
   solutionPath: 'project2/CharSheet/CharSheet.sln'
   buildConfiguration: 'Release'
 
