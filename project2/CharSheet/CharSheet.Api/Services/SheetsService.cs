@@ -77,6 +77,49 @@ namespace CharSheet.Api.Services
         }
         #endregion
 
+        #region POST
+        public async Task<SheetModel> CreateSheet(SheetModel sheetModel)
+        {
+            await AuthenticateUser(sheetModel.UserId);
+
+            var sheet = new Sheet
+            {
+                UserId = sheetModel.UserId,
+                FormInputGroups = new List<FormInputGroup>()
+            };
+
+            // Create form input groups.
+            foreach (var formInputGroupModel in sheetModel.FormGroups)
+            {
+                var formTemplate = await _unitOfWork.FormTemplateRepository.Find(formInputGroupModel.FormTemplate.FormTemplateId);
+                if (formTemplate == null)
+                    throw new InvalidOperationException("Form template not found.");
+                
+                var formInputGroup = new FormInputGroup
+                {
+                    FormTemplate = formTemplate,
+                    FormInputs = new List<FormInput>()
+                };
+
+                for (int i = 0; i < formInputGroupModel.FormInputs.Count(); i++)
+                {
+                    var formInput = new FormInput
+                    {
+                        Index = i,
+                        Value = formInputGroupModel.FormInputs.ElementAt(i)
+                    };
+                    formInputGroup.FormInputs.Add(formInput);
+                }
+
+                sheet.FormInputGroups.Add(formInputGroup);
+            }
+
+            await _unitOfWork.SheetRepository.Insert(sheet);
+            await _unitOfWork.Save();
+            return await ToModel(sheet);
+        }
+        #endregion
+
         #region Helpers
         public async Task<SheetModel> ToModel(Sheet sheet)
         {

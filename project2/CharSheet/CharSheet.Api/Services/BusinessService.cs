@@ -26,5 +26,16 @@ namespace CharSheet.Api.Services
             this._logger = logger;
             this._unitOfWork = new UnitOfWork(context);
         }
+
+        #region Helpers
+        public async Task<User> AuthenticateUser(object id)
+        {
+            var user = await _unitOfWork.UserRepository.Find(id);
+            if (user == null)
+                throw new InvalidOperationException("User not found.");
+            else
+                return user;
+        }
+        #endregion
     }
 }

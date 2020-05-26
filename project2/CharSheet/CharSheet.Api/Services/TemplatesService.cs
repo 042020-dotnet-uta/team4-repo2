@@ -78,14 +78,11 @@ namespace CharSheet.Api.Services
         #region POST
         public async Task<TemplateModel> CreateTemplate(TemplateModel templateModel)
         {
-            // Validate user id.
-            var user = await _unitOfWork.UserRepository.Find(templateModel.UserId);
-            if (user == null)
-                throw new InvalidOperationException("User not found.");
+            await AuthenticateUser(templateModel.UserId);
 
-            var newTemplate = new Template
+            var template = new Template
             {
-                UserId = user.UserId,
+                UserId = templateModel.UserId,
                 FormTemplates = new List<FormTemplate>()
             };
 
@@ -119,12 +116,12 @@ namespace CharSheet.Api.Services
                     formTemplate.FormLabels.Add(formLabel);
                 }
 
-                newTemplate.FormTemplates.Add(formTemplate);
+                template.FormTemplates.Add(formTemplate);
             }
 
-            await _unitOfWork.TemplateRepository.Insert(newTemplate);
+            await _unitOfWork.TemplateRepository.Insert(template);
             await _unitOfWork.Save();
-            return await ToModel(newTemplate);
+            return await ToModel(template);
         }
         #endregion
 
