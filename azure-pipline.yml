@@ -1,0 +1,3 @@
+# This file will be the azure devops pipeline yaml file.
+# It will auto build, test, collect code analysis, code coverage
+# and deploy working versions of project to azure web services
