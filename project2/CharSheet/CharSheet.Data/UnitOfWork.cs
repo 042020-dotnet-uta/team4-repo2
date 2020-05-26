@@ -66,7 +66,7 @@ namespace CharSheet.Data
         }
 
         private ITemplateRepository _templateRepository;
-        public ITemplateRepository templateRepository
+        public ITemplateRepository TemplateRepository
         {
             get
             {
@@ -98,6 +98,11 @@ namespace CharSheet.Data
             this._context = context;
         }
         #endregion
+
+        public async Task Save()
+        {
+            await _context.SaveChangesAsync();
+        }
 
         #region IDisposable
         private bool disposed = false;
