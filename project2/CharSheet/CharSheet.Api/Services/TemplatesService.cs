@@ -32,8 +32,6 @@ namespace CharSheet.Api.Services
         {
             // Load templates from database, filter by user id.
             var templates = (await _unitOfWork.TemplateRepository.Get(template => template.UserId == (Guid)id)).Select(template => template.TemplateId);
-            if (templates.Count() == 0)
-                throw new InvalidOperationException("Templates no found.");
 
             // Templates as template models.
             var templateModels = new List<TemplateModel>();

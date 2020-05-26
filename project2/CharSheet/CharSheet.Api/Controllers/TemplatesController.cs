@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using CharSheet.Data;
 using CharSheet.Api.Services;
 using CharSheet.Api.Models;
 
@@ -24,20 +21,20 @@ namespace CharSheet.Api.Controllers
             this._service = service;
         }
 
+        #region Action Methods
         [HttpGet("{id}")]
-        public async Task<ActionResult<TemplateModel>> GetTemplate(Guid? id, Guid? userId = null)
+        public async Task<ActionResult<TemplateModel>> GetTemplates(Guid? id, Guid? userId = null)
         {
             try
             {
-                // No user id query.
-                if (userId == null)
-                    return Ok(await _service.GetTemplate(id));
+                // Invalid GET request.
+                if (userId == null && id == null)
+                    return BadRequest();
 
-                // User id query.
-                var templateModels = await _service.GetTemplates(userId);
-                if (id == null)
-                    return Ok(templateModels);
-                return Ok(templateModels.Where(template => template.UserId == userId));
+                if (id != null)
+                    return Ok(await _service.GetTemplate(id));
+                
+                return Ok(await _service.GetTemplates(userId));
             }
             catch
             {
@@ -53,7 +50,7 @@ namespace CharSheet.Api.Controllers
                 try
                 {
                     templateModel = await _service.CreateTemplate(templateModel);
-                    return CreatedAtAction(nameof(GetTemplate), new { id = templateModel.TemplateId }, templateModel);
+                    return CreatedAtAction(nameof(GetTemplates), new { id = templateModel.TemplateId }, templateModel);
                 }
                 catch
                 {
@@ -62,5 +59,6 @@ namespace CharSheet.Api.Controllers
             }
             return BadRequest();
         }
+        #endregion
     }
 }

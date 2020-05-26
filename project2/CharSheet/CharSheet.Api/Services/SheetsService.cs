@@ -13,10 +13,16 @@ namespace CharSheet.Api.Services
 {
     public partial interface IBusinessService
     {
+        #region GET
         Task<IEnumerable<SheetModel>> GetSheets(object id);
         Task<SheetModel> GetSheet(object id);
         Task<FormInputGroupModel> GetFormInputGroup(FormInputGroup formInputGroup);
         Task<FormInputGroupModel> GetFormInputGroup(object id);
+        #endregion
+
+        #region POST
+        Task<SheetModel> CreateSheet(SheetModel sheetModel);
+        #endregion
     }
 
     public partial class BusinessService : IBusinessService
