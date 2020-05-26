@@ -15,6 +15,7 @@ namespace CharSheet.Domain
 
         [ForeignKey("FormTemplate")]
         public Guid FormTemplateId { get; set; }
+        public FormTemplate FormTemplate { get; set; }
 
         public ICollection<FormInput> FormInputs { get; set; }
     }

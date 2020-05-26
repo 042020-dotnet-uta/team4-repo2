@@ -6,6 +6,7 @@ namespace CharSheet.Api.Models
     public class TemplateModel
     {
         public Guid TemplateId { get; set; }
+        public Guid UserId { get; set; }
         public IEnumerable<FormTemplateModel> FormTemplates { get; set; }
     }
 }
