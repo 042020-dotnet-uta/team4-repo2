@@ -1,3 +1,126 @@
 # This file will be the azure devops pipeline yaml file.
 # It will auto build, test, collect code analysis, code coverage
 # and deploy working versions of project to azure web services
+
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+# Whenever a change is made to the master branch
+trigger:
+  - master
+
+pr: 'none'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  sdkVersion: '3.1.x'
+  workingDirectory: project2/CharSheet/CharSheetWeb/src/Angular9
+  solutionPath: 'project2/CharSheet/CharSheet.sln'
+  buildConfiguration: 'Release'
+
+
+stages:
+  - stage: 'build'
+    jobs:
+      - job: 'buildjob'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+#Angular, to build this angular project correctly we must first install the dependencies using npm install
+          - task: Npm@1
+            inputs:
+              command: install
+              workingDir: '$(workingDirectory)'
+            displayName: 'npm install'
+#Now that dependencies are installed, we need to build the Angular project.
+          - task: Npm@1
+            inputs:
+              command: custom
+              customCommand: run build -- --prod
+              workingDir: '$(workingDirectory)'
+            displayName: 'build angular'
+          
+#publish the angular artifact
+          - task: PublishPipelineArtifact@0
+            inputs:
+              artifactName: 'angular'
+              targetPath: '$(workingDirectory)/dist'
+            displayName: artifact publish app
+
+  - stage: 'sonarCloud'
+    jobs:
+      - job: 'build'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+
+#configure sonar cloud settings
+          - task: SonarCloudPrepare@1
+            inputs:
+              SonarCloud: 'project1'
+              organization: 'pro'
+              scannerMode: 'MSBuild'
+              projectKey: '5afebd8fc7c6be8448074f35519b3e0c0870fcbc'
+              projectName: 'revproj1'
+              extraProperties: |
+                sonar.exclusions=**/obj/**,**/*.dll
+                sonar.branch.name=$(Build.SourceBranchName)
+                sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+                sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml
+
+#build project
+          - script: dotnet build $(solutionPath)
+
+#run tests
+          - task: DotNetCoreCLI@2
+            displayName: 'dotnet testing'
+            inputs:
+              command: 'test'
+              arguments: '--configuration $(BuildConfiguration)
+                /p:CollectCoverage=true 
+                /p:CoverletOutputFormat=opencover 
+                /p:Coverletoutput=$(Build.SourcesDirector)/TestResults/Coverage 
+                --logger trx'
+              projects: '**/*UnitTests.csproj'
+              nobuild: true
+
+#publishes code coverage in azure devops
+          - task: PublishCodeCoverageResults@1
+            displayName: 'Publish Code Coverage'
+            inputs:
+              codeCoverageTool: Cobertura
+              summaryFileLocation: '$(Build.SorucesDirectory)/**/*.xml'
+              reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
+          - task: SonarCloudAnalyze@1
+          - task: SonarCloudPublish@1
+            inputs:
+              pollingTimeoutSec: '300'
+          - script: dotnet publish $(solutionPath)
+
+#deploy to azure web services
+  - stage: 'deploy'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    dependsOn: build
+  
+    jobs:
+    - deployment: deploy_dev
+      pool:
+        vmImage: ubuntu-latest
+      environment: dev
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              # - download: current
+              #   artifact: app
+              #   displayName: artifact download app
+              - task: AzureRmWebAppDeployment@4
+                inputs:
+                  ConnectionType: 'AzureRM'
+                  azureSubscription: 'Azure subscription 1(c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
+                  appType: 'webApp'
+                  WebAppName: JohnsSite
+                  packageForLinux: '$(Pipeline.Workspace)/*/*web-app'
