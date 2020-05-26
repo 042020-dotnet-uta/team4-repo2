@@ -41,8 +41,8 @@ namespace CharSheet.Api.Services
                 var formTemplateModel = await GetFormTemplate(formTemplate);
                 formTemplateModels.Add(formTemplateModel);
             }
-
             templateModel.FormTemplates = formTemplateModels.AsEnumerable();
+            
             return templateModel;
         }
 
