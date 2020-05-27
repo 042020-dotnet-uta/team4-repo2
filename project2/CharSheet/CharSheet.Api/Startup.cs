@@ -37,6 +37,7 @@ namespace CharSheet.Api
                 .UseInMemoryDatabase(databaseName: "CharSheetAPI"));
 
             services.AddScoped<IBusinessService, BusinessService>();
+            services.AddScoped<IAccountService, AccountService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

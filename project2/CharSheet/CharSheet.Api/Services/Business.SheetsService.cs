@@ -21,6 +21,10 @@ namespace CharSheet.Api.Services
         #region POST
         Task<SheetModel> CreateSheet(SheetModel sheetModel);
         #endregion
+
+        #region PUT
+        Task<SheetModel> UpdateSheet(SheetModel sheetModel);
+        #endregion
     }
 
     public partial class BusinessService : IBusinessService
@@ -99,8 +103,71 @@ namespace CharSheet.Api.Services
         }
         #endregion
 
+        #region PUT
+        public async Task<SheetModel> UpdateSheet(SheetModel sheetModel)
+        {
+            var user = await AuthenticateUser(sheetModel.UserId);
+
+            // Load existing sheet from database.
+            var sheet = await _unitOfWork.SheetRepository.Find(sheetModel.SheetId);
+            if (sheet == null)
+                throw new InvalidOperationException("Sheet not found.");
+            if (sheet.UserId != sheetModel.UserId)
+                throw new InvalidOperationException("User mismatch.");
+
+            // Validate sheet model structure.
+            if (sheetModel.FormGroups == null)
+                throw new InvalidOperationException("Missing form groups.");
+            foreach (var formGroup in sheetModel.FormGroups)
+                if (formGroup.FormTemplateId == null)
+                    throw new InvalidOperationException("Missing form template id.");
+
+            sheetModel.FormGroups = sheetModel.FormGroups.OrderBy(fg => fg.FormTemplateId);
+
+            var deletedInputs = new List<FormInput>();
+
+            for (int i = 0; i < sheetModel.FormGroups.Count(); i++)
+            {
+                var formGroup = sheetModel.FormGroups.ElementAt(i);
+                var formInputGroup = sheet.FormInputGroups.ElementAt(i);
+
+                // Verify form templates.
+                if (formGroup.FormTemplateId != formInputGroup.FormTemplateId)
+                    throw new InvalidOperationException("Form template mismatch.");
+
+                int j;
+                var formInputsCount = formInputGroup.FormInputs.Count();
+                for (j = 0; j < formGroup.FormInputs.Count(); j++)
+                {
+                    var input = formGroup.FormInputs.ElementAt(j);
+                    if (formInputsCount > j)
+                    {
+                        var formInput = formInputGroup.FormInputs.ElementAt(j);
+                        formInput.Value = input;
+                    }
+                    else
+                    {
+                        formInputGroup.FormInputs.Add(new FormInput { Index = j, Value = input });
+                    }
+                }
+
+                // Delete excess form inputs.
+                if (j < formInputsCount)
+                {
+                    deletedInputs.AddRange(formInputGroup.FormInputs.ToList().GetRange(j, formInputsCount - j));
+                }
+            }
+
+            await _unitOfWork.FormInputRepository.RemoveRange(deletedInputs);
+            await _unitOfWork.SheetRepository.Update(sheet);
+            await _unitOfWork.Save();
+
+            return await ToModel(sheet);
+        }
+        #endregion
+
         #region Helpers
-        public async Task<FormInputGroupModel> GetFormInputGroup(FormInputGroup formInputGroup)
+        private async Task<FormInputGroupModel> GetFormInputGroup(FormInputGroup formInputGroup)
         {
             // Instantiate form input group model.
             var id = formInputGroup.FormInputGroupId;
@@ -118,7 +185,7 @@ namespace CharSheet.Api.Services
             return formInputGroupModel;
         }
 
-        public async Task<FormInputGroupModel> GetFormInputGroup(object id)
+        private async Task<FormInputGroupModel> GetFormInputGroup(object id)
         {
             // Load form input group from database.
             var formInputGroup = await _unitOfWork.FormInputGroupRepository.Find(id);
@@ -127,7 +194,7 @@ namespace CharSheet.Api.Services
             return await GetFormInputGroup(formInputGroup);
         }
 
-        public async Task<SheetModel> ToModel(Sheet sheet)
+        private async Task<SheetModel> ToModel(Sheet sheet)
         {
             // Load form input groups.
             var formInputGroups = await _unitOfWork.SheetRepository.GetFormInputGroups(sheet.SheetId);
@@ -152,7 +219,7 @@ namespace CharSheet.Api.Services
             return sheetModel;
         }
 
-        public async Task<Sheet> ToObject(SheetModel sheetModel)
+        private async Task<Sheet> ToObject(SheetModel sheetModel)
         {
             var sheet = new Sheet
             {
