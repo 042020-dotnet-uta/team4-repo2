@@ -56,6 +56,7 @@ namespace CharSheet.Api.Services
         public async Task<FormTemplateModel> GetFormTemplate(FormTemplate formTemplate)
         {
             var labels = await _unitOfWork.FormTemplateRepository.GetFormLabels(formTemplate.FormTemplateId);
+            
             return new FormTemplateModel
             {
                 FormTemplateId = formTemplate.FormTemplateId,
@@ -141,6 +142,7 @@ namespace CharSheet.Api.Services
             var templateModel = new TemplateModel
             {
                 TemplateId = template.TemplateId,
+                UserId = template.UserId
             };
 
             // Instantiate a form template model for each form template.

@@ -10,8 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore.InMemory;
 using Microsoft.EntityFrameworkCore;
 using CharSheet.Api.Services;
+using CharSheet.Data;
 
 namespace CharSheet.Api
 {
@@ -27,7 +29,12 @@ namespace CharSheet.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options => options
+                .JsonSerializerOptions.IgnoreNullValues = true);
+                
+            services.AddDbContext<CharSheetContext>(options => options
+                .UseInMemoryDatabase(databaseName: "CharSheetAPI"));
 
             services.AddScoped<IBusinessService, BusinessService>();
         }
