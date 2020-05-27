@@ -1,14 +1,25 @@
-<p>
-  {{title}}
-</p>
+<header>
+  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3 nav nav-tabs">
+    <div class="container">
+      <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">{{title}}</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+        <ul class="navbar-nav flex-grow-1 justify-content-end">
 
-<button (click)="singIn('Google');">Sign in with Google</button>
-<br />
-<br />
-<button (click)="signOut();">Sign out</button>
-<br />
-<br />
-
+          <li class="nav-item">
+            <a class="nav-link text-white-50 btn btn-primary" button (click)="singIn('Google');">Sign in with Google </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white-50 btn btn-primary" (click)="signOut();">Sign out </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
 <div *ngIf="user">
   <img src="{{ user.photoUrl }}">
   <h4>{{ user.name }}</h4>
