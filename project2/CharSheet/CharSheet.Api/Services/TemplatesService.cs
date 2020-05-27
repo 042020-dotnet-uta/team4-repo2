@@ -67,6 +67,8 @@ namespace CharSheet.Api.Services
                 OffsetLeft = formTemplate.FormPosition.OffsetLeft,
                 XPos = formTemplate.FormPosition.XPos,
                 YPos = formTemplate.FormPosition.YPos,
+                Width = formTemplate.FormPosition.Width,
+                Height = formTemplate.FormPosition.Height,
 
                 Labels = labels.Select(formLabel => formLabel.Value)
             };
@@ -106,7 +108,9 @@ namespace CharSheet.Api.Services
                         OffsetTop = formTemplateModel.OffsetTop,
                         OffsetLeft = formTemplateModel.OffsetLeft,
                         XPos = formTemplateModel.XPos,
-                        YPos = formTemplateModel.YPos
+                        YPos = formTemplateModel.YPos,
+                        Width = formTemplateModel.Width,
+                        Height = formTemplateModel.Height
                     },
 
                     FormLabels = new List<FormLabel>()

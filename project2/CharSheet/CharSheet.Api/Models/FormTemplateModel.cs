@@ -18,6 +18,9 @@ namespace CharSheet.Api.Models
         public int OffsetLeft { get; set; }
         public int XPos { get; set; }
         public int YPos { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+
 
         // Labels.
         public IEnumerable<string> Labels { get; set; }
