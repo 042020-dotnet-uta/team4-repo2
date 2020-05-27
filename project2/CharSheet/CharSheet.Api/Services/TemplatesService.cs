@@ -16,8 +16,6 @@ namespace CharSheet.Api.Services
         #region GET
         Task<IEnumerable<TemplateModel>> GetTemplates(object id);
         Task<TemplateModel> GetTemplate(object id);
-        Task<FormTemplateModel> GetFormTemplate(FormTemplate formTemplate);
-        Task<FormTemplateModel> GetFormTemplate(object id);
         #endregion
 
         #region POST
@@ -52,11 +50,28 @@ namespace CharSheet.Api.Services
                 throw new InvalidOperationException("Template not found.");
             return await ToModel(template);
         }
+        #endregion
 
-        public async Task<FormTemplateModel> GetFormTemplate(FormTemplate formTemplate)
+        #region POST
+        public async Task<TemplateModel> CreateTemplate(TemplateModel templateModel)
+        {
+            await AuthenticateUser(templateModel.UserId);
+
+            var template = await ToObject(templateModel);
+
+            await _unitOfWork.TemplateRepository.Insert(template);
+            await _unitOfWork.Save();
+
+            _logger.LogInformation($"New Template: {template.TemplateId} by {template.UserId}");
+            return await ToModel(template);
+        }
+        #endregion
+
+        #region Helpers
+        private async Task<FormTemplateModel> GetFormTemplate(FormTemplate formTemplate)
         {
             var labels = await _unitOfWork.FormTemplateRepository.GetFormLabels(formTemplate.FormTemplateId);
-            
+
             return new FormTemplateModel
             {
                 FormTemplateId = formTemplate.FormTemplateId,
@@ -74,7 +89,7 @@ namespace CharSheet.Api.Services
             };
         }
 
-        public async Task<FormTemplateModel> GetFormTemplate(object id)
+        private async Task<FormTemplateModel> GetFormTemplate(object id)
         {
             // Load form template from database.
             var formTemplate = await _unitOfWork.FormTemplateRepository.Find(id);
@@ -82,13 +97,31 @@ namespace CharSheet.Api.Services
                 throw new InvalidOperationException("Form template not found.");
             return await GetFormTemplate(formTemplate);
         }
-        #endregion
-
-        #region POST
-        public async Task<TemplateModel> CreateTemplate(TemplateModel templateModel)
+        private async Task<TemplateModel> ToModel(Template template)
         {
-            await AuthenticateUser(templateModel.UserId);
+            var formTemplates = await _unitOfWork.TemplateRepository.GetFormTemplates(template.TemplateId);
 
+            var templateModel = new TemplateModel
+            {
+                TemplateId = template.TemplateId,
+                UserId = template.UserId
+            };
+
+            // Instantiate a form template model for each form template.
+            var formTemplateModels = new List<FormTemplateModel>();
+            foreach (var formTemplate in formTemplates)
+            {
+                // Convert form template object to model.
+                var formTemplateModel = await GetFormTemplate(formTemplate);
+                formTemplateModels.Add(formTemplateModel);
+            }
+            templateModel.FormTemplates = formTemplateModels.AsEnumerable();
+
+            return templateModel;
+        }
+
+        private async Task<Template> ToObject(TemplateModel templateModel)
+        {
             var template = new Template
             {
                 UserId = templateModel.UserId,
@@ -130,36 +163,7 @@ namespace CharSheet.Api.Services
                 template.FormTemplates.Add(formTemplate);
             }
 
-            await _unitOfWork.TemplateRepository.Insert(template);
-            await _unitOfWork.Save();
-
-            _logger.LogInformation($"New Template: {template.TemplateId} by {template.UserId}");
-            return await ToModel(template);
-        }
-        #endregion
-
-        #region Helpers
-        async Task<TemplateModel> ToModel(Template template)
-        {
-            var formTemplates = await _unitOfWork.TemplateRepository.GetFormTemplates(template.TemplateId);
-
-            var templateModel = new TemplateModel
-            {
-                TemplateId = template.TemplateId,
-                UserId = template.UserId
-            };
-
-            // Instantiate a form template model for each form template.
-            var formTemplateModels = new List<FormTemplateModel>();
-            foreach (var formTemplate in formTemplates)
-            {
-                // Convert form template object to model.
-                var formTemplateModel = await GetFormTemplate(formTemplate);
-                formTemplateModels.Add(formTemplateModel);
-            }
-            templateModel.FormTemplates = formTemplateModels.AsEnumerable();
-
-            return templateModel;
+            return await Task.FromResult(template);
         }
         #endregion
     }

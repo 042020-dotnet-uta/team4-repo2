@@ -21,7 +21,6 @@ namespace CharSheet.Api.Models
         public int Width { get; set; }
         public int Height { get; set; }
 
-
         // Labels.
         public IEnumerable<string> Labels { get; set; }
     }
