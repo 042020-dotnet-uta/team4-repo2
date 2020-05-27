@@ -11,16 +11,27 @@ using CharSheet.Api.Models;
 
 namespace CharSheet.Api.Services
 {
-    public partial interface IBusinessService
-    {
-        Task<UserModel> NewUser(UserModel userModel);
-        Task<UserModel> VerifyLogin(UserModel userModel);
-    }
-
-    public partial class BusinessService : IBusinessService
+    public interface IAccountService
     {
         #region POST
-        public async Task<UserModel> NewUser(UserModel userModel)
+        Task<UserModel> RegisterLocal(UserModel userModel);
+        Task<UserModel> LoginLocal(UserModel userModel);
+        #endregion
+    }
+
+    public class AccountService : IAccountService
+    {
+        private readonly ILogger<AccountService> _logger;
+        private readonly UnitOfWork _unitOfWork;
+
+        public AccountService(ILogger<AccountService> logger, CharSheetContext context)
+        {
+            this._logger = logger;
+            this._unitOfWork = new UnitOfWork(context);
+        }
+
+        #region POST
+        public async Task<UserModel> RegisterLocal(UserModel userModel)
         {
             // Check username and email are available.
             var check = (await _unitOfWork.UserRepository.Get(user => user.Username == userModel.Username || user.Email == userModel.Email)).FirstOrDefault();
@@ -74,15 +85,16 @@ namespace CharSheet.Api.Services
                     Username = user.Username,
                     Email = user.Email
                 };
-            } else {
+            }
+            else
+            {
                 if (check.Username == userModel.Username) throw new InvalidOperationException("Username already exists.");
                 else if (check.Email == userModel.Email) throw new InvalidOperationException("Email already exists.");
                 else throw new InvalidOperationException("Unable to create new user.");
             }
         }
-        #endregion
 
-        public async Task<UserModel> VerifyLogin(UserModel userModel)
+        public async Task<UserModel> LoginLocal(UserModel userModel)
         {
             // Find usern by username.
             var user = (await _unitOfWork.UserRepository.Get(user => user.Username == userModel.Username, null, "Login")).ToList().FirstOrDefault();
@@ -112,5 +124,6 @@ namespace CharSheet.Api.Services
             }
             throw new InvalidOperationException("Matching username or password was not found.");
         }
+        #endregion
     }
 }
