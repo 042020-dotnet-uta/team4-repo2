@@ -8,7 +8,7 @@ import { AuthService, GoogleLoginProvider } from "angularx-social-login";
 })
 
 export class AppComponent {
-  title = 'Angular Social login via Google!';
+  title = 'Character Sheet Creator';
   user: any;
 
   constructor(private _socioAuthServ: AuthService) { }
