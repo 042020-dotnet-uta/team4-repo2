@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using CharSheet.Data;
 using CharSheet.Api.Services;
 using CharSheet.Api.Models;
 
@@ -24,17 +21,37 @@ namespace CharSheet.Api.Controllers
             this._service = service;
         }
 
+        #region Action Methods
         [HttpGet("{id}")]
-        public async Task<ActionResult<TemplateModel>> GetTemplate(Guid? id)
+        public async Task<ActionResult<TemplateModel>> GetTemplates(Guid? id)
         {
             try
             {
-                return await _service.GetTemplate(id);
+                return Ok(await _service.GetTemplate(id));
             }
             catch
             {
                 return NotFound();
             }
         }
+
+        [HttpPost("")]
+        public async Task<ActionResult<TemplateModel>> CreateTemplate(TemplateModel templateModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    templateModel = await _service.CreateTemplate(templateModel);
+                    return CreatedAtAction(nameof(GetTemplates), new { id = templateModel.TemplateId }, templateModel);
+                }
+                catch
+                {
+                    return BadRequest();
+                }
+            }
+            return BadRequest();
+        }
+        #endregion
     }
 }

@@ -13,10 +13,16 @@ namespace CharSheet.Api.Services
 {
     public partial interface IBusinessService
     {
+        #region GET
         Task<IEnumerable<TemplateModel>> GetTemplates(object id);
         Task<TemplateModel> GetTemplate(object id);
         Task<FormTemplateModel> GetFormTemplate(FormTemplate formTemplate);
         Task<FormTemplateModel> GetFormTemplate(object id);
+        #endregion
+
+        #region POST
+        Task<TemplateModel> CreateTemplate(TemplateModel templateModel);
+        #endregion
     }
 
     public partial class BusinessService : IBusinessService
@@ -50,6 +56,7 @@ namespace CharSheet.Api.Services
         public async Task<FormTemplateModel> GetFormTemplate(FormTemplate formTemplate)
         {
             var labels = await _unitOfWork.FormTemplateRepository.GetFormLabels(formTemplate.FormTemplateId);
+            
             return new FormTemplateModel
             {
                 FormTemplateId = formTemplate.FormTemplateId,
@@ -121,6 +128,8 @@ namespace CharSheet.Api.Services
 
             await _unitOfWork.TemplateRepository.Insert(template);
             await _unitOfWork.Save();
+
+            _logger.LogInformation($"New Template: {template.TemplateId} by {template.UserId}");
             return await ToModel(template);
         }
         #endregion
@@ -133,6 +142,7 @@ namespace CharSheet.Api.Services
             var templateModel = new TemplateModel
             {
                 TemplateId = template.TemplateId,
+                UserId = template.UserId
             };
 
             // Instantiate a form template model for each form template.

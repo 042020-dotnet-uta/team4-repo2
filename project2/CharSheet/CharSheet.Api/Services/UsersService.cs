@@ -11,23 +11,15 @@ using CharSheet.Api.Models;
 
 namespace CharSheet.Api.Services
 {
-    public interface IUsersService
+    public partial interface IBusinessService
     {
         Task<UserModel> NewUser(UserModel userModel);
         Task<UserModel> VerifyLogin(UserModel userModel);
     }
 
-    public class UsersService : IUsersService
+    public partial class BusinessService : IBusinessService
     {
-        private readonly UnitOfWork _unitOfWork;
-        private readonly ILogger<UsersService> _logger;
-
-        public UsersService(ILogger<UsersService> logger, CharSheetContext context)
-        {
-            this._logger = logger;
-            this._unitOfWork = new UnitOfWork(context);
-        }
-
+        #region POST
         public async Task<UserModel> NewUser(UserModel userModel)
         {
             // Check username and email are available.
@@ -88,6 +80,7 @@ namespace CharSheet.Api.Services
                 else throw new InvalidOperationException("Unable to create new user.");
             }
         }
+        #endregion
 
         public async Task<UserModel> VerifyLogin(UserModel userModel)
         {

@@ -13,10 +13,16 @@ namespace CharSheet.Api.Services
 {
     public partial interface IBusinessService
     {
+        #region GET
         Task<IEnumerable<SheetModel>> GetSheets(object id);
         Task<SheetModel> GetSheet(object id);
         Task<FormInputGroupModel> GetFormInputGroup(FormInputGroup formInputGroup);
         Task<FormInputGroupModel> GetFormInputGroup(object id);
+        #endregion
+
+        #region POST
+        Task<SheetModel> CreateSheet(SheetModel sheetModel);
+        #endregion
     }
 
     public partial class BusinessService : IBusinessService
@@ -91,7 +97,7 @@ namespace CharSheet.Api.Services
             // Create form input groups.
             foreach (var formInputGroupModel in sheetModel.FormGroups)
             {
-                var formTemplate = await _unitOfWork.FormTemplateRepository.Find(formInputGroupModel.FormTemplate.FormTemplateId);
+                var formTemplate = await _unitOfWork.FormTemplateRepository.Find(formInputGroupModel.FormTemplateId);
                 if (formTemplate == null)
                     throw new InvalidOperationException("Form template not found.");
                 
@@ -116,6 +122,8 @@ namespace CharSheet.Api.Services
 
             await _unitOfWork.SheetRepository.Insert(sheet);
             await _unitOfWork.Save();
+
+            _logger.LogInformation($"New Sheet: {sheet.SheetId} by {sheet.SheetId}");
             return await ToModel(sheet);
         }
         #endregion
