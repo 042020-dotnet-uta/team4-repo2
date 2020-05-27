@@ -47,7 +47,7 @@ stages:
           - task: PublishPipelineArtifact@0
             inputs:
               artifactName: 'app'
-              targetPath: '$(Build.ArtifactStagingDirectory)/app'
+              targetPath: '$(workingDirectory)/app'
             displayName: artifact publish app
 
   - stage: 'sonarCloud'
