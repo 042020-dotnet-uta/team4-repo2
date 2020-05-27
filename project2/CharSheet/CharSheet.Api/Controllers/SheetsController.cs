@@ -61,6 +61,26 @@ namespace CharSheet.Api.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<SheetModel>> UpdateSheet(Guid? id, SheetModel sheetModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (id == null)
+                    return BadRequest();
+                sheetModel.SheetId = (Guid)id;
+                try
+                {
+                    return await _service.UpdateSheet(sheetModel);
+                }
+                catch
+                {
+                    return BadRequest();
+                }
+            }
+            return BadRequest();
+        }
         #endregion
     }
 }
