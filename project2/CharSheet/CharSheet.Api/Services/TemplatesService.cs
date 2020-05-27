@@ -16,8 +16,6 @@ namespace CharSheet.Api.Services
         #region GET
         Task<IEnumerable<TemplateModel>> GetTemplates(object id);
         Task<TemplateModel> GetTemplate(object id);
-        Task<FormTemplateModel> GetFormTemplate(FormTemplate formTemplate);
-        Task<FormTemplateModel> GetFormTemplate(object id);
         #endregion
 
         #region POST
@@ -52,34 +50,6 @@ namespace CharSheet.Api.Services
                 throw new InvalidOperationException("Template not found.");
             return await ToModel(template);
         }
-
-        public async Task<FormTemplateModel> GetFormTemplate(FormTemplate formTemplate)
-        {
-            var labels = await _unitOfWork.FormTemplateRepository.GetFormLabels(formTemplate.FormTemplateId);
-            
-            return new FormTemplateModel
-            {
-                FormTemplateId = formTemplate.FormTemplateId,
-                Type = formTemplate.Type,
-                Title = formTemplate.Title,
-
-                OffsetTop = formTemplate.FormPosition.OffsetTop,
-                OffsetLeft = formTemplate.FormPosition.OffsetLeft,
-                XPos = formTemplate.FormPosition.XPos,
-                YPos = formTemplate.FormPosition.YPos,
-
-                Labels = labels.Select(formLabel => formLabel.Value)
-            };
-        }
-
-        public async Task<FormTemplateModel> GetFormTemplate(object id)
-        {
-            // Load form template from database.
-            var formTemplate = await _unitOfWork.FormTemplateRepository.Find(id);
-            if (formTemplate == null)
-                throw new InvalidOperationException("Form template not found.");
-            return await GetFormTemplate(formTemplate);
-        }
         #endregion
 
         #region POST
@@ -87,44 +57,7 @@ namespace CharSheet.Api.Services
         {
             await AuthenticateUser(templateModel.UserId);
 
-            var template = new Template
-            {
-                UserId = templateModel.UserId,
-                FormTemplates = new List<FormTemplate>()
-            };
-
-            // Create form templates.
-            foreach (var formTemplateModel in templateModel.FormTemplates)
-            {
-                var formTemplate = new FormTemplate
-                {
-                    Type = formTemplateModel.Type,
-                    Title = formTemplateModel.Title,
-
-                    FormPosition = new FormPosition
-                    {
-                        OffsetTop = formTemplateModel.OffsetTop,
-                        OffsetLeft = formTemplateModel.OffsetLeft,
-                        XPos = formTemplateModel.XPos,
-                        YPos = formTemplateModel.YPos
-                    },
-
-                    FormLabels = new List<FormLabel>()
-                };
-
-                // Create form labels.
-                for (int i = 0; i < formTemplateModel.Labels.Count(); i++)
-                {
-                    var formLabel = new FormLabel
-                    {
-                        Index = i,
-                        Value = formTemplateModel.Labels.ElementAt(i)
-                    };
-                    formTemplate.FormLabels.Add(formLabel);
-                }
-
-                template.FormTemplates.Add(formTemplate);
-            }
+            var template = await ToObject(templateModel);
 
             await _unitOfWork.TemplateRepository.Insert(template);
             await _unitOfWork.Save();
@@ -135,7 +68,36 @@ namespace CharSheet.Api.Services
         #endregion
 
         #region Helpers
-        async Task<TemplateModel> ToModel(Template template)
+        private async Task<FormTemplateModel> GetFormTemplate(FormTemplate formTemplate)
+        {
+            var labels = await _unitOfWork.FormTemplateRepository.GetFormLabels(formTemplate.FormTemplateId);
+
+            return new FormTemplateModel
+            {
+                FormTemplateId = formTemplate.FormTemplateId,
+                Type = formTemplate.Type,
+                Title = formTemplate.Title,
+
+                OffsetTop = formTemplate.FormPosition.OffsetTop,
+                OffsetLeft = formTemplate.FormPosition.OffsetLeft,
+                XPos = formTemplate.FormPosition.XPos,
+                YPos = formTemplate.FormPosition.YPos,
+                Width = formTemplate.FormPosition.Width,
+                Height = formTemplate.FormPosition.Height,
+
+                Labels = labels.Select(formLabel => formLabel.Value)
+            };
+        }
+
+        private async Task<FormTemplateModel> GetFormTemplate(object id)
+        {
+            // Load form template from database.
+            var formTemplate = await _unitOfWork.FormTemplateRepository.Find(id);
+            if (formTemplate == null)
+                throw new InvalidOperationException("Form template not found.");
+            return await GetFormTemplate(formTemplate);
+        }
+        private async Task<TemplateModel> ToModel(Template template)
         {
             var formTemplates = await _unitOfWork.TemplateRepository.GetFormTemplates(template.TemplateId);
 
@@ -156,6 +118,52 @@ namespace CharSheet.Api.Services
             templateModel.FormTemplates = formTemplateModels.AsEnumerable();
 
             return templateModel;
+        }
+
+        private async Task<Template> ToObject(TemplateModel templateModel)
+        {
+            var template = new Template
+            {
+                UserId = templateModel.UserId,
+                FormTemplates = new List<FormTemplate>()
+            };
+
+            // Create form templates.
+            foreach (var formTemplateModel in templateModel.FormTemplates)
+            {
+                var formTemplate = new FormTemplate
+                {
+                    Type = formTemplateModel.Type,
+                    Title = formTemplateModel.Title,
+
+                    FormPosition = new FormPosition
+                    {
+                        OffsetTop = formTemplateModel.OffsetTop,
+                        OffsetLeft = formTemplateModel.OffsetLeft,
+                        XPos = formTemplateModel.XPos,
+                        YPos = formTemplateModel.YPos,
+                        Width = formTemplateModel.Width,
+                        Height = formTemplateModel.Height
+                    },
+
+                    FormLabels = new List<FormLabel>()
+                };
+
+                // Create form labels.
+                for (int i = 0; i < formTemplateModel.Labels.Count(); i++)
+                {
+                    var formLabel = new FormLabel
+                    {
+                        Index = i,
+                        Value = formTemplateModel.Labels.ElementAt(i)
+                    };
+                    formTemplate.FormLabels.Add(formLabel);
+                }
+
+                template.FormTemplates.Add(formTemplate);
+            }
+
+            return await Task.FromResult(template);
         }
         #endregion
     }
