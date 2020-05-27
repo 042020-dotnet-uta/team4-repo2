@@ -123,4 +123,4 @@ stages:
                   azureSubscription: 'Azure subscription 1(c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
                   appType: 'webApp'
                   WebAppName: JohnsSite
-                  packageForLinux: '$(Pipeline.Workspace)/dist'
+                  packageForLinux: '$(workingDirectory)/dist'
