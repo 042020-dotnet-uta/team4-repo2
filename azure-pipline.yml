@@ -46,7 +46,7 @@ stages:
 #publish the angular artifact
           - task: PublishPipelineArtifact@0
             inputs:
-              artifactName: 'angular'
+              artifactName: 'app'
               targetPath: '$(Build.ArtifactStagingDirectory)/app'
             displayName: artifact publish app
 
