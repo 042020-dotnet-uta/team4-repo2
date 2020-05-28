@@ -34,7 +34,7 @@ namespace CharSheet.Api
                 .JsonSerializerOptions.IgnoreNullValues = true);
                 
             services.AddDbContext<CharSheetContext>(options => options
-                .UseInMemoryDatabase(databaseName: "CharSheetAPI"));
+                .UseSqlServer("Server=LOCALHOST\\SQLEXPRESS;Database=CharSheetTest;Trusted_Connection=True;", ef => ef.MigrationsAssembly("CharSheet.Api")));
 
             services.AddScoped<IBusinessService, BusinessService>();
         }

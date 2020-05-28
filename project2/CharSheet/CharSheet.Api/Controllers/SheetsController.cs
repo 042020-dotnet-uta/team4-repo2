@@ -75,6 +75,22 @@ namespace CharSheet.Api.Controllers
             }
             return BadRequest();
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteSheet(Guid? id)
+        {
+            if (id == null)
+                return BadRequest();
+            try
+            {
+                await _service.DeleteSheet(id);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
         #endregion
     }
 }

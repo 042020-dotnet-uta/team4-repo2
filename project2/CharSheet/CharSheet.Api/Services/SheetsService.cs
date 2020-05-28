@@ -27,7 +27,7 @@ namespace CharSheet.Api.Services
         #endregion
 
         #region DELETE
-        //Task DeleteSheet(object id);
+        Task DeleteSheet(object id);
         #endregion
     }
 
@@ -167,6 +167,19 @@ namespace CharSheet.Api.Services
             await _unitOfWork.Save();
 
             return await ToModel(sheet);
+        }
+        #endregion
+
+        #region DELETE
+        public async Task DeleteSheet(object id)
+        {
+            var sheet = await _unitOfWork.SheetRepository.Find(id);
+            if (sheet == null)
+                throw new InvalidOperationException("Sheet not found.");
+            
+            await _unitOfWork.SheetRepository.Remove(sheet);
+            await _unitOfWork.Save();
+            return;
         }
         #endregion
 
