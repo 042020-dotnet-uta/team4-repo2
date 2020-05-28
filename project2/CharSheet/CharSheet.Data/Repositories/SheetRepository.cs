@@ -17,7 +17,7 @@ namespace CharSheet.Data.Repositories
 
         public async override Task<Sheet> Find(object id)
         {
-            var sheet = (await this.Get(s => s.SheetId == (Guid) id, null, "FormInputGroups,FormInputGroups.FormInputs")).FirstOrDefault();
+            var sheet = (await this.Get(s => s.SheetId == (Guid) id, null, "FormInputGroups,FormInputGroups.FormInputs,FormInputGroups.FormTemplate,FormInputGroups.FormTemplate.FormPosition,FormInputGroups.FormTemplate.FormLabels")).FirstOrDefault();
             if (sheet != null && sheet.FormInputGroups != null)
                 sheet.FormInputGroups = sheet.FormInputGroups.OrderBy(fig => fig.FormTemplateId).ToList();
             return sheet;

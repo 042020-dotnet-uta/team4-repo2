@@ -23,20 +23,14 @@ namespace CharSheet.Api.Controllers
 
         #region Action Methods
         [HttpGet("{id}")]
-        public async Task<ActionResult<SheetModel>> GetSheets(Guid? id, Guid? userId = null)
+        public async Task<ActionResult<SheetModel>> GetSheets(Guid? id)
         {
             try
             {
-                // Invalid GET request.
-                if (userId == null && id == null)
-                    return BadRequest();
-
                 // Find by id.
                 if (id != null)
                     return Ok(await _service.GetSheet(id));
-
-                // User id query.
-                return Ok(await _service.GetSheets(userId));
+                return NotFound();
             }
             catch
             {

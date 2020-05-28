@@ -17,12 +17,7 @@ namespace CharSheet.Data.Repositories
 
         public async override Task<FormTemplate> Find(object id)
         {
-            return (await Get(FormTemplate => FormTemplate.FormTemplateId == (Guid) id, null, "FormPosition")).FirstOrDefault();
-        }
-
-        public async Task<IEnumerable<FormLabel>> GetFormLabels(object id)
-        {
-            return await base._context.FormLabels.Where(formLabel => formLabel.FormTemplateId == (Guid) id).OrderBy(formLabel => formLabel.Index).ToListAsync();
+            return (await Get(FormTemplate => FormTemplate.FormTemplateId == (Guid) id, null, "FormPosition,FormLabels")).FirstOrDefault();
         }
     }
 }
