@@ -29,34 +29,6 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-#Angular, to build this angular project correctly we must first install the dependencies using npm install
-          - task: Npm@1
-            inputs:
-              command: install
-              workingDir: '$(workingDirectory)'
-            displayName: 'npm install'
-#Now that dependencies are installed, we need to build the Angular project.
-          - task: Npm@1
-            inputs:
-              command: custom
-              customCommand: run build -- --prod
-              workingDir: '$(workingDirectory)'
-            displayName: 'build angular'
-          
-#publish the angular artifact
-          - task: PublishPipelineArtifact@0
-            inputs:
-              artifactName: 'app'
-              targetPath: '$(workingDirectory)/app'
-            displayName: artifact publish app
-
-  - stage: 'sonarCloud'
-    jobs:
-      - job: 'build'
-        pool:
-          vmImage: 'ubuntu-latest'
-        steps:
-
 #configure sonar cloud settings
           - task: SonarCloudPrepare@1
             inputs:
