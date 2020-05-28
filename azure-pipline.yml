@@ -78,15 +78,16 @@ stages:
           - task: SonarCloudPrepare@1
             inputs:
               SonarCloud: 'project1'
-              organization: 'pro'
+              organization: 'charsheets'
               scannerMode: 'MSBuild'
-              projectKey: '5afebd8fc7c6be8448074f35519b3e0c0870fcbc'
-              projectName: 'revproj1'
+              projectKey: '50c2a04212d795b8c69603b43ceefe4b37e5c7d9'
+              projectName: 'CharacterSheets'
               extraProperties: |
                 sonar.exclusions=**/obj/**,**/*.dll
                 sonar.branch.name=$(Build.SourceBranchName)
                 sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
                 sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml
+          
 
 #build project
           
