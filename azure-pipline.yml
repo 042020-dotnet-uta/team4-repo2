@@ -47,7 +47,7 @@ stages:
           - task: DotNetCoreCLI@2
             displayName: 'dotnet build'
             inputs:
-              projects: '**.csproj'
+              projects: '**.*csproj'
 
 #run tests
           - task: DotNetCoreCLI@2
