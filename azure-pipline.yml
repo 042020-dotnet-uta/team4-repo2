@@ -44,7 +44,7 @@ stages:
                 sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml
 
 #build project
-          - script: dotnet build 'project2/CharSheet/CharSheet.sln'
+          - script: dotnet build 'project2/CharSheet/*/*.csproj'
 
 #run tests
           - task: DotNetCoreCLI@2
