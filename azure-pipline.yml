@@ -47,7 +47,7 @@ stages:
           - task: DotNetCoreCLI@2
             displayName: 'dotnet build'
             inputs:
-              projects: '**/*.csproj'
+              projects: '**/*.sln'
 
 #run tests
           - task: DotNetCoreCLI@2
@@ -58,6 +58,7 @@ stages:
                 /p:CollectCoverage=true 
                 /p:CoverletOutputFormat=opencover 
                 /p:Coverletoutput=$(Build.SourcesDirector)/TestResults/Coverage 
+                --collect "Codecoverage"
                 --logger trx'
               projects: '**/*UnitTests.csproj'
               nobuild: true
