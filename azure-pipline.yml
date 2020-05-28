@@ -7,8 +7,8 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 # Whenever a change is made to the master branch
-# trigger:
-#   - master
+trigger:
+  - master
 
 pr: 'none'
 
