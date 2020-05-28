@@ -57,7 +57,7 @@ stages:
               arguments: '--configuration $(BuildConfiguration)
                 /p:CollectCoverage=true 
                 /p:CoverletOutputFormat=opencover 
-                /p:Coverletoutput=$(Build.SourcesDirector)/Coverage 
+                /p:Coverletoutput=$(Build.SourcesDirectory)/TestResults/Coverage 
                 --collect "Codecoverage"
                 --logger trx'
               projects: '**/*UnitTests.csproj'
@@ -68,7 +68,7 @@ stages:
             displayName: 'Publish Code Coverage'
             inputs:
               codeCoverageTool: Cobertura
-              summaryFileLocation: '$(Build.SorucesDirectory)/**/*.xml'
+              summaryFileLocation: '$(Build.SourcesDirectory)/**/*.xml'
               reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
           - task: SonarCloudAnalyze@1
           - task: SonarCloudPublish@1
