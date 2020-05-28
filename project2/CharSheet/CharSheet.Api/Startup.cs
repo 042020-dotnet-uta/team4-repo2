@@ -37,6 +37,7 @@ namespace CharSheet.Api
                 .UseSqlServer("Server=LOCALHOST\\SQLEXPRESS;Database=CharSheetTest;Trusted_Connection=True;", ef => ef.MigrationsAssembly("CharSheet.Api")));
 
             services.AddScoped<IBusinessService, BusinessService>();
+            services.AddScoped<IAccountService, AccountService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
