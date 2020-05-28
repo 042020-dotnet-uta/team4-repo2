@@ -44,10 +44,10 @@ stages:
                 sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml
 
 #build project
-          - task: DotNetCoreCLI@2
+          - task: VSBuild@1
             displayName: 'dotnet build'
             inputs:
-              projects: '**.*csproj'
+              solution: '$(solutionPath)'
 
 #run tests
           - task: DotNetCoreCLI@2
