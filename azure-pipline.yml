@@ -13,7 +13,7 @@
 pr: 'none'
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
   sdkVersion: '3.1.x'
@@ -44,10 +44,11 @@ stages:
                 sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml
 
 #build project
-          - task: VSBuild@1
+          
+          - task: DotNetCoreCLI@2
             displayName: 'dotnet build'
             inputs:
-              solution: '$(solutionPath)'
+              projects: '**/*.csproj'
 
 #run tests
           - task: DotNetCoreCLI@2
