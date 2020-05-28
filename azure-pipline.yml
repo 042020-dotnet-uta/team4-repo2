@@ -47,7 +47,7 @@ stages:
           - task: DotNetCoreCLI@2
             displayName: 'dotnet build'
             inputs:
-              projects: '**/*.sln'
+              projects: '**.csproj'
 
 #run tests
           - task: DotNetCoreCLI@2
@@ -57,7 +57,7 @@ stages:
               arguments: '--configuration $(BuildConfiguration)
                 /p:CollectCoverage=true 
                 /p:CoverletOutputFormat=opencover 
-                /p:Coverletoutput=$(Build.SourcesDirector)/TestResults/Coverage 
+                /p:Coverletoutput=$(Build.SourcesDirector)/Coverage 
                 --collect "Codecoverage"
                 --logger trx'
               projects: '**/*UnitTests.csproj'
@@ -74,5 +74,5 @@ stages:
           - task: SonarCloudPublish@1
             inputs:
               pollingTimeoutSec: '300'
-          - script: dotnet publish $(solutionPath)
+
 
