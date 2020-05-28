@@ -25,6 +25,10 @@ namespace CharSheet.Api.Services
         #region PUT
         Task<SheetModel> UpdateSheet(SheetModel sheetModel);
         #endregion
+
+        #region DELETE
+        Task DeleteSheet(object id);
+        #endregion
     }
 
     public partial class BusinessService : IBusinessService
@@ -166,22 +170,30 @@ namespace CharSheet.Api.Services
         }
         #endregion
 
-        #region Helpers
-        private async Task<FormInputGroupModel> GetFormInputGroup(FormInputGroup formInputGroup)
+        #region DELETE
+        public async Task DeleteSheet(object id)
         {
-            // Instantiate form input group model.
-            var id = formInputGroup.FormInputGroupId;
+            var sheet = await _unitOfWork.SheetRepository.Find(id);
+            if (sheet == null)
+                throw new InvalidOperationException("Sheet not found.");
+            
+            await _unitOfWork.SheetRepository.Remove(sheet);
+            await _unitOfWork.Save();
+            return;
+        }
+        #endregion
+
+        #region Helpers
+        private async Task<FormInputGroupModel> ToModel(FormInputGroup formInputGroup)
+        {
             var formInputGroupModel = new FormInputGroupModel
             {
                 FormInputGroupId = formInputGroup.FormInputGroupId,
 
                 // Get form template as model.
-                FormTemplate = await this.GetFormTemplate(formInputGroup.FormTemplateId)
+                FormTemplate = await ToModel(formInputGroup.FormTemplate),
+                FormInputs = formInputGroup.FormInputs.Select(fi => fi.Value)
             };
-
-            // Get form inputs as model.
-            var formInputs = await _unitOfWork.FormInputGroupRepository.GetFormInputs(id);
-            formInputGroupModel.FormInputs = formInputs.Select(formInput => formInput.Value);
             return formInputGroupModel;
         }
 
@@ -191,14 +203,11 @@ namespace CharSheet.Api.Services
             var formInputGroup = await _unitOfWork.FormInputGroupRepository.Find(id);
             if (formInputGroup == null)
                 throw new InvalidOperationException("Form input group not found.");
-            return await GetFormInputGroup(formInputGroup);
+            return await ToModel(formInputGroup);
         }
 
         private async Task<SheetModel> ToModel(Sheet sheet)
         {
-            // Load form input groups.
-            var formInputGroups = await _unitOfWork.SheetRepository.GetFormInputGroups(sheet.SheetId);
-
             // Instantiate sheet model.
             var sheetModel = new SheetModel
             {
@@ -208,10 +217,10 @@ namespace CharSheet.Api.Services
 
             // Instantiate a form input group model for each form input group.
             var formInputGroupModels = new List<FormInputGroupModel>();
-            foreach (var formInputGroup in formInputGroups)
+            foreach (var formInputGroup in sheet.FormInputGroups)
             {
                 // Convert form input group object to model.
-                var formInputGroupModel = await GetFormInputGroup(formInputGroup);
+                var formInputGroupModel = await ToModel(formInputGroup);
                 formInputGroupModels.Add(formInputGroupModel);
             }
             sheetModel.FormGroups = formInputGroupModels.AsEnumerable();
