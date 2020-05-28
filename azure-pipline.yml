@@ -23,6 +23,51 @@ variables:
 
 
 stages:
+  - stage: 'deploy'
+    jobs:
+    - job: 
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+#install node.js
+      - task: NodeAndNpmTool@1
+        inputs:
+          versionSpec: '12.x'
+          checkLatest: true
+#install angular cli
+      - task: Npm@1
+        displayName: 'Install Angular CLI'
+        inputs:
+          command: 'custom'
+          workingDir: 'project2/CharSheet/CharSheetWeb'
+          customCommand: 'install @angular/cli@latest -g'
+#install angular app dependencies
+      - task: Npm@1
+        displayName: 'install project dependencies'
+        inputs:
+          command: 'install'
+          workingDir: 'project2/CharSheet/CharSheetWeb'
+#build angular project
+      - task: AngularCLI@0
+        displayName: 'build angular project'
+        inputs:
+          command: 'custom'
+          project: 'project2/CharSheet/CharSheetWeb'
+          custom: 'build --prod'
+          DisableAnalytics: false
+#deploy angular app to azure app service
+      - task: AzureRmWebAppDeployment@4
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'Azure subscription 1 (c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
+          appType: 'webApp'
+          WebAppName: 'JohnsSite'
+          packageForLinux: 'project2/CharSheet/CharSheetWeb/dist/CharSheetWeb'
+          enableCustomDeployment: true
+          DeploymentType: 'webDeploy'
+          TakeAppOfflineFlag: false
+          RemoveAdditionalFilesFlag: true
+
   - stage: 'build'
     jobs:
       - job: 'buildjob'
