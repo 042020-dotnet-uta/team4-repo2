@@ -26,6 +26,19 @@ namespace CharSheet.Data
             }
         }
 
+        private IFormInputRepository _formInputRepository;
+        public IFormInputRepository FormInputRepository
+        {
+            get
+            {
+                if (this._formInputRepository == null)
+                {
+                    this._formInputRepository = new FormInputRepository(this._context);
+                }
+                return _formInputRepository;
+            }
+        }
+
         private IFormTemplateRepository _formTemplateRepository;
         public IFormTemplateRepository FormTemplateRepository
         {

@@ -7,8 +7,8 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 # Whenever a change is made to the master branch
-# trigger:
-#   - master
+trigger:
+  - master
 
 pr: 'none'
 
@@ -18,61 +18,83 @@ pool:
 variables:
   sdkVersion: '3.1.x'
   workingDirectory: project2/CharSheet/CharSheetWeb
-  solutionPath: 'project2/CharSheet/CharSheet.sln'
+  solutionPath: '/project2/CharSheet/CharSheet.sln'
   buildConfiguration: 'Release'
 
 
 stages:
+  - stage: 'deploy'
+    jobs:
+    - job: 
+      pool:
+        vmImage: 'windows-latest'
+      steps:
+#install node.js
+      - task: NodeAndNpmTool@1
+        inputs:
+          versionSpec: '12.x'
+          checkLatest: true
+#install angular cli
+      - task: Npm@1
+        displayName: 'Install Angular CLI'
+        inputs:
+          command: 'custom'
+          workingDir: 'project2/CharSheet/CharSheetWeb'
+          customCommand: 'install @angular/cli@latest -g'
+#install angular app dependencies
+      - task: Npm@1
+        displayName: 'install project dependencies'
+        inputs:
+          command: 'install'
+          workingDir: 'project2/CharSheet/CharSheetWeb'
+#build angular project
+      - task: AngularCLI@0
+        displayName: 'build angular project'
+        inputs:
+          command: 'custom'
+          project: 'project2/CharSheet/CharSheetWeb'
+          custom: 'build --prod'
+          DisableAnalytics: false
+#deploy angular app to azure app service
+      - task: AzureRmWebAppDeployment@4
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'Azure subscription 1 (c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
+          appType: 'webApp'
+          WebAppName: 'JohnsSite'
+          packageForLinux: 'project2/CharSheet/CharSheetWeb/dist/CharSheetWeb'
+          enableCustomDeployment: true
+          DeploymentType: 'webDeploy'
+          TakeAppOfflineFlag: false
+          RemoveAdditionalFilesFlag: true
+
   - stage: 'build'
     jobs:
       - job: 'buildjob'
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-#Angular, to build this angular project correctly we must first install the dependencies using npm install
-          - task: Npm@1
-            inputs:
-              command: install
-              workingDir: '$(workingDirectory)'
-            displayName: 'npm install'
-#Now that dependencies are installed, we need to build the Angular project.
-          - task: Npm@1
-            inputs:
-              command: custom
-              customCommand: run build -- --prod
-              workingDir: '$(workingDirectory)'
-            displayName: 'build angular'
-          
-#publish the angular artifact
-          - task: PublishPipelineArtifact@0
-            inputs:
-              artifactName: 'app'
-              targetPath: '$(workingDirectory)/app'
-            displayName: artifact publish app
-
-  - stage: 'sonarCloud'
-    jobs:
-      - job: 'build'
-        pool:
-          vmImage: 'ubuntu-latest'
-        steps:
-
 #configure sonar cloud settings
           - task: SonarCloudPrepare@1
             inputs:
               SonarCloud: 'project1'
-              organization: 'pro'
+              organization: 'charsheets'
               scannerMode: 'MSBuild'
-              projectKey: '5afebd8fc7c6be8448074f35519b3e0c0870fcbc'
-              projectName: 'revproj1'
+              projectKey: '50c2a04212d795b8c69603b43ceefe4b37e5c7d9'
+              projectName: 'CharacterSheets'
               extraProperties: |
                 sonar.exclusions=**/obj/**,**/*.dll
                 sonar.branch.name=$(Build.SourceBranchName)
                 sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
                 sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml
+          
 
 #build project
-          - script: dotnet build $(solutionPath)
+          
+          - task: DotNetCoreCLI@2
+            displayName: 'dotnet build'
+            inputs:
+              projects: '**/*.csproj'
 
 #run tests
           - task: DotNetCoreCLI@2
@@ -82,7 +104,8 @@ stages:
               arguments: '--configuration $(BuildConfiguration)
                 /p:CollectCoverage=true 
                 /p:CoverletOutputFormat=opencover 
-                /p:Coverletoutput=$(Build.SourcesDirector)/TestResults/Coverage 
+                /p:Coverletoutput=$(Build.SourcesDirectory)/TestResults/Coverage 
+                --collect "Codecoverage"
                 --logger trx'
               projects: '**/*UnitTests.csproj'
               nobuild: true
@@ -92,36 +115,11 @@ stages:
             displayName: 'Publish Code Coverage'
             inputs:
               codeCoverageTool: Cobertura
-              summaryFileLocation: '$(Build.SorucesDirectory)/**/*.xml'
+              summaryFileLocation: '$(Build.SourcesDirectory)/**/*.xml'
               reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
           - task: SonarCloudAnalyze@1
           - task: SonarCloudPublish@1
             inputs:
               pollingTimeoutSec: '300'
-          - script: dotnet publish $(solutionPath)
 
-#deploy to azure web services
-  - stage: 'deploy'
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    dependsOn: build
-  
-    jobs:
-    - deployment: deploy_dev
-      pool:
-        vmImage: ubuntu-latest
-      environment: dev
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-              # - download: current
-              #   artifact: app
-              #   displayName: artifact download app
-              - task: AzureRmWebAppDeployment@4
-                inputs:
-                  ConnectionType: 'AzureRM'
-                  azureSubscription: 'Azure subscription 1(c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
-                  appType: 'webApp'
-                  WebAppName: JohnsSite
-                  packageForLinux: '$(Pipeline.Workspace)/app'
-              
+

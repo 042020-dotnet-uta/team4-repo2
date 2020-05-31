@@ -69,12 +69,6 @@ namespace CharSheet.Data.Repositories
             }
         }
 
-        public async virtual Task Remove(object id)
-        {
-            TEntity entity = await dbSet.FindAsync(id);
-            await Remove(entity);
-        }
-
         public async virtual Task Remove(TEntity entity)
         {
             if (_context.Entry(entity).State == EntityState.Detached)
@@ -82,6 +76,12 @@ namespace CharSheet.Data.Repositories
                 dbSet.Attach(entity);
             }
             await Task.FromResult(dbSet.Remove(entity));
+        }
+
+        public async virtual Task Remove(object id)
+        {
+            TEntity entity = await dbSet.FindAsync(id);
+            await Remove(entity);
         }
     }
 }

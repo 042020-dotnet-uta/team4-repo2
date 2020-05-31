@@ -15,9 +15,9 @@ namespace CharSheet.Data.Repositories
             : base(context)
         { }
 
-        public async Task<IEnumerable<FormInput>> GetFormInputs(object id)
+        public async override Task<FormInputGroup> Find(object id)
         {
-            return await base._context.FormInputs.Where(formInput => formInput.FormInputGroupId == (Guid) id).OrderBy(formInput => formInput.Index).ToListAsync();
+            return (await this.Get(fig => fig.FormInputGroupId == (Guid) id, null, "FormTemplate,FormTemplate.FormPosition,FormTemplate.FormLabels,FormInputs")).FirstOrDefault();
         }
     }
 }

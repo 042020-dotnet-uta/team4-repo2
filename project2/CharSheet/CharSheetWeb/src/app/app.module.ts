@@ -1,7 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 // Importing social login module and google login provider.
-import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from "angularx-social-login";
+import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, AuthService } from "angularx-social-login";
+
 import { AppComponent } from './app.component';
 import { CreateFormComponent } from './create-form/create-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
