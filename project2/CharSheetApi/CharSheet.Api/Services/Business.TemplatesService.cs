@@ -58,6 +58,7 @@ namespace CharSheet.Api.Services
             await AuthenticateUser(userId);
 
             var template = await ToObject(templateModel);
+            template.UserId = userId;
 
             await _unitOfWork.TemplateRepository.Insert(template);
             await _unitOfWork.Save();
