@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ResizableModule } from 'angular-resizable-element';
 import { AccessCharSheetsComponent } from './access-char-sheets/access-char-sheets.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 // Client id for the google oauth. This is used for validation of our application to google.
@@ -24,7 +25,8 @@ let config = new AuthServiceConfig([
   declarations: [
     AppComponent,
     CreateFormComponent,
-    AccessCharSheetsComponent
+    AccessCharSheetsComponent,
+    
   ],
   // Injecting the social-login-module during the application startup!
   imports: [
@@ -32,7 +34,8 @@ let config = new AuthServiceConfig([
     SocialLoginModule.initialize(config),
     BrowserAnimationsModule,
     DragDropModule,
-    ResizableModule
+    ResizableModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
