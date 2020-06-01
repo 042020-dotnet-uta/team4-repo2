@@ -37,7 +37,7 @@ stages:
         displayName: dotnet publish API
       - publish: $(System.DefaultWorkingDirectory)/project2/CharSheetApi/API
         artifact: APIRelease
-  - stage: Build Angular
+  - stage: BuildAngular
     jobs:
     - job: build
       steps:
