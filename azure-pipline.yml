@@ -21,7 +21,6 @@ variables:
   solutionPath: '/project2/CharSheet/CharSheet.sln'
   buildConfiguration: 'Release'
 
-
 stages:
   - stage: 'deploy'
     jobs:
@@ -107,7 +106,7 @@ stages:
                 /p:Coverletoutput=$(Build.SourcesDirectory)/TestResults/Coverage 
                 --collect "Codecoverage"
                 --logger trx'
-              projects: '**/*UnitTests.csproj'
+              projects: '**/*CharSheet.Test.csproj'
               nobuild: true
 
 #publishes code coverage in azure devops
