@@ -8,6 +8,7 @@ import { CreateFormComponent } from './create-form/create-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ResizableModule } from 'angular-resizable-element';
+import { AccessCharSheetsComponent } from './access-char-sheets/access-char-sheets.component';
 
 
 // Client id for the google oauth. This is used for validation of our application to google.
@@ -22,7 +23,8 @@ let config = new AuthServiceConfig([
 @NgModule({
   declarations: [
     AppComponent,
-    CreateFormComponent
+    CreateFormComponent,
+    AccessCharSheetsComponent
   ],
   // Injecting the social-login-module during the application startup!
   imports: [
