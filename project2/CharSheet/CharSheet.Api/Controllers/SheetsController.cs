@@ -1,7 +1,9 @@
 using System;
+using System.Security;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using CharSheet.Api.Services;
 using CharSheet.Api.Models;
@@ -23,6 +25,7 @@ namespace CharSheet.Api.Controllers
 
         #region Action Methods
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<SheetModel>> GetSheets(Guid? id)
         {
             try
@@ -39,13 +42,15 @@ namespace CharSheet.Api.Controllers
         }
 
         [HttpPost("")]
+        [Authorize]
         public async Task<ActionResult<SheetModel>> CreateSheet(SheetModel sheetModel)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    sheetModel = await _service.CreateSheet(sheetModel);
+                    var userId = Guid.Parse(User.FindFirst("Id").Value);
+                    sheetModel = await _service.CreateSheet(sheetModel, userId);
                     return CreatedAtAction(nameof(GetSheets), new { id = sheetModel.SheetId }, sheetModel);
                 }
                 catch
@@ -57,16 +62,22 @@ namespace CharSheet.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult<SheetModel>> UpdateSheet(Guid? id, SheetModel sheetModel)
         {
             if (ModelState.IsValid)
             {
                 if (id == null)
                     return BadRequest();
+                var userId = Guid.Parse(User.FindFirst("Id").Value);
                 sheetModel.SheetId = (Guid)id;
                 try
                 {
-                    return await _service.UpdateSheet(sheetModel);
+                    return await _service.UpdateSheet(sheetModel, userId);
+                }
+                catch (SecurityException)
+                {
+                    return Unauthorized();
                 }
                 catch
                 {
@@ -77,14 +88,20 @@ namespace CharSheet.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult> DeleteSheet(Guid? id)
         {
             if (id == null)
                 return BadRequest();
             try
             {
-                await _service.DeleteSheet(id);
+                var userId = Guid.Parse(User.FindFirst("Id").Value);
+                await _service.DeleteSheet(id, userId);
                 return Ok();
+            }
+            catch (SecurityException)
+            {
+                return Unauthorized();
             }
             catch
             {

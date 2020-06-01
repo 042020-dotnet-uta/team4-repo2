@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
@@ -67,11 +68,10 @@ namespace CharSheet.Api.Controllers
                         new Claim("Email", userLogin.Email)
                     };
 
-                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-                    var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-                    var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:Audience"], claims, expires: DateTime.UtcNow.AddDays(1), signingCredentials: signIn);
+                    var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:Audience"], claims, expires: DateTime.UtcNow.AddDays(1), signingCredentials: credentials);
 
                     return Ok(new JwtSecurityTokenHandler().WriteToken(token));
                 }
