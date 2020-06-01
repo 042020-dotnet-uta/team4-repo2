@@ -86,16 +86,6 @@ stages:
                 sonar.branch.name=$(Build.SourceBranchName)
                 sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
                 sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml
-          - task: AzureRmWebAppDeployment@4
-            inputs:
-              ConnectionType: 'AzureRM'
-              azureSubscription: 'Azure subscription 1 (c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
-              appType: 'webApp'
-              WebAppName: 'JohnsSite'
-              deployToSlotOrASE: true
-              ResourceGroupName: 'JohnsResourceGroup'
-              SlotName: 'production'
-              packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 
 #build project
           
@@ -117,8 +107,16 @@ stages:
                 --logger trx'
               projects: '**/*CharSheet.Test.csproj'
               nobuild: true
-
-          -
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Azure subscription 1 (c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
+              appType: 'webApp'
+              WebAppName: 'JohnsSite'
+              deployToSlotOrASE: true
+              ResourceGroupName: 'JohnsResourceGroup'
+              SlotName: 'production'
+              packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 #publishes code coverage in azure devops
           - task: PublishCodeCoverageResults@1
             displayName: 'Publish Code Coverage'
