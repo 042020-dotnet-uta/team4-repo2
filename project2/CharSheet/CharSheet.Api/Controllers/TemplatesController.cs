@@ -1,7 +1,14 @@
 using System;
+using System.IdentityModel.Tokens;
+using System.Text;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Security.Principal;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Logging;
 using CharSheet.Api.Services;
 using CharSheet.Api.Models;
@@ -42,6 +49,7 @@ namespace CharSheet.Api.Controllers
             {
                 try
                 {
+                    var userId = Guid.Parse(User.FindFirst("Id").Value);
                     templateModel = await _service.CreateTemplate(templateModel);
                     return CreatedAtAction(nameof(GetTemplates), new { id = templateModel.TemplateId }, templateModel);
                 }

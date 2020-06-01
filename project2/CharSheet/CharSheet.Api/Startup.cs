@@ -1,15 +1,19 @@
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore.InMemory;
 using Microsoft.EntityFrameworkCore;
 using CharSheet.Api.Services;
@@ -32,9 +36,24 @@ namespace CharSheet.Api
             services.AddControllers()
                 .AddJsonOptions(options => options
                 .JsonSerializerOptions.IgnoreNullValues = true);
-                
+
             services.AddDbContext<CharSheetContext>(options => options
                 .UseSqlServer("Server=LOCALHOST\\SQLEXPRESS;Database=CharSheetTest;Trusted_Connection=True;", ef => ef.MigrationsAssembly("CharSheet.Api")));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidAudience = Configuration["Jwt:Audience"],
+                        ValidIssuer = Configuration["Jwt:Issuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                    };
+                });
 
             services.AddScoped<IBusinessService, BusinessService>();
             services.AddScoped<IAccountService, AccountService>();
@@ -52,6 +71,7 @@ namespace CharSheet.Api
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
