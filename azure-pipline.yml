@@ -93,6 +93,13 @@ stages:
             displayName: 'dotnet build'
             inputs:
               projects: '**/*.csproj'
+            
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: publish
+              arguments: -c Release -o release
+          - publish: $(System.DefaultWorkingDirectory)/project2/CharSheetApi/release
+            artifact: APIRelease
 
 #run tests
           - task: DotNetCoreCLI@2
@@ -116,7 +123,7 @@ stages:
               deployToSlotOrASE: true
               ResourceGroupName: 'JohnsResourceGroup'
               SlotName: 'production'
-              packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+              packageForLinux: '$(System.DefaultWorkingDirectory)/project2/CharSheetApi/release'
 #publishes code coverage in azure devops
           - task: PublishCodeCoverageResults@1
             displayName: 'Publish Code Coverage'
