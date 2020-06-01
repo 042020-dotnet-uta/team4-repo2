@@ -22,9 +22,9 @@ variables:
   buildConfiguration: 'Release'
 
 stages:
-  - stage: BuildAPI
+  - stage: 'BuildAPI'
     jobs:
-    - job: build
+    - job: 'build'
       pool: 'ubuntu-latest'
       steps:
       - task: DotNetCoreCLI@2
@@ -37,9 +37,9 @@ stages:
         displayName: dotnet publish API
       - publish: $(System.DefaultWorkingDirectory)/project2/CharSheetApi/API
         artifact: APIRelease
-  - stage: BuildAngular
+  - stage: 'BuildAngular'
     jobs:
-    - job: build
+    - job: 'build'
       steps:
       - task: Npm@1
         displayName: 'install project dependencies'
@@ -56,9 +56,9 @@ stages:
       - publish: $(System.DefaultWorkingDirectory)/project2/CharSheet/dist
         artifact: AngularRelease
  
-  - stage: Coverage
+  - stage: 'Coverage'
     jobs:
-    - job: coverage
+    - job: 'coverage'
       steps:
       - task: SonarCloudPrepare@1
         inputs:
@@ -105,9 +105,9 @@ stages:
           pollingTimeoutSec: '300'
 
 
-  - stage: DeployAPI
+  - stage: 'DeployAPI'
     jobs:
-    - job: 
+    - job: 'deploy'
       pool:
         vmImage: 'ubuntu-latest'
       steps:
@@ -126,9 +126,9 @@ stages:
           RuntimeStack: 'DOTNETCORE|Latest'
           StartupCommand: 'dotnet AptMgmtPortalAPI.dll'
   
-  - stage: DeployAngular
+  - stage: 'DeployAngular'
     jobs:
-    - job: deploy
+    - job: 'deploy'
       steps:
       - task: DownloadPipelineArtifact@2
         inputs:
