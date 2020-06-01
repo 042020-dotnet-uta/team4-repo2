@@ -1,5 +1,7 @@
+<a class="nav-link text-black-50 btn btn-link" button (click)="createDragItem()">Create new Sheet item </a>
+
 <div id="form-boundary">
-  <div  class ="drag-box" *ngFor ="let divForm of formElements"cdkDragBoundary=".form-boundary" cdkDrag
+  <div  class ="drag-box" *ngFor ="let divForm of formElements" cdkDragBoundary="#form-boundary" cdkDrag
         [ngStyle]="style"
         mwlResizable
         [validateResize]="validate"
@@ -29,4 +31,3 @@
   </div>
 </div>
 
-<a class="nav-link text-black-50 btn btn-link" button (click)="createDragItem()">Create new Sheet item </a>
