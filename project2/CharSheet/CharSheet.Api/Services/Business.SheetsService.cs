@@ -1,4 +1,5 @@
 using System;
+using System.Security;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -19,15 +20,15 @@ namespace CharSheet.Api.Services
         #endregion
 
         #region POST
-        Task<SheetModel> CreateSheet(SheetModel sheetModel);
+        Task<SheetModel> CreateSheet(SheetModel sheetModel, Guid userId);
         #endregion
 
         #region PUT
-        Task<SheetModel> UpdateSheet(SheetModel sheetModel);
+        Task<SheetModel> UpdateSheet(SheetModel sheetModel, Guid userId);
         #endregion
 
         #region DELETE
-        Task DeleteSheet(object id);
+        Task DeleteSheet(object id, Guid userId);
         #endregion
     }
 
@@ -63,13 +64,13 @@ namespace CharSheet.Api.Services
         #endregion
 
         #region POST
-        public async Task<SheetModel> CreateSheet(SheetModel sheetModel)
+        public async Task<SheetModel> CreateSheet(SheetModel sheetModel, Guid userId)
         {
-            await AuthenticateUser(sheetModel.UserId);
+            await AuthenticateUser(userId);
 
             var sheet = new Sheet
             {
-                UserId = sheetModel.UserId,
+                UserId = userId,
                 FormInputGroups = new List<FormInputGroup>()
             };
 
@@ -108,16 +109,16 @@ namespace CharSheet.Api.Services
         #endregion
 
         #region PUT
-        public async Task<SheetModel> UpdateSheet(SheetModel sheetModel)
+        public async Task<SheetModel> UpdateSheet(SheetModel sheetModel, Guid userId)
         {
-            var user = await AuthenticateUser(sheetModel.UserId);
+            var user = await AuthenticateUser(userId);
 
             // Load existing sheet from database.
             var sheet = await _unitOfWork.SheetRepository.Find(sheetModel.SheetId);
             if (sheet == null)
                 throw new InvalidOperationException("Sheet not found.");
-            if (sheet.UserId != sheetModel.UserId)
-                throw new InvalidOperationException("User mismatch.");
+            if (sheet.UserId != userId)
+                throw new SecurityException("User mismatch.");
 
             // Validate sheet model structure.
             if (sheetModel.FormGroups == null)
@@ -171,14 +172,17 @@ namespace CharSheet.Api.Services
         #endregion
 
         #region DELETE
-        public async Task DeleteSheet(object id)
+        public async Task DeleteSheet(object id, Guid userId)
         {
             var sheet = await _unitOfWork.SheetRepository.Find(id);
             if (sheet == null)
                 throw new InvalidOperationException("Sheet not found.");
+            if (sheet.UserId != userId)
+                throw new SecurityException("User mismatch.");
             
             await _unitOfWork.SheetRepository.Remove(sheet);
             await _unitOfWork.Save();
+            _logger.LogInformation($"Deleted Sheet: {sheet.SheetId}");
             return;
         }
         #endregion
@@ -188,8 +192,6 @@ namespace CharSheet.Api.Services
         {
             var formInputGroupModel = new FormInputGroupModel
             {
-                FormInputGroupId = formInputGroup.FormInputGroupId,
-
                 // Get form template as model.
                 FormTemplate = await ToModel(formInputGroup.FormTemplate),
                 FormInputs = formInputGroup.FormInputs.Select(fi => fi.Value)
@@ -212,7 +214,6 @@ namespace CharSheet.Api.Services
             var sheetModel = new SheetModel
             {
                 SheetId = sheet.SheetId,
-                UserId = sheet.UserId,
             };
 
             // Instantiate a form input group model for each form input group.
@@ -228,11 +229,11 @@ namespace CharSheet.Api.Services
             return sheetModel;
         }
 
-        private async Task<Sheet> ToObject(SheetModel sheetModel)
+        private async Task<Sheet> ToObject(SheetModel sheetModel, Guid userId)
         {
             var sheet = new Sheet
             {
-                UserId = sheetModel.UserId,
+                UserId = userId,
                 FormInputGroups = new List<FormInputGroup>()
             };
 

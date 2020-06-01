@@ -19,7 +19,7 @@ namespace CharSheet.Api.Services
         #endregion
 
         #region POST
-        Task<TemplateModel> CreateTemplate(TemplateModel templateModel);
+        Task<TemplateModel> CreateTemplate(TemplateModel templateModel, Guid userId);
         #endregion
     }
 
@@ -53,16 +53,16 @@ namespace CharSheet.Api.Services
         #endregion
 
         #region POST
-        public async Task<TemplateModel> CreateTemplate(TemplateModel templateModel)
+        public async Task<TemplateModel> CreateTemplate(TemplateModel templateModel, Guid userId)
         {
-            await AuthenticateUser(templateModel.UserId);
+            await AuthenticateUser(userId);
 
             var template = await ToObject(templateModel);
 
             await _unitOfWork.TemplateRepository.Insert(template);
             await _unitOfWork.Save();
 
-            _logger.LogInformation($"New Template: {template.TemplateId} by {template.UserId}");
+            _logger.LogInformation($"New Template: {template.TemplateId} by {userId}");
             return await ToModel(template);
         }
         #endregion
@@ -100,7 +100,6 @@ namespace CharSheet.Api.Services
             var templateModel = new TemplateModel
             {
                 TemplateId = template.TemplateId,
-                UserId = template.UserId
             };
 
             // Instantiate a form template model for each form template.
@@ -120,7 +119,6 @@ namespace CharSheet.Api.Services
         {
             var template = new Template
             {
-                UserId = templateModel.UserId,
                 FormTemplates = new List<FormTemplate>()
             };
 

@@ -1,9 +1,12 @@
 using System;
+using System.Web;
 using System.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Security.Principal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
@@ -30,6 +33,7 @@ namespace CharSheet.Api.Controllers
 
         #region Action Methods
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<TemplateModel>> GetTemplates(Guid? id)
         {
             try
@@ -43,6 +47,7 @@ namespace CharSheet.Api.Controllers
         }
 
         [HttpPost("")]
+        [Authorize]
         public async Task<ActionResult<TemplateModel>> CreateTemplate(TemplateModel templateModel)
         {
             if (ModelState.IsValid)
@@ -50,11 +55,14 @@ namespace CharSheet.Api.Controllers
                 try
                 {
                     var userId = Guid.Parse(User.FindFirst("Id").Value);
-                    templateModel = await _service.CreateTemplate(templateModel);
+                    _logger.LogInformation(userId.ToString());
+                    templateModel = await _service.CreateTemplate(templateModel, userId);
                     return CreatedAtAction(nameof(GetTemplates), new { id = templateModel.TemplateId }, templateModel);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    _logger.LogError(ex.Message);
+                    _logger.LogError(ex.StackTrace);
                     return BadRequest();
                 }
             }
