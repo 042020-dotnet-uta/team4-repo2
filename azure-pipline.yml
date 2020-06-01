@@ -116,6 +116,16 @@ stages:
               codeCoverageTool: Cobertura
               summaryFileLocation: '$(Build.SourcesDirectory)/**/*.xml'
               reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
+#deploy api to azure web services
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Azure subscription 1 (c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
+              appType: 'webAppLinux'
+              WebAppName: 'JohnsSite'
+              packageForLinux: '$(System.DefaultWorkingDirectory)'
+              RuntimeStack: 'DOTNETCORE|Latest'
+              StartupCommand: 'dotnet CharSheetAPI.dll'
           - task: SonarCloudAnalyze@1
           - task: SonarCloudPublish@1
             inputs:
