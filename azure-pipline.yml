@@ -64,7 +64,7 @@ stages:
           packageForLinux: 'project2/CharSheet/CharSheetWeb/dist/CharSheetWeb'
           enableCustomDeployment: true
           DeploymentType: 'webDeploy'
-          TakeAppOfflineFlag: true
+          TakeAppOfflineFlag: false
           RemoveAdditionalFilesFlag: true
 
   - stage: 'build'
@@ -86,7 +86,7 @@ stages:
                 sonar.branch.name=$(Build.SourceBranchName)
                 sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
                 sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml
-                sonar.exclusions=**/*Migrations
+          
 
 #build project
           
@@ -94,13 +94,6 @@ stages:
             displayName: 'dotnet build'
             inputs:
               projects: '**/*.csproj'
-            
-          - task: DotNetCoreCLI@2
-            inputs:
-              command: publish
-              arguments: -c Release -o release
-          # - publish: $(Build.ArtifactStagingDirectory)/app
-          #   artifact: APIRelease
 
 #run tests
           - task: DotNetCoreCLI@2
@@ -115,28 +108,3 @@ stages:
                 --logger trx'
               projects: '**/*CharSheet.Test.csproj'
               nobuild: true
-          # - task: AzureRmWebAppDeployment@4
-          #   inputs:
-          #     ConnectionType: 'AzureRM'
-          #     azureSubscription: 'Azure subscription 1 (c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
-          #     appType: 'webApp'
-          #     WebAppName: 'JohnsSite'
-          #     deployToSlotOrASE: true
-          #     ResourceGroupName: 'JohnsResourceGroup'
-          #     SlotName: 'production'
-          #     packageForLinux: '$(Build.ArtifactStagingDirectory)/app/APIRelease'
-#publishes code coverage in azure devops
-          - task: PublishCodeCoverageResults@1
-            displayName: 'Publish Code Coverage'
-            inputs:
-              codeCoverageTool: Cobertura
-              summaryFileLocation: '$(Build.SourcesDirectory)/**/*.xml'
-              reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
-#deploy api to azure web services
-          
-          - task: SonarCloudAnalyze@1
-          - task: SonarCloudPublish@1
-            inputs:
-              pollingTimeoutSec: '300'
-
-
