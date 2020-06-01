@@ -98,7 +98,7 @@ stages:
             inputs:
               command: publish
               arguments: -c Release -o release
-          - publish: $(System.DefaultWorkingDirectory)/project2/CharSheetApi/release
+          - publish: $(Build.ArtifactStagingDirectory)/app
             artifact: APIRelease
 
 #run tests
@@ -123,7 +123,7 @@ stages:
               deployToSlotOrASE: true
               ResourceGroupName: 'JohnsResourceGroup'
               SlotName: 'production'
-              packageForLinux: '$(System.DefaultWorkingDirectory)/project2/CharSheetApi/release'
+              packageForLinux: '$(Build.ArtifactStagingDirectory)/app/APIRelease'
 #publishes code coverage in azure devops
           - task: PublishCodeCoverageResults@1
             displayName: 'Publish Code Coverage'
