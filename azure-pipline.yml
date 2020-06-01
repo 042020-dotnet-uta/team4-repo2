@@ -21,7 +21,6 @@ variables:
   solutionPath: '/project2/CharSheet/CharSheet.sln'
   buildConfiguration: 'Release'
 
-
 stages:
   - stage: 'deploy'
     jobs:
@@ -87,7 +86,6 @@ stages:
                 sonar.branch.name=$(Build.SourceBranchName)
                 sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
                 sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml
-          
 
 #build project
           
@@ -107,9 +105,18 @@ stages:
                 /p:Coverletoutput=$(Build.SourcesDirectory)/TestResults/Coverage 
                 --collect "Codecoverage"
                 --logger trx'
-              projects: '**/*UnitTests.csproj'
+              projects: '**/*CharSheet.Test.csproj'
               nobuild: true
-
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Azure subscription 1 (c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
+              appType: 'webApp'
+              WebAppName: 'JohnsSite'
+              deployToSlotOrASE: true
+              ResourceGroupName: 'JohnsResourceGroup'
+              SlotName: 'production'
+              packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 #publishes code coverage in azure devops
           - task: PublishCodeCoverageResults@1
             displayName: 'Publish Code Coverage'
@@ -117,6 +124,8 @@ stages:
               codeCoverageTool: Cobertura
               summaryFileLocation: '$(Build.SourcesDirectory)/**/*.xml'
               reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
+#deploy api to azure web services
+          
           - task: SonarCloudAnalyze@1
           - task: SonarCloudPublish@1
             inputs:
