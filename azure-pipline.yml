@@ -34,7 +34,7 @@ stages:
           inputs:
             command: 'build'
             projects: '**/*CharSheet.Api.csproj'
-            arguments: '--configurations $(buildConfiguration)'
+            arguments: '--configuration $(BuildConfiguration)'
         - task: DotNetCoreCLI@2
           displayName: 'publish dotnetcorecli'
           inputs:
