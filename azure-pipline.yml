@@ -22,50 +22,7 @@ variables:
   buildConfiguration: 'Release'
 
 stages:
-  - stage: 'deploy'
-    jobs:
-    - job: 
-      pool:
-        vmImage: 'ubuntu-latest'
-      steps:
-#install node.js
-      - task: NodeAndNpmTool@1
-        inputs:
-          versionSpec: '12.x'
-          checkLatest: true
-#install angular cli
-      - task: Npm@1
-        displayName: 'Install Angular CLI'
-        inputs:
-          command: 'custom'
-          workingDir: 'project2/CharSheet/CharSheetWeb'
-          customCommand: 'install @angular/cli@latest -g'
-#install angular app dependencies
-      - task: Npm@1
-        displayName: 'install project dependencies'
-        inputs:
-          command: 'install'
-          workingDir: 'project2/CharSheet/CharSheetWeb'
-#build angular project
-      - task: AngularCLI@0
-        displayName: 'build angular project'
-        inputs:
-          command: 'custom'
-          project: 'project2/CharSheet/CharSheetWeb'
-          custom: 'build --prod'
-          DisableAnalytics: false
-#deploy angular app to azure app service
-      - task: AzureRmWebAppDeployment@4
-        inputs:
-          ConnectionType: 'AzureRM'
-          azureSubscription: 'Azure subscription 1 (c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
-          appType: 'webApp'
-          WebAppName: 'JohnsSite'
-          packageForLinux: 'project2/CharSheet/CharSheetWeb/dist/CharSheetWeb'
-          TakeAppOfflineFlag: true
-          RemoveAdditionalFilesFlag: true
-
-  - stage: 'build'
+  - stage: 'API'
     jobs:
       - job: 'buildjob'
         pool:
@@ -90,7 +47,7 @@ stages:
           - task: DotNetCoreCLI@2
             displayName: 'dotnet build'
             inputs:
-              arguments: '--configuration $(buildConfiguration)'
+              arguments: '--configuration $(BuildConfiguration)'
               projects: '**/*.csproj'
             
           
@@ -100,9 +57,10 @@ stages:
             inputs:
               command: publish
               publishWebProjects: false
-              projects: '**/*CharSheet.Api.csproj'
-              arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+              projects: '**/CharSheet.Api.csproj'
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
               zipAfterPublish: true
+              modifyOutputPath: false
 
           - publish: '$(Build.ArtifactStagingDirectory)'
             artifact: 'APIBuildArtifact'
@@ -159,3 +117,47 @@ stages:
           - task: SonarCloudPublish@1
             inputs:
               pollingTimeoutSec: '300'
+
+  - stage: 'Angular'
+    jobs:
+    - job: 
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+#install node.js
+      - task: NodeAndNpmTool@1
+        inputs:
+          versionSpec: '12.x'
+          checkLatest: true
+#install angular cli
+      - task: Npm@1
+        displayName: 'Install Angular CLI'
+        inputs:
+          command: 'custom'
+          workingDir: 'project2/CharSheet/CharSheetWeb'
+          customCommand: 'install @angular/cli@latest -g'
+#install angular app dependencies
+      - task: Npm@1
+        displayName: 'install project dependencies'
+        inputs:
+          command: 'install'
+          workingDir: 'project2/CharSheet/CharSheetWeb'
+#build angular project
+      - task: AngularCLI@0
+        displayName: 'build angular project'
+        inputs:
+          command: 'custom'
+          project: 'project2/CharSheet/CharSheetWeb'
+          custom: 'build --prod'
+          DisableAnalytics: false
+#deploy angular app to azure app service
+      - task: AzureRmWebAppDeployment@4
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'Azure subscription 1 (c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
+          appType: 'webApp'
+          WebAppName: 'JohnsSite'
+          packageForLinux: 'project2/CharSheet/CharSheetWeb/dist/CharSheetWeb'
+          TakeAppOfflineFlag: true
+          RemoveAdditionalFilesFlag: true
+
