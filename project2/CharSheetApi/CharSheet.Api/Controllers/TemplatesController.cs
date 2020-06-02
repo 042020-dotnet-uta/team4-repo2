@@ -41,8 +41,10 @@ namespace CharSheet.Api.Controllers
             {
                 return Ok(await _service.GetTemplate(id));
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogInformation(ex.Message);
+                _logger.LogInformation(ex.StackTrace);
                 return NotFound();
             }
         }
@@ -60,10 +62,8 @@ namespace CharSheet.Api.Controllers
                     templateModel = await _service.CreateTemplate(templateModel, userId);
                     return CreatedAtAction(nameof(GetTemplates), new { id = templateModel.TemplateId }, templateModel);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    _logger.LogError(ex.Message);
-                    _logger.LogError(ex.StackTrace);
                     return BadRequest();
                 }
             }
