@@ -35,7 +35,7 @@ namespace CharSheet.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            _connection = Environment.GetEnvironmentVariable("SQLCONNSTR_APIDatabase");
+            _connection = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_APIDatabase");
             if (_connection == null)
             {
                 SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("IdentityDataContextConnection"));
