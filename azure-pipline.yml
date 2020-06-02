@@ -66,14 +66,13 @@ stages:
             artifact: 'APIBuildArtifact'
 
 #deploy api artifact to azure services
-
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
               azureSubscription: 'Azure Subscription 1 Resource Manager'
               appType: 'apiApp'
               WebAppName: 'RevatureP2API'
-              packageForLinux: '**/*.zip'
+              packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 
 #run tests
           - task: DotNetCoreCLI@2
