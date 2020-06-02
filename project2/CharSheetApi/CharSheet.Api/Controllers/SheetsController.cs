@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Cors;
 using CharSheet.Api.Services;
 using CharSheet.Api.Models;
 
@@ -26,7 +27,7 @@ namespace CharSheet.Api.Controllers
         #region Action Methods
         [HttpGet("{id}")]
         [AllowAnonymous]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        [EnableCors]
         public async Task<ActionResult<SheetModel>> GetSheets(Guid? id)
         {
             try
@@ -44,7 +45,7 @@ namespace CharSheet.Api.Controllers
 
         [HttpPost("")]
         [Authorize]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        [EnableCors]
         public async Task<ActionResult<SheetModel>> CreateSheet(SheetModel sheetModel)
         {
             if (ModelState.IsValid)
@@ -65,7 +66,7 @@ namespace CharSheet.Api.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        [EnableCors]
         public async Task<ActionResult<SheetModel>> UpdateSheet(Guid? id, SheetModel sheetModel)
         {
             if (ModelState.IsValid)
@@ -92,7 +93,7 @@ namespace CharSheet.Api.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        [EnableCors]
         public async Task<ActionResult> DeleteSheet(Guid? id)
         {
             if (id == null)

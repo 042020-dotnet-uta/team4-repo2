@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Cors;
 using CharSheet.Api.Models;
 using CharSheet.Api.Services;
 
@@ -32,7 +33,7 @@ namespace CharSheet.Api.Controllers
 
         #region POST
         [HttpPost("Register")]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        [EnableCors]
         public async Task<ActionResult<UserModel>> CreateUserLocal(UserModel userModel)
         {
             if (ModelState.IsValid)
@@ -51,7 +52,7 @@ namespace CharSheet.Api.Controllers
         }
 
         [HttpPost("Login")]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        [EnableCors]
         public async Task<ActionResult<UserModel>> UserLoginLocal(UserModel userModel)
         {
             if (ModelState.IsValid)
