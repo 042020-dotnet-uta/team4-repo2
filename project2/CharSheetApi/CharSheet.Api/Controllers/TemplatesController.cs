@@ -34,6 +34,7 @@ namespace CharSheet.Api.Controllers
         #region Action Methods
         [HttpGet("{id}")]
         [AllowAnonymous]
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         public async Task<ActionResult<TemplateModel>> GetTemplates(Guid? id)
         {
             try
@@ -48,6 +49,7 @@ namespace CharSheet.Api.Controllers
 
         [HttpPost("")]
         [Authorize]
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         public async Task<ActionResult<TemplateModel>> CreateTemplate(TemplateModel templateModel)
         {
             if (ModelState.IsValid)

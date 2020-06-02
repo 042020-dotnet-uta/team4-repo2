@@ -85,7 +85,6 @@ stages:
                 sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
                 sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml
                 sonar.exclusions=**/*Migrations
-
 #build project
           
           - task: DotNetCoreCLI@2
@@ -158,5 +157,3 @@ stages:
           - task: SonarCloudPublish@1
             inputs:
               pollingTimeoutSec: '300'
-
-
