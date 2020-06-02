@@ -36,13 +36,9 @@ namespace CharSheet.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            _connection = ConfigurationManager.ConnectionStrings["SQLCONNSTR_APIDatabase"]?.ConnectionString;
-            if (string.IsNullOrEmpty(_connection))
-            {
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("IdentityDataContextConnection"));
-                builder.Password = Configuration["ServiceApiKey"];
-                _connection = builder.ConnectionString;
-            }
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("IdentityDataContextConnection"));
+            builder.Password = "sqlfkGH019";
+            _connection = builder.ConnectionString;
 
             services.AddDbContext<CharSheetContext>(options => options
                 .UseSqlServer(_connection, ef => ef.MigrationsAssembly("CharSheet.Api")));
