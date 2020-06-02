@@ -28,7 +28,7 @@ stages:
       steps:
         - task: UseDotNet@2
           inputs:
-            version: '$(sdkVersion)'
+            version: '3.1.x'
             packageType: runtime
         - task: DotNetCoreCLI@2
           inputs:
