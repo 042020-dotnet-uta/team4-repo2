@@ -151,7 +151,7 @@ stages:
             inputs:
               ConnectionType: 'AzureRM'
               azureSubscription: 'Azure Subscription 1 Resource Manager'
-              appType: 'webApp'
+              appType: 'apiApp'
               WebAppName: 'MWRevature'
               packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
           - task: SonarCloudAnalyze@1
