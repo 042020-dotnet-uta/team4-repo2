@@ -45,7 +45,7 @@ namespace CharSheet.Api.Controllers
             {
                 _logger.LogInformation(ex.Message);
                 _logger.LogInformation(ex.StackTrace);
-                return NotFound();
+                return NotFound(ex.StackTrace);
             }
         }
 
