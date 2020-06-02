@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Security.Principal;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -34,7 +35,7 @@ namespace CharSheet.Api.Controllers
         #region Action Methods
         [HttpGet("{id}")]
         [AllowAnonymous]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        [EnableCors]
         public async Task<ActionResult<TemplateModel>> GetTemplates(Guid? id)
         {
             try
@@ -49,7 +50,7 @@ namespace CharSheet.Api.Controllers
 
         [HttpPost("")]
         [Authorize]
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        [EnableCors]
         public async Task<ActionResult<TemplateModel>> CreateTemplate(TemplateModel templateModel)
         {
             if (ModelState.IsValid)
