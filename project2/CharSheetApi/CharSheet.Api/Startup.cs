@@ -51,9 +51,9 @@ namespace CharSheet.Api
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        // builder.AllowAnyOrigin()
-                         builder.WithOrigins("https://mwrevature.azurewebsites.net/",
-                            "https://johnssite.azurewebsites.net/")
+                        builder.AllowAnyOrigin()
+                        // builder.WithOrigins("https://mwrevature.azurewebsites.net/",
+                        // "https://johnssite.azurewebsites.net/")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                     }
