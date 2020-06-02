@@ -36,7 +36,7 @@ namespace CharSheet.Api
         public void ConfigureServices(IServiceCollection services)
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("IdentityDataContextConnection"));
-            builder.Password = Configuration["CharSheetApi:ServiceApiKey"];
+            builder.Password = Configuration["ServiceApiKey"];
             _connection = builder.ConnectionString;
 
             services.AddDbContext<CharSheetContext>(options => options
