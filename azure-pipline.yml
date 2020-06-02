@@ -108,12 +108,18 @@ stages:
               arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
               zipAfterPublish: true
 
-          - task: PublishBuildArtifacts@1
-            displayName: 'publish api artifact'
+          - publish: '$(Build.ArtifactStagingDirectory)'
+            artifact: 'APIBuildArtifact'
 
 #deploy api artifact to azure services
 
-          
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Azure Subscription 1 Resource Manager'
+              appType: 'apiApp'
+              WebAppName: 'RevatureP2API'
+              packageForLinux: '$(Pipeline.Workspace)/APIBuildArtifact'
 
 #run tests
           - task: DotNetCoreCLI@2
