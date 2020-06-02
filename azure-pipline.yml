@@ -73,7 +73,7 @@ stages:
               azureSubscription: 'Azure Subscription 1 Resource Manager'
               appType: 'apiApp'
               WebAppName: 'RevatureP2API'
-              packageForLinux: '$(Build.ArtifactStagingDirectory)/APIBuildArtifact'
+              packageForLinux: '**/*.zip'
 
 #run tests
           - task: DotNetCoreCLI@2
