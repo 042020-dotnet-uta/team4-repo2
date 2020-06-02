@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AccessCharSheetService } from "./access-char-sheet.service";
+import{HttpClient} from '@angular/common/http'
 
 
 @Component({
@@ -9,11 +10,11 @@ import { AccessCharSheetService } from "./access-char-sheet.service";
 })
 export class AccessCharSheetsComponent implements OnInit {
 
-  constructor(private charSheet:AccessCharSheetService) { }
-
+  constructor(private http:HttpClient) { }
+  httpData;
   ngOnInit(): void {
-    this.charSheet.getAllTemplates();
-
+    this.http.get("http://jsonplaceholder.typicode.com/users")
+        .subscribe((data) => this.displayData(data));
   }
-
+  displayData(data) { this.httpData = data; }
 }
