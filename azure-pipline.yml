@@ -170,7 +170,7 @@ stages:
         inputs:
           command: 'test'
           project: 'project2/CharSheet/CharSheetWeb'
-          arguments: '--watch=false --code-coverage'
+          arguments: '--watch=false --code-coverage --browsers ChromeHeadless'
           DisableAnalytics: false
 #run sonar code analysis
       - task: SonarCloudAnalyze@1
