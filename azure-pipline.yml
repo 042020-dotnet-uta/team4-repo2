@@ -91,14 +91,30 @@ stages:
           - task: DotNetCoreCLI@2
             displayName: 'dotnet build'
             inputs:
+              arguments: '--configuration $(buildConfiguration)'
               projects: '**/*.csproj'
             
+          # - task: DotNetCoreCLI@2
+          #   inputs:
+          #     command: publish
+          #     arguments: -c Release -o release
+          
+#publish api artifact
           - task: DotNetCoreCLI@2
+            displayName: 'dotnet publish api'
             inputs:
               command: publish
-              arguments: -c Release -o release
-          # - publish: $(Build.ArtifactStagingDirectory)/app
-          #   artifact: APIRelease
+              publishWebProjects: false
+              projects: '**/*CharSheet.Api.csproj'
+              arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+              zipAfterPublish: true
+
+          - task: PublishBuildArtifacts@1
+            displayName: 'publish api artifact'
+
+#deploy api artifact to azure services
+
+          
 
 #run tests
           - task: DotNetCoreCLI@2
