@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -29,12 +30,17 @@ namespace CharSheet.Api
         }
 
         public IConfiguration Configuration { get; }
+        private string _connection = null;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("IdentityDataContextConnection"));
+            builder.Password = Configuration["CharSheetApi:ServiceApiKey"];
+            _connection = builder.ConnectionString;
+
             services.AddDbContext<CharSheetContext>(options => options
-                .UseSqlServer("Server=LOCALHOST\\SQLEXPRESS;Database=CharSheetTest;Trusted_Connection=True;", ef => ef.MigrationsAssembly("CharSheet.Api")));
+                .UseSqlServer(_connection, ef => ef.MigrationsAssembly("CharSheet.Api")));
 
             services.AddAuthentication(options =>
             {

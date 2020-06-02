@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AccessCharSheetService } from "./access-char-sheet.service";
+
 
 @Component({
   selector: 'app-access-char-sheets',
@@ -7,9 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AccessCharSheetsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private charSheet:AccessCharSheetService) { }
 
   ngOnInit(): void {
+    this.charSheet.getAllTemplates();
+
   }
 
 }
