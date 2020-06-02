@@ -138,6 +138,11 @@ stages:
           extraProperties: |
             sonar.branch.name=$(Build.SourceBranchName)
             sonar.javascript.lcov.reportPaths=$(Build.SourcesDirectory)/project2/CharSheet/CharSheetWeb/coverage/CharSheetWeb/lcov.info
+            sonar.exclusions=**/*node_modules
+            sonar.exclusions=**/*e2e
+            sonar.exclusions=**/*.spec.ts
+            sonar.exclusions=**/*assets
+            sonar.exclusions=**/*environments
 
 #install node.js
       - task: NodeAndNpmTool@1
