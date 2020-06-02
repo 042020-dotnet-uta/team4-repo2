@@ -26,7 +26,7 @@ stages:
     jobs:
     - job: 
       pool:
-        vmImage: 'windows-latest'
+        vmImage: 'ubuntu-latest'
       steps:
 #install node.js
       - task: NodeAndNpmTool@1
@@ -62,8 +62,6 @@ stages:
           appType: 'webApp'
           WebAppName: 'JohnsSite'
           packageForLinux: 'project2/CharSheet/CharSheetWeb/dist/CharSheetWeb'
-          enableCustomDeployment: true
-          DeploymentType: 'webDeploy'
           TakeAppOfflineFlag: true
           RemoveAdditionalFilesFlag: true
 
