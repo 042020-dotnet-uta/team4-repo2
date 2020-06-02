@@ -22,7 +22,50 @@ variables:
   buildConfiguration: 'Release'
 
 stages:
-  - stage: 'API'
+  - stage: 'publish_api'
+    jobs:
+    - job: 'build_API'
+      steps:
+        - task: UseDotNet@2
+          inputs:
+            version: '$(sdkVersion)'
+            packageType: runtime
+        - task: DotNetCoreCLI@2
+          inputs:
+            command: 'build'
+            projects: '**/*CharSheet.Api.csproj'
+            arguments: '--configurations $(buildConfiguration)'
+        - task: DotNetCoreCLI@2
+          displayName: 'publish dotnetcorecli'
+          inputs:
+            projects: '**/CharSheet.Api.csproj'
+            command: 'publish'
+            publishWebProjects: false
+            arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            modifyOutputPath: false
+            zipAfterPublish: true
+        - publish: '$(Build.ArtifactStagingDirectory)'
+          artifact: 'APIBuildArtifact'
+  - stage: 'deploy_api'
+    dependsOn: 'publish_api'
+    jobs:
+      - deployment: 'deploy_dev'
+        pool:
+          vmImage: 'windows-latest'
+        environment: dev
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureRmWebAppDeployment@4
+                  inputs:
+                    ConnectionType: 'AzureRM'
+                    azureSubscription: 'Azure Subscription 1 Resource Manager'
+                    appType: 'apiApp'
+                    WebAppName: 'RevatureP2API'
+                    packageForLinux: '$(Pipeline.Workspace)/APIBuildArtifact'
+
+  - stage: 'APITesting'
     jobs:
       - job: 'buildjob'
         pool:
@@ -52,24 +95,24 @@ stages:
             
           
 #publish api artifact
-          - task: 'DotNetCoreCLI@2'
-            displayName: 'Publish DotNetCoreCLI'
-            inputs:
-              projects: '**/CharSheet.Api.csproj'
-              command: 'publish'
-              publishWebProjects: false
-              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-              modifyOutputPath: false
-              zipAfterPublish: true
-          - publish: '$(Build.ArtifactStagingDirectory)'
-            artifact: 'APIBuildArtifact'
-          - task: AzureRmWebAppDeployment@4
-            inputs:
-              ConnectionType: 'AzureRM'
-              azureSubscription: 'Azure Subscription 1 Resource Manager'
-              appType: 'apiApp'
-              WebAppName: 'RevatureP2API'
-              packageForLinux: '$(Pipeline.Workspace)/APIBuildArtifact'
+          # - task: 'DotNetCoreCLI@2'
+          #   displayName: 'Publish DotNetCoreCLI'
+          #   inputs:
+          #     projects: '**/CharSheet.Api.csproj'
+          #     command: 'publish'
+          #     publishWebProjects: false
+          #     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+          #     modifyOutputPath: false
+          #     zipAfterPublish: true
+          # - publish: '$(Build.ArtifactStagingDirectory)'
+          #   artifact: 'APIBuildArtifact'
+          # - task: AzureRmWebAppDeployment@4
+          #   inputs:
+          #     ConnectionType: 'AzureRM'
+          #     azureSubscription: 'Azure Subscription 1 Resource Manager'
+          #     appType: 'apiApp'
+          #     WebAppName: 'RevatureP2API'
+          #     packageForLinux: '$(Pipeline.Workspace)/APIBuildArtifact'
 #run tests
           - task: DotNetCoreCLI@2
             displayName: 'dotnet testing'
