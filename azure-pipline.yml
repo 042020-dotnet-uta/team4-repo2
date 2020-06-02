@@ -93,26 +93,6 @@ stages:
               arguments: '--configuration $(BuildConfiguration)'
               projects: '**/*.csproj'
             
-          
-#publish api artifact
-          # - task: 'DotNetCoreCLI@2'
-          #   displayName: 'Publish DotNetCoreCLI'
-          #   inputs:
-          #     projects: '**/CharSheet.Api.csproj'
-          #     command: 'publish'
-          #     publishWebProjects: false
-          #     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-          #     modifyOutputPath: false
-          #     zipAfterPublish: true
-          # - publish: '$(Build.ArtifactStagingDirectory)'
-          #   artifact: 'APIBuildArtifact'
-          # - task: AzureRmWebAppDeployment@4
-          #   inputs:
-          #     ConnectionType: 'AzureRM'
-          #     azureSubscription: 'Azure Subscription 1 Resource Manager'
-          #     appType: 'apiApp'
-          #     WebAppName: 'RevatureP2API'
-          #     packageForLinux: '$(Pipeline.Workspace)/APIBuildArtifact'
 #run tests
           - task: DotNetCoreCLI@2
             displayName: 'dotnet testing'
@@ -126,16 +106,7 @@ stages:
                 --logger trx'
               projects: '**/*CharSheet.Test.csproj'
               nobuild: true
-          # - task: AzureRmWebAppDeployment@4
-          #   inputs:
-          #     ConnectionType: 'AzureRM'
-          #     azureSubscription: 'Azure subscription 1 (c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
-          #     appType: 'webApp'
-          #     WebAppName: 'JohnsSite'
-          #     deployToSlotOrASE: true
-          #     ResourceGroupName: 'JohnsResourceGroup'
-          #     SlotName: 'production'
-          #     packageForLinux: '$(Build.ArtifactStagingDirectory)/app/APIRelease'
+
 #publishes code coverage in azure devops
           - task: PublishCodeCoverageResults@1
             displayName: 'Publish Code Coverage'
@@ -143,14 +114,6 @@ stages:
               codeCoverageTool: Cobertura
               summaryFileLocation: '$(Build.SourcesDirectory)/**/*.xml'
               reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
-#deploy api to azure web services
-          - task: AzureRmWebAppDeployment@4
-            inputs:
-              ConnectionType: 'AzureRM'
-              azureSubscription: 'Azure Subscription 1 Resource Manager'
-              appType: 'apiApp'
-              WebAppName: 'MWRevature'
-              packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
           - task: SonarCloudAnalyze@1
           - task: SonarCloudPublish@1
             inputs:
@@ -162,6 +125,20 @@ stages:
       pool:
         vmImage: 'ubuntu-latest'
       steps:
+#configure sonar cloud
+      - task: SonarCloudPrepare@1
+        inputs:
+          SonarCloud: 'project1'
+          organization: 'charsheets'
+          scannerMode: 'CLI'
+          configMode: 'manual'
+          cliProjectKey: '292d32de6ffb9c0d0e37894ec34a74fea340208b'
+          cliProjectName: 'AngularCharSheet'
+          cliSources: 'project2/CharSheet/CharSheetWeb'
+          extraProperties: |
+            sonar.branch.name=$(Build.SourceBranchName)
+            sonar.javascript.lcov.reportPaths=$(Build.SourcesDirectory)/project2/CharSheet/CharSheetWeb/coverage/CharSheetWeb/lcov.info
+
 #install node.js
       - task: NodeAndNpmTool@1
         inputs:
@@ -188,6 +165,26 @@ stages:
           project: 'project2/CharSheet/CharSheetWeb'
           custom: 'build --prod'
           DisableAnalytics: false
+#test angular project
+      - task: AngularCLI@0
+        inputs:
+          command: 'test'
+          project: 'project2/CharSheet/CharSheetWeb'
+          arguments: '--watch=false --code-coverage'
+          DisableAnalytics: false
+#run sonar code analysis
+      - task: SonarCloudAnalyze@1
+#publish sonar quality gate results
+      - task: SonarCloudPublish@1
+        inputs:
+          pollingTimeoutSec: '300'
+#publish angular code coverage to azure devops
+      - task: PublishCodeCoverageResults@1
+        displayName: 'Azure DevOps Publish code coverage'
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: '$(Build.SourcesDirectory)/**/*lcov.info'
+          reportDirectory: '$(Build.SourcesDirectory/project2/CharSheet/CharSheetWeb/coverage/CharSheetWeb'
 #deploy angular app to azure app service
       - task: AzureRmWebAppDeployment@4
         inputs:
