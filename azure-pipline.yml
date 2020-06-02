@@ -147,7 +147,13 @@ stages:
               summaryFileLocation: '$(Build.SourcesDirectory)/**/*.xml'
               reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
 #deploy api to azure web services
-          
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Azure Subscription 1 Resource Manager'
+              appType: 'webApp'
+              WebAppName: 'MWRevature'
+              packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
           - task: SonarCloudAnalyze@1
           - task: SonarCloudPublish@1
             inputs:
