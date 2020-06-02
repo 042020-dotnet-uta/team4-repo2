@@ -11,8 +11,4 @@ export class AccessCharSheetService
   //private templateURL = 'https://johnssite.azurewebsites.net/api/templates';
   constructor(private http: HttpClient) { }
 
-  getAllTemplates() {
-    this.http.get("http://jsonplaceholder.typicode.com/users")
-      .subscribe((data) => { console.log(data); });
-  }
 }
