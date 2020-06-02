@@ -1,12 +1,7 @@
 <a class="nav-link text-black-50 btn btn-link" button (click)="createDragItem()">Create new Sheet item </a>
 
-<div id="form-boundary">
-  <div  class ="drag-box" *ngFor ="let divForm of formElements" cdkDragBoundary="#form-boundary" cdkDrag
-        [ngStyle]="style"
-        mwlResizable
-        [validateResize]="validate"
-        [enableGhostResize]="true"
-        (resizeEnd)="onResizeEnd($event)">
+<div id ="form-boundary" >
+  <div  class ="drag-box" *ngFor ="let divFormElement of formElements" cdkDragBoundary="#form-boundary" cdkDrag>
     <textarea class="textarea">this is a placeholder</textarea>
     <div class=" box-handle" cdkDragHandle>
       <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
@@ -16,18 +11,6 @@
     </div>
     <div class="text-body">
     </div>
-    <div class="resize-handle-top"
-         mwlResizeHandle
-         [resizeEdges]="{ top: true }"></div>
-    <div class="resize-handle-left"
-         mwlResizeHandle
-         [resizeEdges]="{ left: true }"></div>
-    <div class="resize-handle-right"
-         mwlResizeHandle
-         [resizeEdges]="{ right: true }"></div>
-    <div class="resize-handle-bottom"
-         mwlResizeHandle
-         [resizeEdges]="{ bottom: true }"></div>
   </div>
-</div>
+  </div>
 
