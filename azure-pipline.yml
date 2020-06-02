@@ -93,10 +93,6 @@ stages:
               arguments: '--configuration $(buildConfiguration)'
               projects: '**/*.csproj'
             
-          # - task: DotNetCoreCLI@2
-          #   inputs:
-          #     command: publish
-          #     arguments: -c Release -o release
           
 #publish api artifact
           - task: DotNetCoreCLI@2
