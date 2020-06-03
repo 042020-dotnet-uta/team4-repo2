@@ -31,7 +31,7 @@ namespace CharSheet.Api
         }
 
         public IConfiguration Configuration { get; }
-        private string _connection = null;
+        // private string _connection = null;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -54,7 +54,7 @@ namespace CharSheet.Api
                     }
                 );
             });
-
+            /*
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -72,6 +72,7 @@ namespace CharSheet.Api
                     ValidateAudience = false
                 };
             });
+            */
 
             services.AddMvc();
 
