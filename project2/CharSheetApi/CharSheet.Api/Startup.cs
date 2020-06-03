@@ -55,11 +55,12 @@ namespace CharSheet.Api
                     }
                 );
             });
-            
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(options =>
             {
@@ -73,7 +74,7 @@ namespace CharSheet.Api
                     ValidateAudience = false
                 };
             });
-            
+
 
             services.AddMvc();
 

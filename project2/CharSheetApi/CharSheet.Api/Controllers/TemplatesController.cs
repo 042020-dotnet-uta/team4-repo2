@@ -34,6 +34,8 @@ namespace CharSheet.Api.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogInformation(ex.Message);
+                _logger.LogInformation(ex.StackTrace);
                 return Ok(new { Message = ex.Message, StackTrace = ex.StackTrace });
             }
         }

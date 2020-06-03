@@ -50,7 +50,7 @@ namespace CharSheet.Data.Repositories
                 query = query.Where(filter);
             }
 
-            if (includeProperties != null)
+            if (!string.IsNullOrEmpty(includeProperties))
             {
                 foreach (var includeProperty in includeProperties.Split
                 (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
@@ -65,7 +65,7 @@ namespace CharSheet.Data.Repositories
             }
             else
             {
-                return await query.ToListAsync();
+                return query.ToList();
             }
         }
 
