@@ -1,5 +1,5 @@
-import { Component, Injectable, Inject } from '@angular/core';
-import { AuthService, GoogleLoginProvider, SocialUser } from "angularx-social-login";
+import { Component} from '@angular/core';
+import { AuthService, GoogleLoginProvider} from "angularx-social-login";
 import { ApiService } from './api.service';
 import { CookieService } from 'ngx-cookie-service';
 @Component({

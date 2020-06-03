@@ -4,6 +4,8 @@ import { DebugElement } from '@angular/core';
 import { AuthService, GoogleLoginProvider } from "angularx-social-login";
 import { By } from '@angular/platform-browser';
 import { applySourceSpanToExpressionIfNeeded } from '@angular/compiler/src/output/output_ast';
+import { ApiService } from './api.service';
+import { sign } from 'crypto';
 
 describe('AppComponet', () => {
   let component: AppComponent;
@@ -13,16 +15,18 @@ describe('AppComponet', () => {
   let authStub: any;
   let signInSpy: any;
   let signOutSpy: any;
+  let apiStub: any;
 
   beforeEach(async(() => {
     authStub = { AuthService: 'anyAuth'};
     googleStub = { caller: 'thissite.com', callee: 'google.com', arguments: 'none' };
-
+    apiStub = {apiService: 'anyservice'}
     TestBed.configureTestingModule({
       declarations: [AppComponent],
       providers: [{ provide: GoogleLoginProvider, useValue: googleStub },
-        {provide: AuthService, useValue: authStub}],
-
+        { provide: AuthService, useValue: authStub },
+        { provide: ApiService, useValue: apiStub}],
+      
     }).compileComponents(); //compiles html template and css
 
   }));
@@ -53,6 +57,16 @@ describe('AppComponet', () => {
   it('signIn should be called', () => {
     component.singIn('google');
     expect(signInSpy).toHaveBeenCalled();
+  });
+
+  it('signIn should return void', () => {
+    let returnValue: any = component.singIn('google');
+    expect(returnValue).toBeFalsy();
+  });
+
+  it('signOut should return void', () => {
+    let returnValue: any = component.signOut();
+    expect(returnValue).toBeFalsy();
   });
 
   it('signOut should be called', () => {

@@ -3,20 +3,27 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateFormComponent } from './create-form.component';
 //  import dependecies
 import { RouterTestingModule } from '@angular/router/testing';
+import { ApiService, Template } from '../api.service';
 
 describe('CreateFormComponent', () => {
   let component: CreateFormComponent;
   let fixture: ComponentFixture<CreateFormComponent>;
-  
+  let apiMock: any;
+  let dragSpy: any;
+  let titleSpy: any;
 
   beforeEach(async(() => {
+    apiMock = jasmine.createSpyObj('ApiService', ['postTemplate'])
     TestBed.configureTestingModule({
       declarations: [CreateFormComponent],
+      providers: [
+        { provide: ApiService, useValue: apiMock},
+      ],
       imports: [
         RouterTestingModule
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -28,4 +35,51 @@ describe('CreateFormComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have default width of 50', () => {
+    expect(component.width == 50).toBeTruthy();
+  });
+
+  it('should have default height of 30', () => {
+    expect(component.height == 30).toBeTruthy();
+  });
+
+  it('should have titleElements property', () => {
+    expect(component.titleElements).toBeTruthy();
+  });
+
+  it('should have formElements property', () => {
+    expect(component.formElements).toBeTruthy();
+  });
+ 
+  it('should call createDragItem', () => {
+    dragSpy = spyOn(component, 'createDragItem');
+    let drag: any = component.createDragItem();
+    expect(dragSpy).toHaveBeenCalled();
+    expect(drag).toBeUndefined();
+  });
+
+  it('should call createTitleItem', () => {
+    titleSpy = spyOn(component, 'createTitleItem');
+    component.createTitleItem();
+    expect(titleSpy).toHaveBeenCalled();
+  });
+
+  it('should change width when changeWidth is called', () => {
+    expect(component.width == 50).toBeTruthy();
+    component.changeWidth(100);
+    expect(component.width == 100).toBeTruthy();
+  });
+
+  it('should change height when changeHeight is called', () => {
+    expect(component.height == 30).toBeTruthy();
+    component.changeHeight(200);
+    expect(component.height == 200).toBeTruthy();
+  });
+
+  it('convertToModel should return a Template', () => {
+    const template: Template = component.convertToModel();
+    expect(template).toBeTruthy();
+  });
+ 
 });
