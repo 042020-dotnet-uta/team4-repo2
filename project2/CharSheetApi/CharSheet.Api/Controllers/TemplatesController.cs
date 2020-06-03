@@ -48,9 +48,9 @@ namespace CharSheet.Api.Controllers
                     templateModel = await _service.CreateTemplate(templateModel, userId);
                     return CreatedAtAction(nameof(GetTemplates), new { id = templateModel.TemplateId }, templateModel);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return BadRequest();
+                    return BadRequest(new { message = ex.Message, stack = ex.StackTrace});
                 }
             }
             return BadRequest();

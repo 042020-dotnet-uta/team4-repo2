@@ -86,7 +86,7 @@ export class CreateFormComponent implements OnInit {
 
   saveTemplate(): void {
     let template = this.convertToModel();
-    this.apiService.postTempalte(template)
+    this.apiService.postTemplate(template)
     .subscribe(response => {
       if (response.status == 200) {
         console.log(response.body);

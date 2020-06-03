@@ -11,7 +11,8 @@ import { CookieService } from 'ngx-cookie-service';
 export class ApiService {
   constructor(private httpClient: HttpClient, private cookieService: CookieService) { }
 
-  private connectionString = 'https://revatureprojectapi.azurewebsites.net/api/';
+  // private connectionString = 'https://revatureprojectapi.azurewebsites.net/api/';
+  private connectionString = 'http://localhost:5000/';
 
   public userLogin(login: Login): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
@@ -32,7 +33,7 @@ export class ApiService {
     return this.httpClient.get(this.connectionString + `templates/${templateId}`, { observe: 'response' })
   }
 
-  public postTempalte(template: Template): Observable<any> {
+  public postTemplate(template: Template): Observable<any> {
     const headers = new HttpHeaders()
     .set('Content-type', 'application/json')
     .set('Authorization', `Bearer ${this.cookieService.get('apiToken')}`);
