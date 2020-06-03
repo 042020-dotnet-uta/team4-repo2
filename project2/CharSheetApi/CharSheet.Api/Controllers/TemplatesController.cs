@@ -22,8 +22,7 @@ namespace CharSheet.Api.Controllers
         }
 
         #region Action Methods
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id}")]
         [AllowAnonymous]
         public async Task<ActionResult<TemplateModel>> GetTemplates(Guid? id)
         {
@@ -37,8 +36,7 @@ namespace CharSheet.Api.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("{id}")]
+        [HttpPost("{id}")]
         [Authorize]
         public async Task<ActionResult<TemplateModel>> CreateTemplate(TemplateModel templateModel)
         {

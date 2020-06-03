@@ -25,8 +25,7 @@ namespace CharSheet.Api.Controllers
         }
 
         #region Action Methods
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id}")]
         [AllowAnonymous]
         public async Task<ActionResult<SheetModel>> GetSheets(Guid? id)
         {
@@ -43,8 +42,7 @@ namespace CharSheet.Api.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("")]
+        [HttpPost("")]
         [Authorize]
         public async Task<ActionResult<SheetModel>> CreateSheet(SheetModel sheetModel)
         {
@@ -64,8 +62,7 @@ namespace CharSheet.Api.Controllers
             return BadRequest();
         }
 
-        [HttpPut]
-        [Route("{id}")]
+        [HttpPut("{id}")]
         [Authorize]
         public async Task<ActionResult<SheetModel>> UpdateSheet(Guid? id, SheetModel sheetModel)
         {
@@ -91,8 +88,7 @@ namespace CharSheet.Api.Controllers
             return BadRequest();
         }
 
-        [HttpDelete]
-        [Route("{id}")]
+        [HttpDelete("{id}")]
         [Authorize]
         public async Task<ActionResult> DeleteSheet(Guid? id)
         {

@@ -33,8 +33,7 @@ namespace CharSheet.Api.Controllers
         }
 
         #region POST
-        [HttpPost]
-        [Route("Register")]
+        [HttpPost("Register")]
         [AllowAnonymous]
         public async Task<ActionResult<UserModel>> CreateUserLocal(UserModel userModel)
         {
@@ -53,8 +52,7 @@ namespace CharSheet.Api.Controllers
             return BadRequest();
         }
 
-        [HttpPost]
-        [Route("Login")]
+        [HttpPost("Login")]
         [AllowAnonymous]
         public async Task<ActionResult<UserModel>> UserLoginLocal(UserModel userModel)
         {
