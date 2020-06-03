@@ -11,7 +11,7 @@ export class ApiService {
 
   public userLogin(login: Login): Observable<any> {
     const headers = new HttpHeaders().set("Content-Type", "application/json");
-    return this.httpClient.post('https://revatureprojectapi.azurewebsites.net/api/account/login', login, { headers, responseType: 'text' });
+    return this.httpClient.post('https://revatureprojectapi.azurewebsites.net/api/account/login', login, { headers, responseType: 'text', observe: 'response' });
   }
 
   public register(register: Register): Observable<any> {
