@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 
 @Component({
@@ -10,7 +11,7 @@ import { catchError, retry } from 'rxjs/operators';
   styleUrls: ['./access-char-sheets.component.css']
 })
 export class AccessCharSheetsComponent implements OnInit {
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient,private route:ActivatedRoute) { }
   httpData;
   ngOnInit(): void {
     this.http.get("http://jsonplaceholder.typicode.com/users")
