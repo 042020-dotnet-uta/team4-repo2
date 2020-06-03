@@ -43,7 +43,9 @@ stages:
             publishWebProjects: false
             arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
             modifyOutputPath: false
-            zipAfterPublish: true
+            zipAfterPublish: false
+        - publish: '$(Build.ArtifactStagingDirectory)'
+          artifact: 'app'
 
   - stage: 'deploy_api'
     dependsOn: 'publish_api'
@@ -58,7 +60,7 @@ stages:
             azureSubscription: 'Azure subscription 1(f0f77c70-bece-4456-ad00-b1eeb211e3bd)'
             appType: 'webApp'
             WebAppName: 'revatureprojectapi'
-            packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+            packageForLinux: '$(Pipeline.Workspace)/app'
                 
 
   - stage: 'APITesting'
