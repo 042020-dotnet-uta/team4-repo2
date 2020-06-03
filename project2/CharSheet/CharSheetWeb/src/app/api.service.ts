@@ -22,3 +22,19 @@ export class ApiService {
     return this.httpClient.get(`https://revatureprojectapi.azurewebsites.net/api/templates/${templateId}`, { observe: 'response' })
   }
 }
+
+export interface Template
+{
+  'formTemplates': FormTemplate[]
+}
+
+export interface FormTemplate
+{
+  type: string;
+  title: string;
+  x: number;
+  y: number;
+  height: number;
+  width: number;
+  labels: string[];
+}
