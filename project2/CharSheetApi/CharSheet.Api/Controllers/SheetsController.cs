@@ -1,4 +1,5 @@
 using System;
+using System.Security.Claims;
 using System.Security;
 using System.Linq;
 using System.Threading.Tasks;
@@ -48,7 +49,8 @@ namespace CharSheet.Api.Controllers
             {
                 try
                 {
-                    var userId = Guid.Parse(User.FindFirst("Id").Value);
+                    var identity = HttpContext.User.Identity as ClaimsIdentity;
+                    var userId = Guid.Parse(identity.Claims.Where(claim => claim.Type == "Id").First().Value);
                     sheetModel = await _service.CreateSheet(sheetModel, userId);
                     return CreatedAtAction(nameof(GetSheets), new { id = sheetModel.SheetId }, sheetModel);
                 }
@@ -67,7 +69,8 @@ namespace CharSheet.Api.Controllers
             {
                 if (id == null)
                     return BadRequest();
-                var userId = Guid.Parse(User.FindFirst("Id").Value);
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                var userId = Guid.Parse(identity.Claims.Where(claim => claim.Type == "Id").First().Value);
                 sheetModel.SheetId = (Guid)id;
                 try
                 {
@@ -92,7 +95,8 @@ namespace CharSheet.Api.Controllers
                 return BadRequest();
             try
             {
-                var userId = Guid.Parse(User.FindFirst("Id").Value);
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                var userId = Guid.Parse(identity.Claims.Where(claim => claim.Type == "Id").First().Value);
                 await _service.DeleteSheet(id, userId);
                 return Ok();
             }

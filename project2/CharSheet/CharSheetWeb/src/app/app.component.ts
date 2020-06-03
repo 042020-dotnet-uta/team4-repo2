@@ -28,7 +28,7 @@ export class AppComponent {
         .subscribe((response) => {
           if (response.status == 200) {
             console.log(response);
-            this.cookieService.set('apiToken', response.body);
+            this.cookieService.set('access_token', response.body);
           }
         });
     });
