@@ -61,10 +61,11 @@ stages:
                 - task: AzureRmWebAppDeployment@4
                   inputs:
                     ConnectionType: 'AzureRM'
-                    azureSubscription: 'Azure Subscription 1 Resource Manager'
+                    azureSubscription: 'Azure subscription 1(f0f77c70-bece-4456-ad00-b1eeb211e3bd)'
                     appType: 'webApp'
-                    WebAppName: 'RevatureP2API'
+                    WebAppName: 'revatureprojectapi'
                     packageForLinux: '$(Pipeline.Workspace)/APIBuildArtifact'
+                
 
   - stage: 'APITesting'
     jobs:
