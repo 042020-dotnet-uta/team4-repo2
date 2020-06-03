@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CharSheet.Api.Migrations
 {
     [DbContext(typeof(CharSheetContext))]
-    [Migration("20200603031542_InitialSetup")]
-    partial class InitialSetup
+    [Migration("20200603220129_NewDatabaseLayout")]
+    partial class NewDatabaseLayout
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -70,25 +70,16 @@ namespace CharSheet.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("FormTemplateId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Height")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OffsetLeft")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OffsetTop")
                         .HasColumnType("int");
 
                     b.Property<int>("Width")
                         .HasColumnType("int");
 
-                    b.Property<int>("XPos")
+                    b.Property<int>("X")
                         .HasColumnType("int");
 
-                    b.Property<int>("YPos")
+                    b.Property<int>("Y")
                         .HasColumnType("int");
 
                     b.HasKey("FormPostionId");

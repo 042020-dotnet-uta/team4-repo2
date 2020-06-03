@@ -65,7 +65,7 @@ namespace CharSheet.Data.Repositories
             }
             else
             {
-                return query.ToList();
+                return await query.ToListAsync();
             }
         }
 

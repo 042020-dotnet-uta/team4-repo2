@@ -49,7 +49,7 @@ namespace CharSheet.Api.Services
                 sheetModels.Add(sheetModel);
             }
 
-            return sheetModels.AsEnumerable();
+            return sheetModels.ToList();
         }
 
         public async Task<SheetModel> GetSheet(object id)
@@ -187,7 +187,7 @@ namespace CharSheet.Api.Services
                 var formInputGroupModel = await ToModel(formInputGroup);
                 formInputGroupModels.Add(formInputGroupModel);
             }
-            sheetModel.FormGroups = formInputGroupModels.AsEnumerable();
+            sheetModel.FormGroups = formInputGroupModels.ToList();
 
             return sheetModel;
         }
