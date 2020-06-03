@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AccessCharSheetsComponent } from './access-char-sheets.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { dispatch } from 'rxjs/internal/observable/range';
 
 describe('AccessCharSheetsComponent', () => {
   let component: AccessCharSheetsComponent;
@@ -29,4 +30,8 @@ describe('AccessCharSheetsComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should do something', ()=> {
+    let something: any = component.displayData('some data');
+    expect(something).toBeUndefined();
+  });
 });
