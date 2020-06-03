@@ -50,15 +50,21 @@ stages:
   - stage: 'deploy_api'
     dependsOn: 'publish_api'
     jobs:
-     - job:
-       steps:       
-        - task: AzureRmWebAppDeployment@4
-          inputs:
-            ConnectionType: 'AzureRM'
-            azureSubscription: 'Azure subscription 1(f0f77c70-bece-4456-ad00-b1eeb211e3bd)'
-            appType: 'webApp'
-            WebAppName: 'revatureprojectapi'
-            packageForLinux: '$(Build.ArtifactStagingDirectory)/app'
+      - deployment: 
+        pool:
+          vmimage: "windows-latest"
+        environment: dev
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureRmWebAppDeployment@4
+                  inputs:
+                    ConnectionType: 'AzureRM'
+                    azureSubscription: 'Azure subscription 1(f0f77c70-bece-4456-ad00-b1eeb211e3bd)'
+                    appType: 'webApp'
+                    WebAppName: 'revatureprojectapi'
+                    packageForLinux: '$(Pipeline.Workspace)/app'
                 
 
   - stage: 'APITesting'
