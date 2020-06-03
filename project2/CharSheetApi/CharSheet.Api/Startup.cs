@@ -54,7 +54,7 @@ namespace CharSheet.Api
                     }
                 );
             });
-            /*
+            
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -72,7 +72,7 @@ namespace CharSheet.Api
                     ValidateAudience = false
                 };
             });
-            */
+            
 
             services.AddMvc();
 
