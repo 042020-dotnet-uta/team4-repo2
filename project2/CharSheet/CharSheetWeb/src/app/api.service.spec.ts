@@ -4,13 +4,14 @@ import { ApiService, Login, Template, Register, FormTemplate } from './api.servi
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Observable } from 'rxjs';
 import { SocialUser } from 'angularx-social-login';
-import { CookieService } from 'ngx-cookie-service';
 
 describe('ApiService', () => {
   let service: ApiService;
   let userLogin: Login;
   let socialUser: Partial<SocialUser>;
   let register: Register;
+  let template: Partial<Template>;
+  let formTemplate: Partial<FormTemplate>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -22,6 +23,8 @@ describe('ApiService', () => {
     userLogin = { username: 'name', password: 'password' };
     socialUser = { name: 'name', email: 'email@domain.com' };
     register = { email: 'email@domain.com', password: 'password', username: 'name' };
+    formTemplate = { height: 11 };
+    template = { formTemplates: [<FormTemplate>formTemplate] };
   });
 
   it('should be created', () => {
@@ -47,5 +50,11 @@ describe('ApiService', () => {
     let object: Observable<any> = service.getTemplate('templateID');
     expect(object).toBeTruthy();
   });
+
+  it('postTemplate should return Observable<any>', () => {
+    let object: Observable<any> = service.postTempalte(<Template>template);
+    expect(object).toBeTruthy();
+  });
+
 
 });
