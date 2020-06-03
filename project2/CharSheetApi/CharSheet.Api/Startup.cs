@@ -38,16 +38,8 @@ namespace CharSheet.Api
         {
             services.AddControllersWithViews();
 
-            _connection = ConfigurationManager.ConnectionStrings["SQLCONNSTR_APIDatabase"]?.ConnectionString;
-            if (string.IsNullOrEmpty(_connection))
-            {
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("IdentityDataContextConnection"));
-                builder.Password = Configuration["ServiceApiKey"];
-                _connection = builder.ConnectionString;
-            }
-
             services.AddDbContext<CharSheetContext>(options => options
-                .UseSqlServer(_connection, ef => ef.MigrationsAssembly("CharSheet.Api")));
+                .UseSqlServer(Configuration.GetConnectionString("IdentityDataContextConnection"), ef => ef.MigrationsAssembly("CharSheet.Api")));
 
             services.AddCors(options =>
             {
@@ -81,11 +73,11 @@ namespace CharSheet.Api
                 };
             });
 
+            services.AddMvc();
+
             services.AddControllers()
                 .AddJsonOptions(options => options
                 .JsonSerializerOptions.IgnoreNullValues = true);
-
-            services.AddMvc();
 
             services.AddScoped<IBusinessService, BusinessService>();
             services.AddScoped<IAccountService, AccountService>();
