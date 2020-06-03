@@ -127,6 +127,16 @@ stages:
       pool:
         vmImage: 'ubuntu-latest'
       steps:
+      #deploy angular app to azure app service
+      - task: AzureRmWebAppDeployment@4
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'Azure subscription 1 (c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
+          appType: 'webApp'
+          WebAppName: 'JohnsSite'
+          packageForLinux: 'project2/CharSheet/CharSheetWeb/dist/CharSheetWeb'
+          TakeAppOfflineFlag: true
+          RemoveAdditionalFilesFlag: true
 #configure sonar cloud
       - task: SonarCloudPrepare@1
         inputs:
@@ -188,14 +198,5 @@ stages:
           codeCoverageTool: Cobertura
           summaryFileLocation: '$(Build.SourcesDirectory)/**/*lcov.info'
           reportDirectory: '$(Build.SourcesDirectory/project2/CharSheet/CharSheetWeb/coverage/CharSheetWeb'
-#deploy angular app to azure app service
-      - task: AzureRmWebAppDeployment@4
-        inputs:
-          ConnectionType: 'AzureRM'
-          azureSubscription: 'Azure subscription 1 (c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
-          appType: 'webApp'
-          WebAppName: 'JohnsSite'
-          packageForLinux: 'project2/CharSheet/CharSheetWeb/dist/CharSheetWeb'
-          TakeAppOfflineFlag: true
-          RemoveAdditionalFilesFlag: true
+
 
