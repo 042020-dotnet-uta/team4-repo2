@@ -39,21 +39,17 @@ namespace CharSheet.Api.Controllers
         [HttpPost("")]
         public async Task<ActionResult<TemplateModel>> CreateTemplate(TemplateModel templateModel)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    var userId = Guid.Parse(User.FindFirst("Id").Value);
-                    _logger.LogInformation(userId.ToString());
-                    templateModel = await _service.CreateTemplate(templateModel, userId);
-                    return CreatedAtAction(nameof(GetTemplates), new { id = templateModel.TemplateId }, templateModel);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(new { message = ex.Message, stack = ex.StackTrace});
-                }
+                var userId = Guid.Parse(User.FindFirst("Id").Value);
+                _logger.LogInformation(userId.ToString());
+                templateModel = await _service.CreateTemplate(templateModel, userId);
+                return CreatedAtAction(nameof(GetTemplates), new { id = templateModel.TemplateId }, templateModel);
             }
-            return BadRequest();
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message, stack = ex.StackTrace });
+            }
         }
         #endregion
     }
