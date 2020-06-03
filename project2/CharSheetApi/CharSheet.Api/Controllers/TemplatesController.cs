@@ -39,6 +39,7 @@ namespace CharSheet.Api.Controllers
         }
 
         [HttpPost("")]
+        [Authorize]
         public async Task<ActionResult<TemplateModel>> CreateTemplate(TemplateModel templateModel)
         {
             Guid? userId = null;
