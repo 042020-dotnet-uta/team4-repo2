@@ -17,22 +17,29 @@ var document;
 
 //Angular class for declaring methods, kinda like controller from what I have seen, with the methods inside being like
 //controller actions. 
-export class CreateFormComponent implements OnInit
-{
-  titleElements=[];
-  formElements = [];
+export class CreateFormComponent implements OnInit {
+  titleElements = [] as FormElement[];
+  formElements = [] as FormElement[];
+  width = 50;
+  height = 30;
   constructor(private route: ActivatedRoute,
   ) { }
   // create a method to be used in the HTML to  push a new dev of the predefined type
   // to the dom and to the page dynamically 
   createDragItem(): void {
-    this.formElements.push(this.formElements.length);
-    document.getElementById("form-boundary").appendChild(this.formElements);
+    this.formElements.push({ height: 300, width: 200 } as FormElement);
   }
 
   createTitleItem(): void {
-    this.titleElements.push(this.titleElements.length);
-    document.getElementById("form-boundary").appendChild(this.titleElements);
+    this.titleElements.push({ width: this.width, height: this.height } as FormElement);
+  }
+
+  changeWidth(w:number):void{
+    this.width = w;
+  }
+
+  changeHeight(h:number):void{
+    this.height = h;
   }
 
   name;
@@ -41,4 +48,9 @@ export class CreateFormComponent implements OnInit
       this.name = params['name'];
     });
   }
+}
+
+export class FormElement {
+  width: number;
+  height: number;
 }
