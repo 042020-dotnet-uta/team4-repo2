@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 import { SocialUser } from 'angularx-social-login';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -34,22 +34,22 @@ export class ApiService {
   }
 
   public postTemplate(template: Template): Observable<any> {
-    const headers = new HttpHeaders()
-      .set('Content-type', 'application/json')
-      .set('Authorization', `Bearer ${this.cookieService.get('access_token')}`)
-      .set('Authenticationtoken', `Bearer ${this.cookieService.get('access_token')}`)
-      .set('X-Requested-With', 'XMLHttpRequest');
+    const headers = this.setRequestHeaders();
     return this.httpClient
       .post<Template>(this.connectionString + 'templates', template, { headers, observe: 'response' });
   }
 
   public postSheet(sheet: Sheet): Observable<any> {
-    const headers = new HttpHeaders()
+    const headers = this.setRequestHeaders();
+    return this.httpClient.post(this.connectionString + 'sheets', sheet, { headers, observe: 'response' });
+  }
+
+  private setRequestHeaders(): HttpHeaders {
+    return new HttpHeaders()
       .set('Content-type', 'application/json')
       .set('Authorization', `Bearer ${this.cookieService.get('access_token')}`)
       .set('Authenticationtoken', `Bearer ${this.cookieService.get('access_token')}`)
       .set('X-Requested-With', 'XMLHttpRequest');
-    return this.httpClient.post(this.connectionString + 'sheets', sheet, { headers, observe: 'response' });
   }
 }
 

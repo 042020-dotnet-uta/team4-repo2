@@ -61,7 +61,7 @@ namespace CharSheet.Api.Controllers
                     userModel = await _accountService.LoginLocal(userModel);
 
                     // Log in successful.
-                    return Ok(new { accessToken = GetAccessToken(userModel), id = userModel.UserId });
+                    return Ok(GetAccessToken(userModel));
                 }
                 catch
                 {
@@ -77,7 +77,7 @@ namespace CharSheet.Api.Controllers
             try
             {
                 userModel = await _accountService.LoginSocial(userModel);
-                return Ok(new { accessToken = GetAccessToken(userModel), id = userModel.UserId });
+                return Ok(GetAccessToken(userModel));
             }
             catch
             {
