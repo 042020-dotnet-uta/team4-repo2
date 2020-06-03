@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ApiService, Login, Template, Register, FormTemplate } from './api.service';
+import { ApiService, Login, Template, Register, FormTemplate, Sheet } from './api.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Observable } from 'rxjs';
 import { SocialUser } from 'angularx-social-login';
@@ -12,6 +12,7 @@ describe('ApiService', () => {
   let register: Register;
   let template: Partial<Template>;
   let formTemplate: Partial<FormTemplate>;
+  let sheet: Partial<Sheet>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,6 +26,7 @@ describe('ApiService', () => {
     register = { email: 'email@domain.com', password: 'password', username: 'name' };
     formTemplate = { height: 11 };
     template = { formTemplates: [<FormTemplate>formTemplate] };
+    sheet = { sheetId: 'sheetId' }
   });
 
   it('should be created', () => {
@@ -56,5 +58,9 @@ describe('ApiService', () => {
     expect(object).toBeTruthy();
   });
 
+  it('postSheet should return Observable<any>', () => {
+    let object: Observable<any> = service.postSheet(<Sheet>sheet);
+    expect(object).toBeTruthy();
+  });
 
 });
