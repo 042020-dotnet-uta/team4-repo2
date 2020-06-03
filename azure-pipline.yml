@@ -47,7 +47,8 @@ stages:
 
   - stage: 'deploy_api'
     dependsOn: 'publish_api'
-    pool: "windows-latest"
+    pool: 
+      vmimage: "windows-latest"
     jobs:
      - job:
        steps:       
