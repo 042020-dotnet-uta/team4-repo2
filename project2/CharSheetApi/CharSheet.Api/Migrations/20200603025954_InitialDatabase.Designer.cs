@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CharSheet.Api.Migrations
 {
     [DbContext(typeof(CharSheetContext))]
-    [Migration("20200528144308_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20200603025954_InitialDatabase")]
+    partial class InitialDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
