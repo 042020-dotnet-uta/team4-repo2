@@ -33,14 +33,16 @@ export class ApiService {
   }
 
   public postTempalte(template: Template): Observable<any> {
-    const headers = new HttpHeaders().set('Content-type', 'application/json');
-    headers.set('Authorization', `Bearer ${this.cookieService.get('token')}`);
+    const headers = new HttpHeaders()
+    .set('Content-type', 'application/json')
+    .set('Authorization', `Bearer ${this.cookieService.get('apiToken')}`);
     return this.httpClient.post(this.connectionString + 'templates', template, { headers, observe: 'response' })
   }
 
   public postSheet(sheet: Sheet): Observable<any> {
-    const headers = new HttpHeaders().set('Content-type', 'application/json');
-    headers.set('Authorization', `Bearer ${this.cookieService.get('token')}`);
+    const headers = new HttpHeaders()
+    .set('Content-type', 'application/json')
+    .set('Authorization', `Bearer ${this.cookieService.get('apiToken')}`);
     return this.httpClient.post(this.connectionString + 'sheets', sheet, {headers, observe: 'response'});
   }
 }
