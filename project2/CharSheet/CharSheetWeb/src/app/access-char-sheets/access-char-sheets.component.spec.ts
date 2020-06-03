@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccessCharSheetsComponent } from './access-char-sheets.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('AccessCharSheetsComponent', () => {
   let component: AccessCharSheetsComponent;
@@ -8,7 +10,11 @@ describe('AccessCharSheetsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AccessCharSheetsComponent ]
+      declarations: [AccessCharSheetsComponent],
+      imports: [
+        RouterTestingModule,
+        HttpClientTestingModule
+      ]
     })
     .compileComponents();
   }));
@@ -19,7 +25,8 @@ describe('AccessCharSheetsComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });

@@ -6,7 +6,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ResizeEvent } from 'angular-resizable-element';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
-//ties component info to correlating temlate and css files. 
+//ties component info to correlating temlate and css files.
 var document;
 
 @Component({
@@ -41,7 +41,6 @@ export class CreateFormComponent implements OnInit {
   changeHeight(h:number):void{
     this.height = h;
   }
-
   name;
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
