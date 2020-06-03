@@ -41,7 +41,7 @@ stages:
             projects: '**/CharSheet.Api.csproj'
             command: 'publish'
             publishWebProjects: false
-            arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)/app'
+            arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
             modifyOutputPath: false
             zipAfterPublish: false
         - publish: '$(Build.ArtifactStagingDirectory)'
