@@ -16,6 +16,8 @@ namespace CharSheet.Api.Services
         #region POST
         Task<UserModel> RegisterLocal(UserModel userModel);
         Task<UserModel> LoginLocal(UserModel userModel);
+
+        Task<UserModel> LoginSocial(UserModel userModel);
         #endregion
     }
 
@@ -123,6 +125,26 @@ namespace CharSheet.Api.Services
                 }
             }
             throw new InvalidOperationException("Matching username or password was not found.");
+        }
+
+        public async Task<UserModel> LoginSocial(UserModel userModel)
+        {
+            var user = (await _unitOfWork.UserRepository.Get(user => user.Username == userModel.Username && user.Email == userModel.Email)).FirstOrDefault();
+            if (user == null)
+            {
+                user = await _unitOfWork.UserRepository.Insert(new User
+                {
+                    Username = userModel.Username,
+                    Email = userModel.Email
+                });
+            }
+
+            return new UserModel
+            {
+                UserId = user.UserId,
+                Username = user.Username,
+                Email = user.Email
+            };
         }
         #endregion
     }

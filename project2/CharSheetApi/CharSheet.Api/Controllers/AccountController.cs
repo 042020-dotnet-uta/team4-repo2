@@ -61,21 +61,7 @@ namespace CharSheet.Api.Controllers
                     var userLogin = await _accountService.LoginLocal(userModel);
 
                     // Log in successful.
-                    var claims = new[] {
-                        new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                        new Claim("Id", userLogin.UserId.ToString()),
-                        new Claim("Username", userLogin.Username),
-                        new Claim("Email", userLogin.Email)
-                    };
-
-                    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-                    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-                    var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:Audience"], claims, expires: DateTime.UtcNow.AddDays(1), signingCredentials: credentials);
-
-                    return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                    return Ok(GetAccessToken(userLogin));
                 }
                 catch
                 {
@@ -83,6 +69,41 @@ namespace CharSheet.Api.Controllers
                 }
             }
             return BadRequest();
+        }
+
+        [HttpPost("GoogleLogin")]
+        public async Task<ActionResult<UserModel>> GoogleLogin(UserModel userModel)
+        {
+            try
+            {
+                await _accountService.LoginSocial(userModel);
+                return Ok(GetAccessToken(userModel));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        #endregion
+
+        #region Helpers
+        public string GetAccessToken(UserModel userModel)
+        {
+            var claims = new[] {
+                new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                new Claim("Id", userModel.UserId.ToString()),
+                new Claim("Username", userModel.Username),
+                new Claim("Email", userModel.Email)
+            };
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:Audience"], claims, expires: DateTime.UtcNow.AddDays(1), signingCredentials: credentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
         #endregion
     }
