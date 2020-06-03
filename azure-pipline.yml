@@ -58,7 +58,7 @@ stages:
             azureSubscription: 'Azure subscription 1(f0f77c70-bece-4456-ad00-b1eeb211e3bd)'
             appType: 'webApp'
             WebAppName: 'revatureprojectapi'
-            packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+            packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
                 
 
   - stage: 'APITesting'
