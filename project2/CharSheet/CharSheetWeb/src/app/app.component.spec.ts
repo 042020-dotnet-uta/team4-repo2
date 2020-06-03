@@ -6,12 +6,13 @@ import { By } from '@angular/platform-browser';
 import { applySourceSpanToExpressionIfNeeded } from '@angular/compiler/src/output/output_ast';
 import { ApiService } from './api.service';
 import { sign } from 'crypto';
+import { RouterLink, Navigation } from '@angular/router';
 
 describe('AppComponet', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
   let de: DebugElement;
-  let googleStub: any;
+  let googleStub: Partial<GoogleLoginProvider>;
   let authStub: any;
   let signInSpy: any;
   let signOutSpy: any;
@@ -19,13 +20,13 @@ describe('AppComponet', () => {
 
   beforeEach(async(() => {
     authStub = { AuthService: 'anyAuth'};
-    googleStub = { caller: 'thissite.com', callee: 'google.com', arguments: 'none' };
+    googleStub = { };
     apiStub = {apiService: 'anyservice'}
     TestBed.configureTestingModule({
       declarations: [AppComponent],
       providers: [{ provide: GoogleLoginProvider, useValue: googleStub },
         { provide: AuthService, useValue: authStub },
-        { provide: ApiService, useValue: apiStub}],
+        { provide: ApiService, useValue: apiStub }],
       
     }).compileComponents(); //compiles html template and css
 
@@ -60,7 +61,7 @@ describe('AppComponet', () => {
   });
 
   it('signIn should return void', () => {
-    let returnValue: any = component.singIn('google');
+    let returnValue: any = component.singIn('Google');
     expect(returnValue).toBeFalsy();
   });
 
@@ -101,8 +102,20 @@ describe('AppComponet', () => {
     const linkDes = de.queryAll(
       By.css('li')
     );
-    const createForm: HTMLDListElement = linkDes[2].nativeElement;
+    const createForm: HTMLLinkElement = linkDes[2].nativeElement;
     expect(createForm.textContent).toContain('Sign in with Google');
+  });
+
+  it('signIn should be called when "Sign in with Google" is clicked', () => {
+    const linkDes = de.queryAll(
+      By.css('a')
+    );
+    let signInLink: HTMLLinkElement = linkDes[3].nativeElement;
+    signInLink.click();
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(signInSpy).toHaveBeenCalled();
+    });
   });
 
   it('should have Sign out link', () => {
@@ -111,6 +124,18 @@ describe('AppComponet', () => {
     );
     const createForm: HTMLDListElement = linkDes[3].nativeElement;
     expect(createForm.textContent).toContain('Sign out');
+  });
+
+  it('signOut should be called when "Sign Out" is clicked', () => {
+    const linkDes = de.queryAll(
+      By.css('a')
+    );
+    let signOutLink: HTMLLinkElement = linkDes[4].nativeElement;
+    signOutLink.click();
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(signOutSpy).toHaveBeenCalled();
+    });
   });
 
   it('should have user div', () => {
