@@ -1,5 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 // Importing social login module and google login provider.
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, AuthService } from "angularx-social-login";
 
@@ -28,7 +30,7 @@ let config = new AuthServiceConfig([
     AppComponent,
     CreateFormComponent,
     AccessCharSheetsComponent,
-    FormsContainerComponent 
+    FormsContainerComponent
   ],
   // Injecting the social-login-module during the application startup!
   imports: [
@@ -38,9 +40,10 @@ let config = new AuthServiceConfig([
     DragDropModule,
     ResizableModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 
