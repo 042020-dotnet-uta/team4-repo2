@@ -58,10 +58,10 @@ namespace CharSheet.Api.Controllers
             {
                 try
                 {
-                    var userLogin = await _accountService.LoginLocal(userModel);
+                    userModel = await _accountService.LoginLocal(userModel);
 
                     // Log in successful.
-                    return Ok(GetAccessToken(userLogin));
+                    return Ok(GetAccessToken(userModel));
                 }
                 catch
                 {
@@ -76,7 +76,7 @@ namespace CharSheet.Api.Controllers
         {
             try
             {
-                await _accountService.LoginSocial(userModel);
+                userModel = await _accountService.LoginSocial(userModel);
                 return Ok(GetAccessToken(userModel));
             }
             catch

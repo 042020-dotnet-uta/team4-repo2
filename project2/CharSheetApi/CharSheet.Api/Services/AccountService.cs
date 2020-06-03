@@ -76,7 +76,7 @@ namespace CharSheet.Api.Services
                 };
 
                 // Insert user into database.
-                await _unitOfWork.UserRepository.Insert(user);
+                user = await _unitOfWork.UserRepository.Insert(user);
                 await _unitOfWork.Save();
 
                 _logger.LogInformation($"New User: {user.UserId} - {user.Username}.");

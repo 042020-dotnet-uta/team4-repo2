@@ -109,7 +109,7 @@ namespace CharSheet.Api.Services
                 var formTemplateModel = await ToModel(formTemplate);
                 formTemplateModels.Add(formTemplateModel);
             }
-            templateModel.FormTemplates = formTemplateModels.AsEnumerable();
+            templateModel.FormTemplates = formTemplateModels.ToList();
 
             return templateModel;
         }

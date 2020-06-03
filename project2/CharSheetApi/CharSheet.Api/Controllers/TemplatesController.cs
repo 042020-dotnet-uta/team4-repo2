@@ -25,20 +25,22 @@ namespace CharSheet.Api.Controllers
 
         #region Action Methods
         [HttpGet("{id}")]
-        public async Task<ActionResult<TemplateModel>> GetTemplates(string id)
+        public async Task<ActionResult<TemplateModel>> GetTemplates(Guid? id)
         {
             try
             {
-                Guid.Parse(id);
                 return Ok(await _service.GetTemplate(id));
             }
             catch (Exception ex)
             {
+                _logger.LogInformation(ex.Message);
+                _logger.LogInformation(ex.StackTrace);
                 return Ok(new { Message = ex.Message, StackTrace = ex.StackTrace });
             }
         }
 
         [HttpPost("")]
+        [Authorize]
         public async Task<ActionResult<TemplateModel>> CreateTemplate(TemplateModel templateModel)
         {
             Guid? userId = null;
