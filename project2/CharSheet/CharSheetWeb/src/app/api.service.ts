@@ -11,8 +11,8 @@ import { CookieService } from 'ngx-cookie-service';
 export class ApiService {
   constructor(private httpClient: HttpClient, private cookieService: CookieService) { }
 
-  // private connectionString = 'https://revatureprojectapi.azurewebsites.net/api/';
-  private connectionString = 'http://localhost:5000/';
+  private connectionString = 'https://revatureprojectapi.azurewebsites.net/api/';
+  // private connectionString = 'http://localhost:5000/';
 
   public userLogin(login: Login): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
@@ -36,14 +36,18 @@ export class ApiService {
   public postTemplate(template: Template): Observable<any> {
     const headers = new HttpHeaders()
     .set('Content-type', 'application/json')
-    .set('Authorization', `Bearer ${this.cookieService.get('apiToken')}`);
+    .set('Authorization', `Bearer ${this.cookieService.get('apiToken')}`)
+    .set('Authenticationtoken', `Bearer ${this.cookieService.get('apiToken')}`)
+    .set('X-Requested-With', 'XMLHttpRequest');
     return this.httpClient.post(this.connectionString + 'templates', template, { headers, observe: 'response' })
   }
 
   public postSheet(sheet: Sheet): Observable<any> {
     const headers = new HttpHeaders()
     .set('Content-type', 'application/json')
-    .set('Authorization', `Bearer ${this.cookieService.get('apiToken')}`);
+    .set('Authorization', `Bearer ${this.cookieService.get('apiToken')}`)
+    .set('Authenticationtoken', `Bearer ${this.cookieService.get('apiToken')}`)
+    .set('X-Requested-With', 'XMLHttpRequest');
     return this.httpClient.post(this.connectionString + 'sheets', sheet, {headers, observe: 'response'});
   }
 }

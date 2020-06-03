@@ -14,6 +14,7 @@ import { AccessCharSheetsComponent } from './access-char-sheets/access-char-shee
 import { HttpClientModule } from '@angular/common/http';
 import { FormsContainerComponent } from './forms-container/forms-container.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ApiService } from './api.service';
 
 
 // Client id for the google oauth. This is used for validation of our application to google.
@@ -43,7 +44,10 @@ let config = new AuthServiceConfig([
     AppRoutingModule,
     FormsModule
   ],
-  providers: [CookieService],
+  providers: [
+    CookieService,
+    ApiService
+  ],
   bootstrap: [AppComponent]
 })
 
