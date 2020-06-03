@@ -41,7 +41,7 @@ namespace CharSheet.Data.Repositories
             return await dbSet.FindAsync(id);
         }
 
-        public async virtual Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
+        public async virtual Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = null)
         {
             IQueryable<TEntity> query = dbSet;
 
@@ -50,7 +50,7 @@ namespace CharSheet.Data.Repositories
                 query = query.Where(filter);
             }
 
-            if (!string.IsNullOrEmpty(includeProperties))
+            if (includeProperties != null)
             {
                 foreach (var includeProperty in includeProperties.Split
                 (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))

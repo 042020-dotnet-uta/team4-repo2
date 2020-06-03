@@ -68,6 +68,9 @@ namespace CharSheet.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("FormTemplateId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Height")
                         .HasColumnType("int");
 

@@ -9,6 +9,9 @@ namespace CharSheet.Domain
         [Key]
         public Guid FormPostionId { get; set; }
 
+        [ForeignKey("FormTemplate")]
+        public Guid FormTemplateId { get; set; }
+
         public int X { get; set; }
         public int Y { get; set; }
 

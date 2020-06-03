@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CharSheet.Api.Migrations
 {
-    public partial class NewDatabaseLayout : Migration
+    public partial class NewDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,6 +12,7 @@ namespace CharSheet.Api.Migrations
                 columns: table => new
                 {
                     FormPostionId = table.Column<Guid>(nullable: false),
+                    FormTemplateId = table.Column<Guid>(nullable: false),
                     X = table.Column<int>(nullable: false),
                     Y = table.Column<int>(nullable: false),
                     Width = table.Column<int>(nullable: false),
