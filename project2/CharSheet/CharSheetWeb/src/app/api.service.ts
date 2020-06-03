@@ -5,17 +5,18 @@ import { Observable, of } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+
 export class ApiService {
   constructor(private httpClient: HttpClient) { }
 
-  public userLogin(username: string, password: string): Observable<any> {
+  public userLogin(login: Login): Observable<any> {
     const headers = new HttpHeaders().set("Content-Type", "application/json");
-    return this.httpClient.post('https://revatureprojectapi.azurewebsites.net/api/account/login', { username, password }, { headers, responseType: 'text' });
+    return this.httpClient.post('https://revatureprojectapi.azurewebsites.net/api/account/login', login, { headers, responseType: 'text' });
   }
 
-  public register(username: string, email: string, password: string): Observable<any> {
+  public register(register: Register): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.httpClient.post('https://revatureprojectapi.azurewebsites.net/api/account/register', { username, email, password }, { observe: 'response' });
+    return this.httpClient.post('https://revatureprojectapi.azurewebsites.net/api/account/register', register, { observe: 'response' });
   }
 
   public getTemplate(templateId: string): Observable<object> {
@@ -23,13 +24,20 @@ export class ApiService {
   }
 }
 
-export interface Template
-{
+export interface Login {
+  username: string;
+  password: string;
+}
+
+export interface Register extends Login {
+  email: string;
+}
+
+export interface Template {
   'formTemplates': FormTemplate[]
 }
 
-export interface FormTemplate
-{
+export interface FormTemplate {
   type: string;
   title: string;
   x: number;
