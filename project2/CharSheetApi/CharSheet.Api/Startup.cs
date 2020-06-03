@@ -36,8 +36,13 @@ namespace CharSheet.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+<<<<<<< HEAD
             _connection = ConfigurationManager.ConnectionStrings["SQLCONNSTR_APIDatabase"]?.ConnectionString;
             if (string.IsNullOrEmpty(_connection))
+=======
+            _connection = Environment.GetEnvironmentVariable("SQLCONNSTR_APIDatabase");
+            if (_connection == null)
+>>>>>>> parent of a12f5c1... Change connection string
             {
                 SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("IdentityDataContextConnection"));
                 builder.Password = Configuration["ServiceApiKey"];
