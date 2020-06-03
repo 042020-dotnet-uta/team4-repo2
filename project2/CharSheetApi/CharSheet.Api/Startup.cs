@@ -36,6 +36,8 @@ namespace CharSheet.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews();
+
             _connection = ConfigurationManager.ConnectionStrings["SQLCONNSTR_APIDatabase"]?.ConnectionString;
             if (string.IsNullOrEmpty(_connection))
             {
@@ -52,11 +54,11 @@ namespace CharSheet.Api
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.AllowAnyOrigin()
+                        builder.AllowAnyOrigin();
                         // builder.WithOrigins("https://mwrevature.azurewebsites.net/",
                         // "https://johnssite.azurewebsites.net/")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
+                        builder.AllowAnyHeader();
+                        builder.AllowAnyMethod();
                     }
                 );
             });
@@ -82,6 +84,8 @@ namespace CharSheet.Api
             services.AddControllers()
                 .AddJsonOptions(options => options
                 .JsonSerializerOptions.IgnoreNullValues = true);
+
+            services.AddMvc();
 
             services.AddScoped<IBusinessService, BusinessService>();
             services.AddScoped<IAccountService, AccountService>();
