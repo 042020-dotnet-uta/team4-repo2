@@ -36,7 +36,7 @@ namespace CharSheet.Api.Controllers
             }
         }
 
-        [HttpPost("{id}")]
+        [HttpPost("")]
         public async Task<ActionResult<TemplateModel>> CreateTemplate(TemplateModel templateModel)
         {
             if (ModelState.IsValid)
