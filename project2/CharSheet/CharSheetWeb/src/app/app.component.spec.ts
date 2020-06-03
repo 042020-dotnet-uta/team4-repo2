@@ -2,6 +2,8 @@ import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { DebugElement } from '@angular/core';
 import { AuthService, GoogleLoginProvider } from "angularx-social-login";
+import { By } from '@angular/platform-browser';
+import { applySourceSpanToExpressionIfNeeded } from '@angular/compiler/src/output/output_ast';
 
 describe('AppComponet', () => {
   let component: AppComponent;
@@ -9,6 +11,8 @@ describe('AppComponet', () => {
   let de: DebugElement;
   let googleStub: any;
   let authStub: any;
+  let signInSpy: any;
+  let signOutSpy: any;
 
   beforeEach(async(() => {
     authStub = { AuthService: 'anyAuth'};
@@ -20,6 +24,7 @@ describe('AppComponet', () => {
         {provide: AuthService, useValue: authStub}],
 
     }).compileComponents(); //compiles html template and css
+
   }));
 
   //  setup of variables used for testing
@@ -27,7 +32,8 @@ describe('AppComponet', () => {
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
     de = fixture.debugElement;
-
+    signInSpy = spyOn(component, 'singIn');
+    signOutSpy = spyOn(component, 'signOut');
     fixture.detectChanges();
   });
 
@@ -35,35 +41,78 @@ describe('AppComponet', () => {
     expect(component).toBeTruthy();
   });
 
+  // check title of app button
+  it('should have title: Character Sheet Creator', () => {
+    expect(component.title).toContain('Character Sheet Creator');
+  });
+
+  it('should have undefined user property', () => {
+    expect(component.user).toBeUndefined();
+  });
+
+  it('signIn should be called', () => {
+    component.singIn('google');
+    expect(signInSpy).toHaveBeenCalled();
+  });
+
+  it('signOut should be called', () => {
+    component.signOut();
+    expect(signOutSpy).toHaveBeenCalled();
+  });
+
+  it('should have button', () => {
+    const linkDes = de.queryAll(
+      By.css('button')
+    );
+    expect(linkDes.length>=1).toBeTruthy();
+  });
+
+  it('should have create form link', () => {
+    const linkDes = de.queryAll(
+      By.css('li')
+    );
+    const createForm: HTMLDListElement = linkDes[0].nativeElement;
+    expect(createForm.textContent).toContain('Create Form');
+  });
+
+  it('should have access form link', () => {
+    const linkDes = de.queryAll(
+      By.css('li')
+    );
+    const createForm: HTMLDListElement = linkDes[1].nativeElement;
+    expect(createForm.textContent).toContain('Access Form');
+  });
+
+  it('should have Sign in with Google link', () => {
+    const linkDes = de.queryAll(
+      By.css('li')
+    );
+    const createForm: HTMLDListElement = linkDes[2].nativeElement;
+    expect(createForm.textContent).toContain('Sign in with Google');
+  });
+
+  it('should have Sign out link', () => {
+    const linkDes = de.queryAll(
+      By.css('li')
+    );
+    const createForm: HTMLDListElement = linkDes[3].nativeElement;
+    expect(createForm.textContent).toContain('Sign out');
+  });
+
+  it('should have user div', () => {
+    const linkDes = de.queryAll(
+      By.css('div')
+    );
+    expect(linkDes.length>=2).toBeTruthy();
+  });
+
+  it('should contain one header', () => {
+    const linkDes = de.queryAll(
+      By.css('header')
+    );
+    expect(linkDes.length==1).toBeTruthy();
+  });
 
 
 });
 
-/*describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ]
-    }).compileComponents();
-  }));
-
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it(`should have as title 'Character Sheet Creator'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('Character Sheet Creator');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('CharSheetWeb app is running!');
-  });
-});*/
