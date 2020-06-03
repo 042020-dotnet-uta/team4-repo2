@@ -34,7 +34,6 @@ namespace CharSheet.Api.Controllers
 
         #region POST
         [HttpPost("Register")]
-        [AllowAnonymous]
         public async Task<ActionResult<UserModel>> CreateUserLocal(UserModel userModel)
         {
             if (ModelState.IsValid)
@@ -53,7 +52,6 @@ namespace CharSheet.Api.Controllers
         }
 
         [HttpPost("Login")]
-        [AllowAnonymous]
         public async Task<ActionResult<UserModel>> UserLoginLocal(UserModel userModel)
         {
             if (ModelState.IsValid)

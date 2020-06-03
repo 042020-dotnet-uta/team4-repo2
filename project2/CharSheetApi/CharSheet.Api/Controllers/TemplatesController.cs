@@ -23,7 +23,6 @@ namespace CharSheet.Api.Controllers
 
         #region Action Methods
         [HttpGet("{id}")]
-        [AllowAnonymous]
         public async Task<ActionResult<TemplateModel>> GetTemplates(Guid? id)
         {
             try
@@ -37,7 +36,6 @@ namespace CharSheet.Api.Controllers
         }
 
         [HttpPost("{id}")]
-        [Authorize]
         public async Task<ActionResult<TemplateModel>> CreateTemplate(TemplateModel templateModel)
         {
             if (ModelState.IsValid)
