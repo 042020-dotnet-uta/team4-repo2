@@ -12,7 +12,7 @@ using CharSheet.Api.Models;
 namespace CharSheet.Api.Controllers
 {
     [ApiController]
-    [Route("/api/[controller]")]
+    [Route("/api/sheets")]
     public class SheetsController : ControllerBase
     {
         private readonly ILogger<SheetsController> _logger;
@@ -25,7 +25,8 @@ namespace CharSheet.Api.Controllers
         }
 
         #region Action Methods
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("{id}")]
         [AllowAnonymous]
         public async Task<ActionResult<SheetModel>> GetSheets(Guid? id)
         {
@@ -42,7 +43,8 @@ namespace CharSheet.Api.Controllers
             }
         }
 
-        [HttpPost("")]
+        [HttpPost]
+        [Route("")]
         [Authorize]
         public async Task<ActionResult<SheetModel>> CreateSheet(SheetModel sheetModel)
         {
@@ -62,7 +64,8 @@ namespace CharSheet.Api.Controllers
             return BadRequest();
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("{id}")]
         [Authorize]
         public async Task<ActionResult<SheetModel>> UpdateSheet(Guid? id, SheetModel sheetModel)
         {
@@ -88,7 +91,8 @@ namespace CharSheet.Api.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("{id}")]
         [Authorize]
         public async Task<ActionResult> DeleteSheet(Guid? id)
         {
