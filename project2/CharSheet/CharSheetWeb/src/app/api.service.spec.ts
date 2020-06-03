@@ -4,6 +4,7 @@ import { ApiService, Login, Template, Register, FormTemplate } from './api.servi
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Observable } from 'rxjs';
 import { SocialUser } from 'angularx-social-login';
+import { CookieService } from 'ngx-cookie-service';
 
 describe('ApiService', () => {
   let service: ApiService;

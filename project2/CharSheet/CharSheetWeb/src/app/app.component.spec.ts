@@ -4,6 +4,7 @@ import { DebugElement } from '@angular/core';
 import { AuthService, GoogleLoginProvider } from "angularx-social-login";
 import { By } from '@angular/platform-browser';
 import { applySourceSpanToExpressionIfNeeded } from '@angular/compiler/src/output/output_ast';
+import { ApiService } from './api.service';
 
 describe('AppComponet', () => {
   let component: AppComponent;
@@ -13,16 +14,18 @@ describe('AppComponet', () => {
   let authStub: any;
   let signInSpy: any;
   let signOutSpy: any;
+  let apiStub: any;
 
   beforeEach(async(() => {
     authStub = { AuthService: 'anyAuth'};
     googleStub = { caller: 'thissite.com', callee: 'google.com', arguments: 'none' };
-
+    apiStub = {apiService: 'anyservice'}
     TestBed.configureTestingModule({
       declarations: [AppComponent],
       providers: [{ provide: GoogleLoginProvider, useValue: googleStub },
-        {provide: AuthService, useValue: authStub}],
-
+        { provide: AuthService, useValue: authStub },
+        { provide: ApiService, useValue: apiStub}],
+      
     }).compileComponents(); //compiles html template and css
 
   }));
