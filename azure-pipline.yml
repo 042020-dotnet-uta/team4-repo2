@@ -36,12 +36,12 @@ stages:
             projects: '**/*CharSheet.Api.csproj'
             arguments: '--configuration Release'
         - task: DotNetCoreCLI@2
-          displayName: 'publish dotnetcorecli'
+          displayName: 'publish release'
           inputs:
             projects: '**/CharSheet.Api.csproj'
             command: 'publish'
             publishWebProjects: false
-            arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
             modifyOutputPath: false
             zipAfterPublish: true
 
