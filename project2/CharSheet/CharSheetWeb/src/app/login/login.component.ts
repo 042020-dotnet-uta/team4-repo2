@@ -1,7 +1,9 @@
 import { Component, OnInit, Injectable, Inject } from '@angular/core';
-import { AuthService} from "angularx-social-login";
+import { AuthService } from "angularx-social-login";
 import { GoogleLoginProvider } from "angularx-social-login";
 import { SocialUser } from "angularx-social-login";
+
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-login',
@@ -11,9 +13,9 @@ import { SocialUser } from "angularx-social-login";
 
 export class LoginComponent implements OnInit {
   private user: SocialUser;
-  private loggedIn: boolean;
+  private loggedIn = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private apiService: ApiService) { }
 
   signInWithGoogle(): void {
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
@@ -23,10 +25,10 @@ export class LoginComponent implements OnInit {
     this.authService.signOut();
   }
 
-  ngOnInit() { 
-      this.authService.authState.subscribe((user) => {
+  ngOnInit() {
+    this.authService.authState.subscribe((user) => {
       this.user = user;
-      this.loggedIn = (user != null);
+      this.loggedIn = (this.user === null);
     });
   }
 }
