@@ -22,4 +22,9 @@ describe('FormsContainerComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('shoud create new form template', () => {
+    let form: any = component.newFormTemplate();
+    expect(form).toBeUndefined;
+  });
 });
