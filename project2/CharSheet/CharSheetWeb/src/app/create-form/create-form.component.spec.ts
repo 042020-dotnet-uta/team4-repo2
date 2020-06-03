@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CreateFormComponent } from './create-form.component';
+//  import dependecies
+import {DragDropModule} from '@angular/cdk/drag-drop'
 
 describe('CreateFormComponent', () => {
   let component: CreateFormComponent;
@@ -8,7 +10,11 @@ describe('CreateFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CreateFormComponent ]
+      declarations: [CreateFormComponent],
+      imports: [
+        DragDropModule
+      ]
+
     })
     .compileComponents();
   }));
@@ -19,7 +25,7 @@ describe('CreateFormComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
