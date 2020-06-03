@@ -28,7 +28,7 @@ let config = new AuthServiceConfig([
     AppComponent,
     CreateFormComponent,
     AccessCharSheetsComponent,
-    FormsContainerComponent 
+    FormsContainerComponent
   ],
   // Injecting the social-login-module during the application startup!
   imports: [

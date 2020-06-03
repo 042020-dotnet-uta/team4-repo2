@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CreateFormComponent } from './create-form.component';
 //  import dependecies
-import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('CreateFormComponent', () => {
   let component: CreateFormComponent;
@@ -12,6 +12,9 @@ describe('CreateFormComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [CreateFormComponent],
+      imports: [
+        RouterTestingModule
+      ]
     })
     .compileComponents();
   }));
@@ -22,7 +25,7 @@ describe('CreateFormComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

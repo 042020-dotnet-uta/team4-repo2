@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, inject, getTestBed } from '@angular/core/testing';
 import { AuthService, GoogleLoginProvider } from "angularx-social-login";
 import { LoginComponent } from './login.component';
 import { SocialUser } from "angularx-social-login";
@@ -9,34 +9,39 @@ describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   let de: DebugElement;
-
+  let injector: TestBed;
   let googleStub: Partial<GoogleLoginProvider>;
-  let authStub: Partial<AuthService>;
+  //let googleStub: GoogleLoginProvider;
+  let authMock: any;
   let userStub: Observable<SocialUser>;
   let states: Observable<string[]>;
 
   beforeEach(async(() => {
-
-    authStub = { readyState: states, authState: userStub};
-
+    authMock = jasmine.createSpyObj('AuthService', ['authState'])
     TestBed.configureTestingModule({
       declarations: [LoginComponent],
       providers: [{ provide: GoogleLoginProvider, useValue: googleStub },
-        { provide: AuthService, useValue: authStub },
-        { provide: SocialUser, useValue: userStub },]
+        { provide: SocialUser, useValue: userStub },
+        {provide: AuthService, useValue: authMock}
+      ],
+      
     })
-    .compileComponents();
+      .compileComponents();
+    injector = getTestBed();
+    //authStub = injector.get(AuthService);
+    //googleStub = injector.get(GoogleLoginProvider);
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     de = fixture.debugElement;
-
     fixture.detectChanges();
   });
 
   xit('should create', () => {
     expect(component).toBeTruthy()
   });
+
+
 });
