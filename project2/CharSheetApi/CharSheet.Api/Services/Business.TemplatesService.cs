@@ -77,10 +77,8 @@ namespace CharSheet.Api.Services
                 Type = formTemplate.Type,
                 Title = formTemplate.Title,
 
-                OffsetTop = formTemplate.FormPosition.OffsetTop,
-                OffsetLeft = formTemplate.FormPosition.OffsetLeft,
-                XPos = formTemplate.FormPosition.XPos,
-                YPos = formTemplate.FormPosition.YPos,
+                X = formTemplate.FormPosition.X,
+                Y = formTemplate.FormPosition.Y,
                 Width = formTemplate.FormPosition.Width,
                 Height = formTemplate.FormPosition.Height,
 
@@ -133,10 +131,8 @@ namespace CharSheet.Api.Services
 
                     FormPosition = new FormPosition
                     {
-                        OffsetTop = formTemplateModel.OffsetTop,
-                        OffsetLeft = formTemplateModel.OffsetLeft,
-                        XPos = formTemplateModel.XPos,
-                        YPos = formTemplateModel.YPos,
+                        X = formTemplateModel.X,
+                        Y = formTemplateModel.Y,
                         Width = formTemplateModel.Width,
                         Height = formTemplateModel.Height
                     },
