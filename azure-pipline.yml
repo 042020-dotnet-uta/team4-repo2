@@ -41,7 +41,7 @@ stages:
             projects: '**/CharSheet.Api.csproj'
             command: 'publish'
             publishWebProjects: false
-            arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
+            arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)/app'
             modifyOutputPath: false
             zipAfterPublish: false
         - publish: '$(Build.ArtifactStagingDirectory)'
@@ -49,8 +49,6 @@ stages:
 
   - stage: 'deploy_api'
     dependsOn: 'publish_api'
-    pool: 
-      vmimage: "windows-latest"
     jobs:
      - job:
        steps:       
@@ -60,7 +58,7 @@ stages:
             azureSubscription: 'Azure subscription 1(f0f77c70-bece-4456-ad00-b1eeb211e3bd)'
             appType: 'webApp'
             WebAppName: 'revatureprojectapi'
-            packageForLinux: '$(Pipeline.Workspace)/app'
+            packageForLinux: '$(Build.ArtifactStagingDirectory)/app'
                 
 
   - stage: 'APITesting'
