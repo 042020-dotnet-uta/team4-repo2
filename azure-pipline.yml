@@ -44,8 +44,6 @@ stages:
             arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
             modifyOutputPath: false
             zipAfterPublish: true
-        - publish: '$(Build.ArtifactStagingDirectory)'
-          artifact: 'APIBuildArtifact'
 
   - stage: 'deploy_api'
     dependsOn: 'publish_api'
