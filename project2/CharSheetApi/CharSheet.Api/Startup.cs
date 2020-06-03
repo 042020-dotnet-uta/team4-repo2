@@ -46,11 +46,12 @@ namespace CharSheet.Api
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.AllowAnyOrigin();
+                        builder.AllowAnyOrigin()
                         // builder.WithOrigins("https://mwrevature.azurewebsites.net/",
                         // "https://johnssite.azurewebsites.net/")
-                        builder.AllowAnyHeader();
-                        builder.AllowAnyMethod();
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .Build();
                     }
                 );
             });

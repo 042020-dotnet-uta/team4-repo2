@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -41,8 +43,8 @@ namespace CharSheet.Api.Controllers
         {
             try
             {
-                var userId = Guid.Parse(User.FindFirst("Id").Value);
-                _logger.LogInformation(userId.ToString());
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                var userId = Guid.Parse(identity.Claims.Where(claim => claim.Type == "Id").First().Value);
                 templateModel = await _service.CreateTemplate(templateModel, userId);
                 return CreatedAtAction(nameof(GetTemplates), new { id = templateModel.TemplateId }, templateModel);
             }
