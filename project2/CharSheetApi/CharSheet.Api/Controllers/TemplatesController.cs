@@ -9,7 +9,7 @@ using CharSheet.Api.Models;
 namespace CharSheet.Api.Controllers
 {
     [ApiController]
-    [Route("/api/[controller]")]
+    [Route("/api/templates")]
     public class TemplatesController : ControllerBase
     {
         private readonly ILogger<TemplatesController> _logger;
@@ -22,7 +22,8 @@ namespace CharSheet.Api.Controllers
         }
 
         #region Action Methods
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("{id}")]
         [AllowAnonymous]
         public async Task<ActionResult<TemplateModel>> GetTemplates(Guid? id)
         {
@@ -36,7 +37,8 @@ namespace CharSheet.Api.Controllers
             }
         }
 
-        [HttpPost("")]
+        [HttpPost]
+        [Route("{id}")]
         [Authorize]
         public async Task<ActionResult<TemplateModel>> CreateTemplate(TemplateModel templateModel)
         {

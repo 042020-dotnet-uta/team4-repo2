@@ -5,17 +5,18 @@ using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Cors;
 using CharSheet.Api.Models;
 using CharSheet.Api.Services;
 
 namespace CharSheet.Api.Controllers
 {
     [ApiController]
-    [Route("/api/[controller]")]
+    [Route("/api/account")]
     public class AccountController : ControllerBase
     {
         private readonly ILogger<AccountController> _logger;
@@ -32,7 +33,9 @@ namespace CharSheet.Api.Controllers
         }
 
         #region POST
-        [HttpPost("Register")]
+        [HttpPost]
+        [Route("Register")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserModel>> CreateUserLocal(UserModel userModel)
         {
             if (ModelState.IsValid)
@@ -50,7 +53,9 @@ namespace CharSheet.Api.Controllers
             return BadRequest();
         }
 
-        [HttpPost("Login")]
+        [HttpPost]
+        [Route("Login")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserModel>> UserLoginLocal(UserModel userModel)
         {
             if (ModelState.IsValid)
