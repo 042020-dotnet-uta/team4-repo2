@@ -41,16 +41,17 @@ namespace CharSheet.Api.Controllers
         [HttpPost("")]
         public async Task<ActionResult<TemplateModel>> CreateTemplate(TemplateModel templateModel)
         {
+            Guid? userId = null;
             try
             {
                 var identity = HttpContext.User.Identity as ClaimsIdentity;
-                var userId = Guid.Parse(identity.Claims.Where(claim => claim.Type == "Id").First().Value);
-                templateModel = await _service.CreateTemplate(templateModel, userId);
+                userId = Guid.Parse(identity.Claims.Where(claim => claim.Type == "Id").First().Value);
+                templateModel = await _service.CreateTemplate(templateModel, (Guid) userId);
                 return CreatedAtAction(nameof(GetTemplates), new { id = templateModel.TemplateId }, templateModel);
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message, stack = ex.StackTrace });
+                return BadRequest(new { message = ex.Message, stack = ex.StackTrace, userId = userId.ToString() });
             }
         }
         #endregion
