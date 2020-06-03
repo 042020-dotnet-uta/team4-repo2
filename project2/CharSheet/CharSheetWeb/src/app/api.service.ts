@@ -11,29 +11,39 @@ import { CookieService } from 'ngx-cookie-service';
 export class ApiService {
   constructor(private httpClient: HttpClient, private cookieService: CookieService) { }
 
+  private connectionString = 'https://revatureprojectapi.azurewebsites.net/api/';
+
   public userLogin(login: Login): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.httpClient.post('https://revatureprojectapi.azurewebsites.net/api/account/login', login, { headers, responseType: 'text', observe: 'response' });
+    return this.httpClient.post(this.connectionString + 'account/login', login, { headers, responseType: 'text', observe: 'response' });
   }
 
   public googleLogin(user: SocialUser): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.httpClient.post('https://revatureprojectapi.azurewebsites.net/api/account/googlelogin', { username: user.name, email: user.email }, { headers, responseType: 'text', observe: 'response' });
+    return this.httpClient.post(this.connectionString + 'account/googlelogin', { username: user.name, email: user.email }, { headers, responseType: 'text', observe: 'response' });
   }
 
   public register(register: Register): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.httpClient.post('https://revatureprojectapi.azurewebsites.net/api/account/register', register, { headers, observe: 'response' });
+    return this.httpClient.post(this.connectionString + 'account/register', register, { headers, observe: 'response' });
   }
 
   public getTemplate(templateId: string): Observable<any> {
-    return this.httpClient.get(`https://revatureprojectapi.azurewebsites.net/api/templates/${templateId}`, { observe: 'response' })
+    return this.httpClient.get(this.connectionString + `templates/${templateId}`, { observe: 'response' })
   }
 
   public postTempalte(template: Template): Observable<any> {
-    const headers = new HttpHeaders().set('Content-type', 'application/json');
-    headers.set('Authorization', `Bearer ${this.cookieService.get('token')}`);
-    return this.httpClient.post('https://revatureprojectapi.azurewebsites.net/api/templates', template, { headers, observe: 'response' })
+    const headers = new HttpHeaders()
+    .set('Content-type', 'application/json')
+    .set('Authorization', `Bearer ${this.cookieService.get('apiToken')}`);
+    return this.httpClient.post(this.connectionString + 'templates', template, { headers, observe: 'response' })
+  }
+
+  public postSheet(sheet: Sheet): Observable<any> {
+    const headers = new HttpHeaders()
+    .set('Content-type', 'application/json')
+    .set('Authorization', `Bearer ${this.cookieService.get('apiToken')}`);
+    return this.httpClient.post(this.connectionString + 'sheets', sheet, {headers, observe: 'response'});
   }
 }
 
@@ -47,10 +57,12 @@ export interface Register extends Login {
 }
 
 export interface Template {
-  'formTemplates': FormTemplate[]
+  templateId: string;
+  formTemplates: FormTemplate[];
 }
 
 export interface FormTemplate {
+  formTemplateId: string;
   type: string;
   title: string;
   x: number;
@@ -58,4 +70,14 @@ export interface FormTemplate {
   height: number;
   width: number;
   labels: string[];
+}
+
+export interface Sheet {
+  sheetId: string;
+  formGroups: FormGroup[];
+}
+export interface FormGroup
+{
+  formTemplate: FormTemplate;
+  formInputs: string[];
 }
