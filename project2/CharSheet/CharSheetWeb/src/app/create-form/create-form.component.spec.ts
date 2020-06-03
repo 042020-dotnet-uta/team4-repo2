@@ -54,8 +54,9 @@ describe('CreateFormComponent', () => {
  
   it('should call createDragItem', () => {
     dragSpy = spyOn(component, 'createDragItem');
-    component.createDragItem();
+    let drag: any = component.createDragItem();
     expect(dragSpy).toHaveBeenCalled();
+    expect(drag).toBeUndefined();
   });
 
   it('should call createTitleItem', () => {
