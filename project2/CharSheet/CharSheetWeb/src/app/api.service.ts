@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-
 import { SocialUser } from 'angularx-social-login';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class ApiService {
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private cookieService: CookieService) { }
 
   public userLogin(login: Login): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
@@ -23,11 +23,17 @@ export class ApiService {
 
   public register(register: Register): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.httpClient.post('https://revatureprojectapi.azurewebsites.net/api/account/register', register, { observe: 'response' });
+    return this.httpClient.post('https://revatureprojectapi.azurewebsites.net/api/account/register', register, { headers, observe: 'response' });
   }
 
   public getTemplate(templateId: string): Observable<any> {
     return this.httpClient.get(`https://revatureprojectapi.azurewebsites.net/api/templates/${templateId}`, { observe: 'response' })
+  }
+
+  public postTempalte(template: Template): Observable<any> {
+    const headers = new HttpHeaders().set('Content-type', 'application/json');
+    headers.set('Authorization', `Bearer ${this.cookieService.get('token')}`);
+    return this.httpClient.post('https://revatureprojectapi.azurewebsites.net/api/templates', template, { headers, observe: 'response' })
   }
 }
 
