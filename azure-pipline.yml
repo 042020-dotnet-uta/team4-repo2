@@ -41,28 +41,23 @@ stages:
             projects: '**/CharSheet.Api.csproj'
             command: 'publish'
             publishWebProjects: false
-            arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
+            arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
             modifyOutputPath: false
             zipAfterPublish: true
 
   - stage: 'deploy_api'
     dependsOn: 'publish_api'
+    pool: "windows-latest"
     jobs:
-      - deployment: 'deploy_dev'
-        pool:
-          vmImage: 'windows-latest'
-        environment: dev
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - task: AzureRmWebAppDeployment@4
-                  inputs:
-                    ConnectionType: 'AzureRM'
-                    azureSubscription: 'Azure subscription 1(f0f77c70-bece-4456-ad00-b1eeb211e3bd)'
-                    appType: 'webApp'
-                    WebAppName: 'revatureprojectapi'
-                    packageForLinux: '$(Pipeline.Workspace)/APIBuildArtifact'
+     - job:
+       steps:       
+        - task: AzureRmWebAppDeployment@4
+          inputs:
+            ConnectionType: 'AzureRM'
+            azureSubscription: 'Azure subscription 1(f0f77c70-bece-4456-ad00-b1eeb211e3bd)'
+            appType: 'webApp'
+            WebAppName: 'revatureprojectapi'
+            packageForLinux: '$(Build.ArtifactStagingDirectory)'
                 
 
   - stage: 'APITesting'
