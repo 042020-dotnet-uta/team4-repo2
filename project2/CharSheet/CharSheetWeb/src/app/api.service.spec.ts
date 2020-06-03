@@ -52,7 +52,7 @@ describe('ApiService', () => {
   });
 
   it('postTemplate should return Observable<any>', () => {
-    let object: Observable<any> = service.postTempalte(<Template>template);
+    let object: Observable<any> = service.postTemplate(<Template>template);
     expect(object).toBeTruthy();
   });
 
