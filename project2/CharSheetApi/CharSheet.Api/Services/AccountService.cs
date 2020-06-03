@@ -135,8 +135,10 @@ namespace CharSheet.Api.Services
                 user = await _unitOfWork.UserRepository.Insert(new User
                 {
                     Username = userModel.Username,
-                    Email = userModel.Email
+                    Email = userModel.Email,
+                    Login = new Login()
                 });
+                await _unitOfWork.Save();
             }
 
             return new UserModel
