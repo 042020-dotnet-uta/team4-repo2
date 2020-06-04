@@ -19,7 +19,14 @@ namespace CharSheet.Test
             //  Act
             using (var context = GetContext(options))
             {
-                context.Users.Add(new User());
+
+				context.Users.Add(new User
+				{
+					Username = "userName",
+					Email = "email@domain.net",
+					Login = new Login(),
+					LoginId = new Guid()					
+				}) ;
                 context.SaveChanges();
             }
 
@@ -27,7 +34,12 @@ namespace CharSheet.Test
             using (var context = GetContext(options))
             {
                 var users = context.Users.ToList();
-                Assert.Single(users);
+				var user = users.FirstOrDefault();
+				Assert.Single(users);
+				Assert.Equal("userName", user.Username);
+				Assert.Equal("email@domain.net", user.Email);
+				Assert.IsType<Guid>(user.LoginId);
+				Assert.IsType<Guid>(user.UserId);
             }
 
         }
@@ -41,10 +53,16 @@ namespace CharSheet.Test
             // Act
             using (var context = GetContext(options))
             {
-                context.Users.Add(new User
-                {
-					Login = new Login()
-                });
+				context.Users.Add(new User
+				{
+					Login = new Login
+					{
+						IterationCount = 1,
+						UserId = new Guid(),
+						Salt = new byte[1],
+						Hashed = "hashed"
+					}
+				}) ;
 				context.SaveChanges();
             }
 
@@ -52,7 +70,12 @@ namespace CharSheet.Test
 			using (var context = GetContext(options))
 			{
 				var logins = context.Logins.ToList();
+				var login = logins.FirstOrDefault();
 				Assert.Single(logins);
+				Assert.IsType<byte[]>(login.Salt);
+				Assert.Equal(1, login.IterationCount);
+				Assert.Equal("hashed", login.Hashed);
+				Assert.IsType<Guid>(login.UserId);
 			}
         }
 
@@ -264,5 +287,7 @@ namespace CharSheet.Test
 				Assert.IsType<Guid>(label.FormInputId);
 			}
 		}
+
+
 	}
 }
