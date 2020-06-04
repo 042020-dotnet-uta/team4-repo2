@@ -127,6 +127,8 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
     if (this.sheetId == null) {
       this.apiService.postSheet(sheet)
         .subscribe(response => {
+          this.sheetId = response.body.sheetId;
+          this.templateId = null;
           console.log(response);
         });
     } else {
