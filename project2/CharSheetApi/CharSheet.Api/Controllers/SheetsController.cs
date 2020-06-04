@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Cors;
 using CharSheet.Api.Services;
 using CharSheet.Api.Models;
 
@@ -31,6 +30,7 @@ namespace CharSheet.Api.Controllers
         {
             try
             {
+                this._logger.LogInformation("Finding sheet by id", id);
                 // Find by id.
                 if (id != null)
                     return Ok(await _service.GetSheet(id));
@@ -38,6 +38,7 @@ namespace CharSheet.Api.Controllers
             }
             catch
             {
+                this._logger.LogError("Sheet not found", id);
                 return NotFound();
             }
         }

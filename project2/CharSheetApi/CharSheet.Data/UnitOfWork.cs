@@ -1,17 +1,14 @@
 using System;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
 using CharSheet.Data.Repositories;
 using CharSheet.Domain.Interfaces;
-using CharSheet.Domain;
 
 namespace CharSheet.Data
 {
     public class UnitOfWork : IDisposable
     {
         #region Repository Properties
-        private CharSheetContext _context;
+        private readonly CharSheetContext _context;
 
         private IFormInputGroupRepository _formInputGroupRepository;
         public IFormInputGroupRepository FormInputGroupRepository
@@ -122,12 +119,9 @@ namespace CharSheet.Data
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposed)
+            if (!this.disposed && disposing)
             {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
+                    _context.Dispose();            
             }
             this.disposed = true;
         }
