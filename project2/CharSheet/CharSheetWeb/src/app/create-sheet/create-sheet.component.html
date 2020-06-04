@@ -8,7 +8,7 @@
     <button (click)="fetchSheet()">Fetch Sheet</button>
     <br>
 </div>
-<input [(ngModel)]="nameInput">
+<input [(ngModel)]="nameInput" placeholder="Enter Sheet Name">
 <button (click)="saveSheet()">Save Sheet</button>
 <div id='form-boundary' #formBoundary>
     <div class="form-box title-text-form form-template" *ngFor="let form of titleTextElements"
@@ -28,3 +28,4 @@
         <label class="title-form">{{form.title}}</label>
     </div>
 </div>
+<button (click)="toPdf()">Save as PDF</button>

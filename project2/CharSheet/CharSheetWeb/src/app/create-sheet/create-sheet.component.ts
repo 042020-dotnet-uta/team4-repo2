@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angula
 import { ApiService, Template, Sheet, FormTemplate, FormGroup } from '../api.service';
 import { FormElementArrays } from '../shared/form-types'
 import { ActivatedRoute } from '@angular/router';
+import { SavePdfService } from '../print-pdf.service';
 
 @Component({
   selector: 'app-create-sheet',
@@ -19,7 +20,7 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
   sheetId: string;
   nameInput: string;
 
-  constructor(private apiService: ApiService, private activatedRoute: ActivatedRoute) {
+  constructor(private apiService: ApiService, private activatedRoute: ActivatedRoute, private savedPdfService: SavePdfService) {
   }
 
   ngOnInit(): void {
@@ -37,6 +38,10 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
   }
 
   loadTemplate(template: Template): void {
+    this.sheetId = null;
+    this.templateId = template.templateId;
+    this.nameInput = null;
+
     this.textElements.splice(0, this.textElements.length);
     this.titleElements.splice(0, this.titleElements.length);
     this.titleTextElements.splice(0, this.titleTextElements.length);
@@ -49,6 +54,10 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
   }
 
   loadSheet(sheet: Sheet): void {
+    this.templateId = null;
+    this.sheetId = sheet.sheetId;
+    this.nameInput = sheet.name;
+
     this.textElements.splice(0, this.textElements.length);
     this.titleElements.splice(0, this.titleElements.length);
     this.titleTextElements.splice(0, this.titleTextElements.length);
@@ -80,10 +89,6 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
       .subscribe(response => {
         if (response.status == 200) {
           console.log(response.body);
-          let sheet = response.body as Sheet;
-          this.templateId = null;
-          this.sheetId = sheet.sheetId;
-          this.nameInput = sheet.name;
           this.loadSheet(response.body as Sheet);
         }
       })
@@ -94,10 +99,6 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
       .subscribe(response => {
         if (response.status == 200) {
           console.log(response);
-          let template = response.body as Template;
-          this.sheetId = null;
-          this.templateId = template.templateId;
-          this.nameInput = template.name;
           this.loadTemplate(response.body as Template);
         }
       });
@@ -126,7 +127,7 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
     return sheet;
   }
 
-  saveSheet() {
+  saveSheet(): void {
     let sheet = this.toModel();
     if (this.sheetId == null) {
       this.apiService.postSheet(sheet)
@@ -143,5 +144,8 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
           console.log(response);
         });
     }
+  }
+  toPdf(): void {
+    this.savedPdfService.captureScreen(this.formBoundary.nativeElement);
   }
 }

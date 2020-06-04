@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { SavePdfService } from '../print-pdf.service'
 
 @Component({
   selector: 'app-selected-sheet',
@@ -8,13 +7,8 @@ import { SavePdfService } from '../print-pdf.service'
 })
 export class SelectedSheetComponent implements OnInit {
 
-  constructor(private savePdfService: SavePdfService) { }
+  constructor() { }
 
   ngOnInit(): void {
   }
-
-  saveToPdf(){
-    this.savePdfService.captureScreen();
-  }
-
 }

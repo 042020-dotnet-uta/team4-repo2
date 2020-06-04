@@ -8,17 +8,17 @@ import html2canvas from 'html2canvas';
 })
 export class SavePdfService {
 
-constructor() { }
+  constructor() { }
 
- // Method to capture form and convert to PDF
-  public captureScreen(){
-    var data = document.getElementById('toPdf');
-    html2canvas(data).then(canvas=>{
-      let pdf = new jspdf('p', 'mm', [canvas.width, canvas.height]);
-      var imgData = canvas.toDataURL();
-      pdf.addImage(imgData, 0,0);
-      pdf.save('myCharSheet.pdf');
-      
-    });    
-  }  
+  // Method to capture form and convert to PDF
+  public captureScreen(data: HTMLElement) {
+    let div = document.getElementById('form-boundary');
+    div
+    html2canvas(div, { scrollX: -window.scrollX, scrollY: -window.scrollY }).then(canvas => {
+      var pdf = new jspdf('p', 'cm', 'a4');
+      var imgData = canvas.toDataURL("image/png");
+      pdf.addImage(imgData, 'PNG', 0, 0, 21.0, 29.7);
+      pdf.save('pdfSheet.pdf');
+    });
+  }
 }
