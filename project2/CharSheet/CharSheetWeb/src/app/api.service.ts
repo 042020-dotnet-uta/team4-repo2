@@ -33,6 +33,10 @@ export class ApiService {
     return this.httpClient.get(this.mainUrl + `templates/${templateId}`, { observe: 'response' })
   }
 
+  public getTemplates(): Observable<any> {
+    return this.httpClient.get(this.mainUrl + 'templates', {observe: 'response'});
+  }
+
   public postTemplate(template: Template): Observable<any> {
     const headers = this.setRequestHeaders();
     return this.httpClient.post(this.mainUrl + 'templates', template, { headers, observe: 'response' })
