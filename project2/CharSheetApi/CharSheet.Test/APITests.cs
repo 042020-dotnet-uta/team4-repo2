@@ -54,7 +54,7 @@ namespace CharSheet.Test
                 {
                     new FormInputGroupModel
                     {
-                        FormTemplate = templateModel.FormTemplates.First(),
+                        FormTemplateId = templateModel.FormTemplates.First().FormTemplateId,
                         FormInputs = new List<string>()
                     }
                 }
