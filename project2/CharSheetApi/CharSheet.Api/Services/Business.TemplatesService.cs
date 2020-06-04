@@ -101,6 +101,7 @@ namespace CharSheet.Api.Services
             var templateModel = new TemplateModel
             {
                 TemplateId = template.TemplateId,
+                Name = template.Name
             };
 
             // Instantiate a form template model for each form template.
@@ -130,7 +131,8 @@ namespace CharSheet.Api.Services
         {
             var template = new Template
             {
-                FormTemplates = new List<FormTemplate>()
+                FormTemplates = new List<FormTemplate>(),
+                Name = templateModel.Name
             };
 
             // Create form templates.

@@ -90,6 +90,7 @@ export interface Register extends Login {
 
 export interface Template {
   templateId: string;
+  name: string;
   formTemplates: FormTemplate[];
 }
 
@@ -107,6 +108,7 @@ export interface FormTemplate {
 
 export interface Sheet {
   sheetId: string;
+  name: string;
   formGroups: FormGroup[];
 }
 export interface FormGroup {

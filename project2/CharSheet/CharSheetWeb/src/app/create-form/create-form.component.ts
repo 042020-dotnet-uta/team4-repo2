@@ -25,6 +25,7 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
   width = 500;
   height = 100;
   type: string;
+  nameInput: string;
 
   formTypes = [
     {
@@ -84,6 +85,7 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
   convertToModel(): Template {
     let forms = Array.from(this.formBoundary.nativeElement.children) as Array<HTMLElement>;
     let template = {} as Template;
+    template.name = this.nameInput;
     template.formTemplates = [];
     forms.forEach(form => {
       let formTemplate = {} as FormTemplate;

@@ -92,13 +92,10 @@ namespace CharSheet.Api.Services
             // Validate sheet model structure.
             if (sheetModel.FormGroups == null)
                 throw new InvalidOperationException("Missing form groups.");
-            foreach (var formGroup in sheetModel.FormGroups)
-                //This is statement is not necessary because FormTemplateId is the primary key and may not be null
-                //it is already validated via the FormTemplateIdModel
-                /*if (formGroup.FormTemplate.FormTemplateId == null)
-                    throw new InvalidOperationException("Missing form template id.");*/
 
+            sheet.Name = sheetModel.Name;
             sheetModel.FormGroups = sheetModel.FormGroups.OrderBy(fg => fg.FormTemplateId);
+            sheet.FormInputGroups = sheet.FormInputGroups.OrderBy(fig => fig.FormTemplate.FormTemplateId).ToList();
 
             var deletedInputs = new List<FormInput>();
 
@@ -108,7 +105,7 @@ namespace CharSheet.Api.Services
                 var formInputGroup = sheet.FormInputGroups.ElementAt(i);
 
                 // Verify form templates.
-                if (formGroup.FormTemplateId != formInputGroup.FormTemplateId)
+                if (formGroup.FormTemplate.FormTemplateId != formInputGroup.FormTemplate.FormTemplateId && formGroup.FormTemplateId != formInputGroup.FormTemplate.FormTemplateId)
                     throw new InvalidOperationException("Form template mismatch.");
 
                 int j;
@@ -176,6 +173,7 @@ namespace CharSheet.Api.Services
             var sheetModel = new SheetModel
             {
                 SheetId = sheet.SheetId,
+                Name = sheet.Name
             };
 
             // Instantiate a form input group model for each form input group.
@@ -195,7 +193,8 @@ namespace CharSheet.Api.Services
         {
             var sheet = new Sheet
             {
-                FormInputGroups = new List<FormInputGroup>()
+                FormInputGroups = new List<FormInputGroup>(),
+                Name = sheetModel.Name
             };
 
             // Create form input groups.
