@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security;
 using System.Linq;
@@ -25,6 +26,22 @@ namespace CharSheet.Api.Controllers
         }
 
         #region Action Methods
+        [HttpGet("")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<SheetModel>>> GetSheets()
+        {
+            try
+            {
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                var userId = Guid.Parse(identity.Claims.Where(claim => claim.Type == "Id").First().Value);
+                return Ok(await _service.GetSheets(userId));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<SheetModel>> GetSheets(Guid? id)
         {
