@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { ApiService, Template, Sheet } from '../api.service';
+import { SavePdfService } from '../print-pdf.service'
 
 
 
@@ -14,7 +15,8 @@ import { ApiService, Template, Sheet } from '../api.service';
 })
 export class AccessCharSheetsComponent implements OnInit {
   constructor(private http: HttpClient, private route: ActivatedRoute,
-    private apiService: ApiService, private router: Router) { }
+    private apiService: ApiService, private router: Router,
+    private savePdfService: SavePdfService) { }
   selectedTemplate = null;
   selectedSheet = null;
 
@@ -38,7 +40,12 @@ export class AccessCharSheetsComponent implements OnInit {
       this.sheetsData = response.body as Sheet[];
     });
   }
+
+  saveToPdf(){
+    this.savePdfService.captureScreen();
+  }
 }
+
 
 
 
