@@ -202,5 +202,61 @@ namespace CharSheet.Test
 				Assert.Single(formLabels);
 			}
 		}
-    }
+
+		[Fact]
+		public void CreateFormLabel()
+		{
+			// Arrange
+			var options = GetOptions("CreateFormLabel");
+
+			// Act
+			using (var context = GetContext(options))
+			{
+				context.FormLabels.Add(new FormLabel
+				{
+					FormLabelId = new Guid(),
+					FormTemplateId = new Guid(),
+					Index = 1,
+					Value = "someValue"
+				}) ;
+				context.SaveChanges();
+			}
+
+			// Assert
+			using (var context = GetContext(options))
+			{
+				var formLabels = context.FormLabels.ToList();
+				var label = formLabels.FirstOrDefault();
+				Assert.Equal("someValue", label.Value);
+			}
+		}
+
+		[Fact]
+		public void CreateFormInput()
+		{
+			// Arrange
+			var options = GetOptions("CreateFormInput");
+
+			// Act
+			using (var context = GetContext(options))
+			{
+				context.FormInputs.Add(new FormInput
+				{
+					FormInputGroupId = new Guid(),
+					FormInputId = new Guid(),
+					Value = "someValue",
+					Index = 1
+				}) ;
+				context.SaveChanges();
+			}
+
+			// Assert
+			using (var context = GetContext(options))
+			{
+				var formInputs = context.FormInputs.ToList();
+				var label = formInputs.FirstOrDefault();
+				Assert.Equal("someValue", label.Value);
+			}
+		}
+	}
 }
