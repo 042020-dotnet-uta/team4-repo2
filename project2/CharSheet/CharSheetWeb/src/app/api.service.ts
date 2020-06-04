@@ -90,6 +90,6 @@ export interface Sheet {
   formGroups: FormGroup[];
 }
 export interface FormGroup {
-  formTemplate: FormTemplate;
+  formTemplateId: string;
   formInputs: string[];
 }
