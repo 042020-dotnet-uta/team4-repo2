@@ -5,6 +5,7 @@ import { SocialUser } from "angularx-social-login";
 import { Observable } from 'rxjs';
 import { DebugElement } from '@angular/core';
 import { ApiService } from '../api.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -23,11 +24,15 @@ describe('LoginComponent', () => {
     authMock = jasmine.createSpyObj('AuthService', ['authState'])
     TestBed.configureTestingModule({
       declarations: [LoginComponent],
-      providers: [{ provide: GoogleLoginProvider, useValue: googleStub },
+      providers: [
+        ApiService,
+        { provide: GoogleLoginProvider, useValue: googleStub },
         { provide: SocialUser, useValue: userStub },
         { provide: AuthService, useValue: authMock },
-        { provide: ApiService, useValue: apiStub }
       ],
+      imports: [
+        HttpClientTestingModule,
+      ]
       
     })
       .compileComponents();
