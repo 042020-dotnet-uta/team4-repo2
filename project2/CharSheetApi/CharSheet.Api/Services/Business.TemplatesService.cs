@@ -15,6 +15,7 @@ namespace CharSheet.Api.Services
     {
         #region GET
         Task<IEnumerable<TemplateModel>> GetTemplates(object id);
+        Task<IEnumerable<TemplateModel>> GetTemplates();
         Task<TemplateModel> GetTemplate(object id);
         #endregion
 
@@ -40,6 +41,18 @@ namespace CharSheet.Api.Services
             }
 
             return templateModels.AsEnumerable();
+        }
+
+        public async Task<IEnumerable<TemplateModel>> GetTemplates()
+        {
+            var templates = (await _unitOfWork.TemplateRepository.All()).ToList();
+            var templateModels = new List<TemplateModel>();
+            foreach(var template in templates)
+            {
+                templateModels.Add(await ToModel(template));
+            }
+            
+            return templateModels;
         }
 
         public async Task<TemplateModel> GetTemplate(object id)

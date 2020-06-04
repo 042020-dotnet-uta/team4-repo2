@@ -11,37 +11,40 @@ import { CookieService } from 'ngx-cookie-service';
 export class ApiService {
   constructor(private httpClient: HttpClient, private cookieService: CookieService) { }
 
-  private connectionString = 'https://revatureprojectapi.azurewebsites.net/api/';
-  // private connectionString = 'http://localhost:5000/';
+  private mainUrl = 'https://revatureprojectapi.azurewebsites.net/api/';
+  // private mainUrl = 'http://localhost:5000/';
 
   public userLogin(login: Login): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.httpClient.post(this.connectionString + 'account/login', login, { headers, responseType: 'text', observe: 'response' });
+    return this.httpClient.post(this.mainUrl + 'account/login', login, { headers, responseType: 'text', observe: 'response' });
   }
 
   public googleLogin(user: SocialUser): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.httpClient.post(this.connectionString + 'account/googlelogin', { username: user.name, email: user.email }, { headers, responseType: 'text', observe: 'response' });
+    return this.httpClient.post(this.mainUrl + 'account/googlelogin', { username: user.name, email: user.email }, { headers, responseType: 'text', observe: 'response' });
   }
 
   public register(register: Register): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.httpClient.post(this.connectionString + 'account/register', register, { headers, observe: 'response' });
+    return this.httpClient.post(this.mainUrl + 'account/register', register, { headers, observe: 'response' });
   }
 
   public getTemplate(templateId: string): Observable<any> {
-    return this.httpClient.get(this.connectionString + `templates/${templateId}`, { observe: 'response' })
+    return this.httpClient.get(this.mainUrl + `templates/${templateId}`, { observe: 'response' })
+  }
+
+  public getTemplates(): Observable<any> {
+    return this.httpClient.get(this.mainUrl + 'templates', {observe: 'response'});
   }
 
   public postTemplate(template: Template): Observable<any> {
     const headers = this.setRequestHeaders();
-    return this.httpClient
-      .post<Template>(this.connectionString + 'templates', template, { headers, observe: 'response' });
+    return this.httpClient.post(this.mainUrl + 'templates', template, { headers, observe: 'response' })
   }
 
   public postSheet(sheet: Sheet): Observable<any> {
     const headers = this.setRequestHeaders();
-    return this.httpClient.post(this.connectionString + 'sheets', sheet, { headers, observe: 'response' });
+    return this.httpClient.post(this.mainUrl + 'sheets', sheet, { headers, observe: 'response' });
   }
 
   private setRequestHeaders(): HttpHeaders {
