@@ -79,13 +79,6 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.form-template > :first-child {
-  resize: none;
-  height: 100%;
-  width: 100%;
-  box-sizing: border-box;
-}
-
 /*Resizable CSS layout
     general resizing
 */

@@ -28,11 +28,11 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
 
   formTypes = [
     {
-      value: "textForm",
+      value: "text-form",
       name: "Text Box",
     },
     {
-      value: "titleForm",
+      value: "title-form",
       name: "Title Box"
     }];
 
@@ -47,10 +47,10 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
     let elements = [];
     let newElement = { width: this.width, height: this.height };
     switch (this.type) {
-      case "textForm":
+      case "text-form":
         this.textElements.push(newElement as FormElement);
         break;
-      case "titleForm":
+      case "title-form":
         this.titleElements.push(newElement as FormElement);
         break;
     }
@@ -92,11 +92,11 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
       formTemplate.width = parseInt(style.width, 10);
       formTemplate.height = parseInt(style.height, 10);
 
-      if (classes.includes("textForm")) {
+      if (classes.includes("text-form")) {
         formTemplate.title = "";
         formTemplate.type = "text";
         formTemplate.labels = [];
-      } else if (classes.includes("titleForm")) {
+      } else if (classes.includes("title-form")) {
         formTemplate.title = (formArea as HTMLInputElement).value;
         formTemplate.type = "title";
         formTemplate.labels = [];

@@ -13,7 +13,9 @@ export class SheetsComponent implements OnInit, FormElementArrays {
   textElements = [];
   titleElements = [];
 
+  templateId: string;
   currentTemplate: Template;
+  sheetId: string;
   currentSheet: Sheet;
 
   constructor(private apiService: ApiService) {
@@ -23,8 +25,8 @@ export class SheetsComponent implements OnInit, FormElementArrays {
   ngOnInit(): void {
   }
 
-  fetchTemplate(id: string): void {
-    this.apiService.getTemplate(id)
+  fetchTemplate(): void {
+    this.apiService.getTemplate(this.templateId)
       .subscribe(response => {
         if (response.status == 200) {
           this.currentTemplate = response.body;
@@ -36,13 +38,17 @@ export class SheetsComponent implements OnInit, FormElementArrays {
 
   loadTemplate() {
     let formTemplates = this.currentTemplate.formTemplates;
+
+    this.textElements.splice(0, this.textElements.length);
+    this.titleElements.splice(0, this.titleElements.length);
+
     formTemplates.forEach(formTemplate => {
       switch (formTemplate.type) {
         case "text":
           this.textElements.push(formTemplate);
           break;
         case "title":
-          this.textElements.push(formTemplate);
+          this.titleElements.push(formTemplate);
           break;
       }
     });
