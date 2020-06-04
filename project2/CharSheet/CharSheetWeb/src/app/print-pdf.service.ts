@@ -12,7 +12,7 @@ constructor() { }
 
  // Method to capture form and convert to PDF
   public captureScreen(){
-    var data = document.getElementById('form-boundary');
+    var data = document.getElementById('toPdf');
     html2canvas(data).then(canvas=>{
       let pdf = new jspdf('p', 'mm', [canvas.width, canvas.height]);
       var imgData = canvas.toDataURL();
