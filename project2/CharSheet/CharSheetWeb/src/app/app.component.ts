@@ -11,6 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
 export class AppComponent {
   title = 'Character Sheet Creator';
   user: any;
+  isLoggedIn:boolean = false;
 
   constructor(private _socioAuthServ: AuthService, private apiService: ApiService, private cookieService: CookieService) { }
 
@@ -31,6 +32,7 @@ export class AppComponent {
             this.cookieService.set('access_token', response.body);
           }
         });
+      this.isLoggedIn = true;
     });
   }
 
@@ -39,5 +41,6 @@ export class AppComponent {
     this._socioAuthServ.signOut();
     this.user = null;
     console.log('User signed out.');
+    this.isLoggedIn = false;
   }
 }

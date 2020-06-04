@@ -16,6 +16,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { ApiService } from './api.service';
 import { SelectedCharSheetComponent } from './selected-char-sheet/selected-char-sheet.component';
 import { SheetsComponent } from './sheets/sheets.component';
+import { AccessSheetsComponent } from './access-sheets/access-sheets.component';
+import { ViewSheetComponent } from './view-sheet/view-sheet.component';
 
 
 
@@ -35,7 +37,9 @@ let config = new AuthServiceConfig([
     AccessCharSheetsComponent,
     FormsContainerComponent,
     SelectedCharSheetComponent,
-    SheetsComponent
+    SheetsComponent,
+    AccessSheetsComponent,
+    ViewSheetComponent
   ],
   // Injecting the social-login-module during the application startup!
   imports: [
