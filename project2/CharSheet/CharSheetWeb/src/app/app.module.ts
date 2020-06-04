@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 // Importing social login module and google login provider.
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, AuthService } from "angularx-social-login";
-
 import { AppComponent } from './app.component';
 import { CreateFormComponent } from './create-form/create-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -15,7 +14,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsContainerComponent } from './forms-container/forms-container.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiService } from './api.service';
+import { SelectedCharSheetComponent } from './selected-char-sheet/selected-char-sheet.component';
 import { SheetsComponent } from './sheets/sheets.component';
+
 
 
 // Client id for the google oauth. This is used for validation of our application to google.
@@ -33,7 +34,12 @@ let config = new AuthServiceConfig([
     CreateFormComponent,
     AccessCharSheetsComponent,
     FormsContainerComponent,
+
+    SelectedCharSheetComponent
+
+
     SheetsComponent
+
   ],
   // Injecting the social-login-module during the application startup!
   imports: [
