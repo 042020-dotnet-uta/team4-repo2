@@ -34,8 +34,13 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
     {
       value: "title-form",
       name: "Title Box"
+    },
+    {
+      value:"title-text-form",
+      name: "Title and Text"
     }];
 
+  titleTextElements = [];
   textElements = [];
   titleElements = [];
 
@@ -52,6 +57,9 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
         break;
       case "title-form":
         this.titleElements.push(newElement as FormElement);
+        break;
+      case "title-text-form":
+        this.titleTextElements.push(newElement as FormElement);
         break;
     }
   }
