@@ -3,23 +3,3 @@
     overflow: auto;
     box-sizing: border-box;
 }
-
-.textarea, .form-title {
-    resize: none;
-    box-sizing: border-box;
-}
-
-.textarea {
-    width: 100%;
-}
-
-.form-title {
-    display: block;
-    display: block;
-    margin: 0 auto;
-    width: 80%;
-}
-
-.form-template>.textarea:first-child {
-    height: 100%;
-}

@@ -11,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 export class SheetsComponent implements OnInit, AfterViewInit, FormElementArrays {
   @ViewChild('formBoundary') formBoundary: ElementRef;
 
+  titleTextElements = [];
   textElements = [];
   titleElements = [];
 
@@ -52,6 +53,9 @@ export class SheetsComponent implements OnInit, AfterViewInit, FormElementArrays
 
     formTemplates.forEach(formTemplate => {
       switch (formTemplate.type) {
+        case "title-text":
+          this.titleTextElements.push(formTemplate);
+          break;
         case "text":
           this.textElements.push(formTemplate);
           break;

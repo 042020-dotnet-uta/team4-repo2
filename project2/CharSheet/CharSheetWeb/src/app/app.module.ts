@@ -11,7 +11,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ResizableModule } from 'angular-resizable-element';
 import { AccessCharSheetsComponent } from './access-char-sheets/access-char-sheets.component';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsContainerComponent } from './forms-container/forms-container.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiService } from './api.service';
 import { SelectedCharSheetComponent } from './selected-char-sheet/selected-char-sheet.component';
@@ -35,7 +34,6 @@ let config = new AuthServiceConfig([
     AppComponent,
     CreateFormComponent,
     AccessCharSheetsComponent,
-    FormsContainerComponent,
     SelectedCharSheetComponent,
     SheetsComponent,
     AccessSheetsComponent,
