@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using Xunit;
 using System.Collections.Generic;
+using CharSheet.Data.Repositories;
 
 namespace CharSheet.Test
 {
@@ -199,6 +200,36 @@ namespace CharSheet.Test
 
             // Assert
             Assert.NotNull(template);
+        }
+
+        [Fact]
+        public async void GetAllLogins()
+        {
+            // Arrange
+            var options = GetOptions("GetAllLogins");
+            Login login = null;
+            using (var unitOfWork = GetUnitOfWork(options))
+            {
+                await unitOfWork.LoginRepository.Insert(new Login
+                {
+                    UserId = new Guid(),
+                    LoginId = new Guid(),
+                    Hashed = "hashed",
+                    IterationCount = 1,
+                    Salt = new byte[1],
+                }) ;
+                await unitOfWork.Save();
+            }
+
+            // Act
+            using (var unitOfWork = GetUnitOfWork(options))
+            {
+                var logins = await unitOfWork.LoginRepository.All();
+                login = await unitOfWork.LoginRepository.Find(logins.First().LoginId);
+            }
+
+            // Assert
+            Assert.NotNull(login);
         }
     }
 }

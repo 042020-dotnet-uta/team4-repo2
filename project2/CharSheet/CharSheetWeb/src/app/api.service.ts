@@ -34,7 +34,11 @@ export class ApiService {
   }
 
   public getTemplates(): Observable<any> {
-    return this.httpClient.get(this.mainUrl + 'templates', {observe: 'response'});
+    return this.httpClient.get(this.mainUrl + 'templates', { observe: 'response' });
+  }
+
+  public getSheet(sheetId: string): Observable<any> {
+    return this.httpClient.get(this.mainUrl + `sheets/${sheetId}`, { observe: "response" });
   }
 
   public postTemplate(template: Template): Observable<any> {

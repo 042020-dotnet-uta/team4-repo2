@@ -82,7 +82,7 @@ stages:
               projectKey: '50c2a04212d795b8c69603b43ceefe4b37e5c7d9'
               projectName: 'CharacterSheets'
               extraProperties: |
-                sonar.exclusions=**/*Migrations,**/obj/**,**/*.dll
+                sonar.exclusions=**/Migrations/**,**/obj/**,**/*.dll
                 sonar.branch.name=$(Build.SourceBranchName)
                 sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
                 sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml

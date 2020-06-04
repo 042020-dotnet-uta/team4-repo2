@@ -126,7 +126,7 @@ describe('AppComponet', () => {
     expect(createForm.textContent).toContain('Sign out');
   });
 
-  it('signOut should be called when "Sign Out" is clicked', () => {
+  it('signOut should be called when "Sign Out" is clicked, user should be set to null', () => {
     const linkDes = de.queryAll(
       By.css('a')
     );
@@ -135,6 +135,7 @@ describe('AppComponet', () => {
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       expect(signOutSpy).toHaveBeenCalled();
+      expect(component.user).toBeFalsy();
     });
   });
 
@@ -151,7 +152,6 @@ describe('AppComponet', () => {
     );
     expect(linkDes.length==1).toBeTruthy();
   });
-
 
 });
 

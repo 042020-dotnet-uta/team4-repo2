@@ -4,6 +4,7 @@ import { LoginComponent } from './login.component';
 import { SocialUser } from "angularx-social-login";
 import { Observable } from 'rxjs';
 import { DebugElement } from '@angular/core';
+import { ApiService } from '../api.service';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -15,14 +16,17 @@ describe('LoginComponent', () => {
   let authMock: any;
   let userStub: Observable<SocialUser>;
   let states: Observable<string[]>;
+  let apiStub: any;
 
   beforeEach(async(() => {
+    apiStub = { apiService: 'anyservice' }
     authMock = jasmine.createSpyObj('AuthService', ['authState'])
     TestBed.configureTestingModule({
       declarations: [LoginComponent],
       providers: [{ provide: GoogleLoginProvider, useValue: googleStub },
         { provide: SocialUser, useValue: userStub },
-        {provide: AuthService, useValue: authMock}
+        { provide: AuthService, useValue: authMock },
+        { provide: ApiService, useValue: apiStub }
       ],
       
     })
@@ -43,5 +47,11 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy()
   });
 
+  xit('should have default logged in of false', () => {
+    let spy: any = spyOn(component, 'signOut');
+    component.signOut();
+    expect(spy).toHaveBeenCalled();
+  });
 
+ 
 });

@@ -6,6 +6,7 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 //import { ResizeEvent } from 'angular-resizable-element';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { ApiService, Template, FormTemplate } from '../api.service';
+import { FormElementArrays, FormElement } from "../shared/form-types";
 
 //ties component info to correlating temlate and css files.
 var document;
@@ -18,16 +19,44 @@ var document;
 
 //Angular class for declaring methods, kinda like controller from what I have seen, with the methods inside being like
 //controller actions. 
-export class CreateFormComponent implements OnInit {
+export class CreateFormComponent implements OnInit, FormElementArrays {
   @ViewChild('formBoundary') formBoundary: ElementRef;
-  titleElements = [] as FormElement[];
-  formElements = [] as FormElement[];
-  width = 50;
-  height = 30;
+
+  width = 300;
+  height = 100;
+  type: string;
+
+  formTypes = [
+    {
+      value: "textForm",
+      name: "Text Box",
+    },
+    {
+      value: "titleForm",
+      name: "Title Box"
+    }];
+
+  textElements = [];
+  titleElements = [];
+
   constructor(private route: ActivatedRoute, private apiService: ApiService
   ) { }
   // create a method to be used in the HTML to  push a new dev of the predefined type
   // to the dom and to the page dynamically 
+  createItem(): void {
+    let elements = [];
+    let newElement = { width: this.width, height: this.height };
+    switch (this.type) {
+      case "textForm":
+        this.textElements.push(newElement as FormElement);
+        break;
+      case "titleForm":
+        this.titleElements.push(newElement as FormElement);
+        break;
+    }
+  }
+
+  /*
   createDragItem(): void {
     this.formElements.push({ height: 300, width: 200 } as FormElement);
   }
@@ -35,14 +64,7 @@ export class CreateFormComponent implements OnInit {
   createTitleItem(): void {
     this.titleElements.push({ width: this.width, height: this.height } as FormElement);
   }
-
-  changeWidth(w: number): void {
-    this.width = w;
-  }
-
-  changeHeight(h: number): void {
-    this.height = h;
-  }
+  */
 
   name;
   ngOnInit(): void {
@@ -64,7 +86,6 @@ export class CreateFormComponent implements OnInit {
 
       // x and y position from transform.
       let matrix = new WebKitCSSMatrix(style.webkitTransform);
-      console.log(JSON.stringify(matrix));
       formTemplate.x = matrix.m41;
       formTemplate.y = matrix.m42;
 
@@ -88,13 +109,8 @@ export class CreateFormComponent implements OnInit {
   saveTemplate(): void {
     let template = this.convertToModel();
     this.apiService.postTemplate(template)
-    .subscribe(response => {
-      console.log(response)
-    });
+      .subscribe(response => {
+        console.log(response)
+      });
   }
-}
-
-export class FormElement {
-  width: number;
-  height: number;
 }
