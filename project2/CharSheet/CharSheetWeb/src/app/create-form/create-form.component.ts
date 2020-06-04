@@ -60,10 +60,11 @@ export class CreateFormComponent implements OnInit {
 
       let formArea = (form as HTMLElement).firstChild as HTMLElement;
       let classes = form.className as string;
-      let style = window.getComputedStyle(formArea);
+      let style = window.getComputedStyle(form);
 
       // x and y position from transform.
       let matrix = new WebKitCSSMatrix(style.webkitTransform);
+      console.log(JSON.stringify(matrix));
       formTemplate.x = matrix.m41;
       formTemplate.y = matrix.m42;
 
@@ -88,9 +89,7 @@ export class CreateFormComponent implements OnInit {
     let template = this.convertToModel();
     this.apiService.postTemplate(template)
     .subscribe(response => {
-      if (response.status == 200) {
-        console.log(response.body);
-      }
+      console.log(response)
     });
   }
 }
