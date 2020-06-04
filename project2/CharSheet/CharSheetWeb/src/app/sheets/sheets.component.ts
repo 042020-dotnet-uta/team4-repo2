@@ -1,13 +1,14 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { ApiService, Template, Sheet, FormTemplate, FormGroup } from '../api.service';
 import { FormElementArrays } from '../shared/form-types'
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-sheets',
   templateUrl: './sheets.component.html',
   styleUrls: ['./sheets.component.css']
 })
-export class SheetsComponent implements OnInit, FormElementArrays {
+export class SheetsComponent implements OnInit, AfterViewInit, FormElementArrays {
   @ViewChild('formBoundary') formBoundary: ElementRef;
 
   textElements = [];
@@ -18,11 +19,18 @@ export class SheetsComponent implements OnInit, FormElementArrays {
   sheetId: string;
   currentSheet: Sheet;
 
-  constructor(private apiService: ApiService) {
-
+  constructor(private apiService: ApiService, private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
+    this.activatedRoute.params.subscribe(paramsId => {
+      this.templateId = paramsId.p1;
+    });
+  }
+
+  ngAfterViewInit(): void {
+    if (this.templateId != null)
+      this.fetchTemplate();
   }
 
   fetchTemplate(): void {
@@ -62,5 +70,34 @@ export class SheetsComponent implements OnInit, FormElementArrays {
           console.log(this.currentSheet);
         }
       })
+  }
+
+  convertToNewModel(): Sheet {
+    let sheet = {} as Sheet;
+    let forms = Array.from(this.formBoundary.nativeElement.children) as Array<HTMLElement>;
+    sheet.formGroups = [];
+    forms.forEach(form => {
+      let formGroup = {} as FormGroup;
+      formGroup.formTemplateId = form.id;
+      formGroup.formInputs = [] as string[];
+
+      let classes = form.className as string;
+      if (classes.includes("text-form")) {
+        let input = (form.firstChild as HTMLInputElement).value;
+        formGroup.formInputs.push(input);
+      sheet.formGroups.push(formGroup);
+      }
+    });
+    return sheet;
+  }
+
+  saveNewSheet() {
+    let sheet: Sheet;
+    if (this.sheetId == null)
+      sheet = this.convertToNewModel();
+    this.apiService.postSheet(sheet)
+      .subscribe(response => {
+        console.log(response);
+      });
   }
 }
