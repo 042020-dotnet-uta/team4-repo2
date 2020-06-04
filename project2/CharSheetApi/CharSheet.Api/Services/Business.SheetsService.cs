@@ -202,7 +202,7 @@ namespace CharSheet.Api.Services
             // Create form input groups.
             foreach (var formInputGroupModel in sheetModel.FormGroups)
             {
-                var formTemplate = await _unitOfWork.FormTemplateRepository.Find(formInputGroupModel.FormTemplate.FormTemplateId);
+                var formTemplate = await _unitOfWork.FormTemplateRepository.Find(formInputGroupModel.FormTemplateId);
                 if (formTemplate == null)
                     throw new InvalidOperationException("Form template not found.");
 
