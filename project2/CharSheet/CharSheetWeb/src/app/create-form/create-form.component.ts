@@ -32,8 +32,8 @@ export class CreateFormComponent implements OnInit {
     }
   ];
 
-  titleElements = [] as FormElement[];
   formElements = [] as FormElement[];
+  titleElements = [] as FormElement[];
 
   width = 300;
   height = 100;
@@ -46,9 +46,7 @@ export class CreateFormComponent implements OnInit {
   createItem(): void {
     console.log(this.type, this.width, this.height);
     let elements = [];
-    const width = this.width;
-    const height = this.height;
-    let newForm = { width: width, height: height } as FormElement;
+    let newForm = { width: this.width, height: this.height } as FormElement;
     switch (this.type) {
       case "textForm":
         this.formElements.push(newForm);
