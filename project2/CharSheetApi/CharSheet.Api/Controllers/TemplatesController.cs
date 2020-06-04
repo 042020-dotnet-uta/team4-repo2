@@ -58,10 +58,17 @@ namespace CharSheet.Api.Controllers
         {
             try
             {
-                var identity = HttpContext.User.Identity as ClaimsIdentity;
-                var userId = Guid.Parse(identity.Claims.Where(claim => claim.Type == "Id").First().Value);
-                templateModel = await _service.CreateTemplate(templateModel, (Guid)userId);
-                return CreatedAtAction(nameof(GetTemplates), new { id = templateModel.TemplateId }, templateModel);
+                if (ModelState.IsValid)
+                {
+                    var identity = HttpContext.User.Identity as ClaimsIdentity;
+                    var userId = Guid.Parse(identity.Claims.Where(claim => claim.Type == "Id").First().Value);
+                    templateModel = await _service.CreateTemplate(templateModel, (Guid)userId);
+                    return CreatedAtAction(nameof(GetTemplates), new { id = templateModel.TemplateId }, templateModel);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Model state invalid.");
+                }
             }
             catch
             {
