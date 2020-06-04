@@ -1,5 +1,17 @@
-<li *ngFor="let data of httpData" (click)="getSelectedTemplate(data)">
-   <a routerLink="/selectedSheet/{{data.templateId}}" >{{data.templateId}}</a>
-</li>
+<div class="container">
+   <div class="row">
+      <div class="col-6">
+         <h1>Templates</h1>
+         <li *ngFor="let template of templatesData" (click)="getSelectedTemplate(template)">
+            <a routerLink="/template/{{template.templateId}}">{{template.templateId}}</a>
+         </li>
+      </div>
+      <div class="col-6">
+         <h1>Sheets</h1>
+         <li *ngFor="let sheet of sheetsData" (click)="getSelectedSheet(sheet)">
+            <a routerLink="/sheet/{{sheet.sheetId}}">{{sheet.sheetId}}</a>
+         </li>
+      </div>
+   </div>
+</div>
 <p>{{tempId}}</p>
-

@@ -13,10 +13,9 @@ import { AccessCharSheetsComponent } from './access-char-sheets/access-char-shee
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiService } from './api.service';
-import { SelectedCharSheetComponent } from './selected-char-sheet/selected-char-sheet.component';
-import { SheetsComponent } from './sheets/sheets.component';
-import { AccessSheetsComponent } from './access-sheets/access-sheets.component';
-import { ViewSheetComponent } from './view-sheet/view-sheet.component';
+import { SelectedTemplateComponent } from './selected-template/selected-template.component';
+import { CreateSheetComponent } from './create-sheet/create-sheet.component';
+import { SelectedSheetComponent } from './selected-sheet/selected-sheet.component';
 
 
 
@@ -34,10 +33,9 @@ let config = new AuthServiceConfig([
     AppComponent,
     CreateFormComponent,
     AccessCharSheetsComponent,
-    SelectedCharSheetComponent,
-    SheetsComponent,
-    AccessSheetsComponent,
-    ViewSheetComponent
+    SelectedTemplateComponent,
+    CreateSheetComponent,
+    SelectedSheetComponent
   ],
   // Injecting the social-login-module during the application startup!
   imports: [

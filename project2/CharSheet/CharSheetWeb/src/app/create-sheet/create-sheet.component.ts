@@ -4,11 +4,11 @@ import { FormElementArrays } from '../shared/form-types'
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-sheets',
-  templateUrl: './sheets.component.html',
-  styleUrls: ['./sheets.component.css']
+  selector: 'app-create-sheet',
+  templateUrl: './create-sheet.component.html',
+  styleUrls: ['./create-sheet.component.css']
 })
-export class SheetsComponent implements OnInit, AfterViewInit, FormElementArrays {
+export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementArrays {
   @ViewChild('formBoundary') formBoundary: ElementRef;
 
   titleTextElements = [];
@@ -24,13 +24,15 @@ export class SheetsComponent implements OnInit, AfterViewInit, FormElementArrays
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(paramsId => {
       this.templateId = paramsId.p1;
-      // this.sheetId = paramsId.p2;
+      this.sheetId = paramsId.p2;
     });
   }
 
   ngAfterViewInit(): void {
     if (this.templateId != null)
       this.fetchTemplate();
+    else if (this.sheetId != null)
+      this.fetchSheet();
   }
 
   loadTemplate(template: Template): void {

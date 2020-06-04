@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewSheetComponent } from './view-sheet.component';
+import { SelectedSheetComponent } from './selected-sheet.component';
 
-describe('ViewSheetComponent', () => {
-  let component: ViewSheetComponent;
-  let fixture: ComponentFixture<ViewSheetComponent>;
+describe('SelectedSheetComponent', () => {
+  let component: SelectedSheetComponent;
+  let fixture: ComponentFixture<SelectedSheetComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ViewSheetComponent ]
+      declarations: [ SelectedSheetComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ViewSheetComponent);
+    fixture = TestBed.createComponent(SelectedSheetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

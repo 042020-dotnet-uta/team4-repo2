@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { ApiService, Template, FormTemplate } from '../api.service';
+import { ApiService, Template, Sheet } from '../api.service';
 
 
 
@@ -14,19 +14,30 @@ import { ApiService, Template, FormTemplate } from '../api.service';
 })
 export class AccessCharSheetsComponent implements OnInit {
   constructor(private http: HttpClient, private route: ActivatedRoute,
-    private apiService: ApiService,private router:Router) { }
-  tempId;
+    private apiService: ApiService, private router: Router) { }
   selectedTemplate = null;
+  selectedSheet = null;
 
   getSelectedTemplate(template: Template) {
     this.selectedTemplate = template;
   }
 
-  httpData;
-  ngOnInit(): void {
-    this.apiService.getTemplates().subscribe((data) => this.displayData(data.body));
+  getSelectedSheet(sheet: Sheet) {
+    this.selectedSheet = sheet;
   }
-  displayData(data) { this.httpData = data; }
+
+  templatesData: Template[];
+  sheetsData: Sheet[];
+  ngOnInit(): void {
+    this.apiService.getTemplates().subscribe(response => {
+      console.log(response);
+      this.templatesData = response.body as Template[];
+    });
+    this.apiService.getSheets().subscribe(response => {
+      console.log(response);
+      this.sheetsData = response.body as Sheet[];
+    });
+  }
 }
 
 

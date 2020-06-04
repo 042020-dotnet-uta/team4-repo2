@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SheetsComponent } from './sheets.component';
+import { CreateSheetComponent } from './create-sheet.component';
 import { ApiService, Template, Sheet, } from '../api.service';
 import {  HttpClientTestingModule} from '@angular/common/http/testing';
 
-describe('SheetsComponent', () => {
-  let component: SheetsComponent;
-  let fixture: ComponentFixture<SheetsComponent>;
+describe('CreateSheetComponent', () => {
+  let component: CreateSheetComponent;
+  let fixture: ComponentFixture<CreateSheetComponent>;
   let fetchTemplateSpy: any;
   let loadTemplateSpy: any;
   let fetchSheetSpy: any;
   
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SheetsComponent],
+      declarations: [CreateSheetComponent],
       providers: [
         ApiService,
       ],
@@ -25,7 +25,7 @@ describe('SheetsComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SheetsComponent);
+    fixture = TestBed.createComponent(CreateSheetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
