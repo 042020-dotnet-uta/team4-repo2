@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CharSheet.Api.Migrations
 {
     [DbContext(typeof(CharSheetContext))]
-    [Migration("20200603225438_NewDatabase")]
-    partial class NewDatabase
+    [Migration("20200604213436_TemplateAndSheetsDatabase")]
+    partial class TemplateAndSheetsDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -146,6 +146,9 @@ namespace CharSheet.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -159,6 +162,9 @@ namespace CharSheet.Api.Migrations
                     b.Property<Guid>("TemplateId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
