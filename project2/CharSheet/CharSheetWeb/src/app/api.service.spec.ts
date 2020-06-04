@@ -53,6 +53,11 @@ describe('ApiService', () => {
     expect(object).toBeTruthy();
   });
 
+  it('getTemplates should return Observable<any>', () => {
+    let object: Observable<any> = service.getTemplates();
+    expect(object).toBeTruthy();
+  });
+
   it('postTemplate should return Observable<any>', () => {
     let object: Observable<any> = service.postTemplate(<Template>template);
     expect(object).toBeTruthy();
