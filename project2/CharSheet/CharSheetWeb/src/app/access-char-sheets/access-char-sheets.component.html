@@ -1,5 +1,5 @@
-
-<ul *ngFor="let data of httpData">
-  <li>Name : {{data.name}} Address: {{data.address.city}}</li>
-</ul>
+<li *ngFor="let data of httpData" (click)="getSelectedTemplate(data)">
+   <a routerLink="/selectedSheet/{{data.templateId}}" >{{data.templateId}}</a>
+</li>
+<p>{{tempId}}</p>
 
