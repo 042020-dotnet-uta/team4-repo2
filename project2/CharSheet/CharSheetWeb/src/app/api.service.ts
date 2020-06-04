@@ -37,8 +37,22 @@ export class ApiService {
     return this.httpClient.get(this.mainUrl + 'templates', { observe: 'response' });
   }
 
+  public getTemplatesByUser(): Observable<any> {
+    const headers = new HttpHeaders()
+      .set('Authorization', `Bearer ${this.cookieService.get('access_token')}`)
+      .set('Authenticationtoken', `Bearer ${this.cookieService.get('access_token')}`);
+      return this.httpClient.get(this.mainUrl + 'templates?user=true', { observe: 'response' });
+  }
+
   public getSheet(sheetId: string): Observable<any> {
     return this.httpClient.get(this.mainUrl + `sheets/${sheetId}`, { observe: "response" });
+  }
+
+  public getSheets(): Observable<any> {
+    const headers = new HttpHeaders()
+      .set('Authorization', `Bearer ${this.cookieService.get('access_token')}`)
+      .set('Authenticationtoken', `Bearer ${this.cookieService.get('access_token')}`);
+    return this.httpClient.get(this.mainUrl + 'sheets', { headers, observe: "response" });
   }
 
   public postTemplate(template: Template): Observable<any> {

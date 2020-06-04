@@ -26,10 +26,16 @@ namespace CharSheet.Api.Controllers
 
         #region Action Methods
         [HttpGet("")]
-        public async Task<ActionResult<IEnumerable<TemplateModel>>> GetTemplates()
+        public async Task<ActionResult<IEnumerable<TemplateModel>>> GetTemplates(Boolean user = false)
         {
             try
             {
+                if (user)
+                {
+                    var identity = HttpContext.User.Identity as ClaimsIdentity;
+                    var userId = Guid.Parse(identity.Claims.Where(claim => claim.Type == "Id").First().Value);
+                    return Ok(await _service.GetTemplates(userId));
+                }
                 return Ok(await _service.GetTemplates());
             }
             catch
@@ -44,11 +50,9 @@ namespace CharSheet.Api.Controllers
             {
                 return Ok(await _service.GetTemplate(id));
             }
-            catch (Exception ex)
+            catch
             {
-                _logger.LogInformation(ex.Message);
-                _logger.LogInformation(ex.StackTrace);
-                return Ok(new { Message = ex.Message, StackTrace = ex.StackTrace });
+                return BadRequest();
             }
         }
 
