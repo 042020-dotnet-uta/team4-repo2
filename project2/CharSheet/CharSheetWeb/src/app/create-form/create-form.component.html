@@ -6,7 +6,8 @@
   <option *ngFor="let type of formTypes" [value]="type.value">{{type.name}}</option>
 </select>
 <button class="btn" (click)="createItem()">Create New Item</button>
-<input [(ngModel)]="name">
+<br>
+<input [(ngModel)]="nameInput" placeholder="Template Name">
 <button class="btn" (click)="saveTemplate()">Save Template</button>
 <div id='form-boundary' #formBoundary>
   <div class="drag-box title-text-form form-template" *ngFor="let form of titleTextElements"
