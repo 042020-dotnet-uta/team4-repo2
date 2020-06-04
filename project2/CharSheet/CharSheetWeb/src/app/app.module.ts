@@ -35,7 +35,7 @@ let config = new AuthServiceConfig([
     AccessCharSheetsComponent,
     FormsContainerComponent,
 
-    SelectedCharSheetComponent
+    SelectedCharSheetComponent,
 
 
     SheetsComponent
