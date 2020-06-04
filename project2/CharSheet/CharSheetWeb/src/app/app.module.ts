@@ -34,12 +34,8 @@ let config = new AuthServiceConfig([
     CreateFormComponent,
     AccessCharSheetsComponent,
     FormsContainerComponent,
-
-    SelectedCharSheetComponent
-
-
+    SelectedCharSheetComponent,
     SheetsComponent
-
   ],
   // Injecting the social-login-module during the application startup!
   imports: [
