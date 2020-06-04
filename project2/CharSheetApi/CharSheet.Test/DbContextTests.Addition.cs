@@ -228,6 +228,9 @@ namespace CharSheet.Test
 				var formLabels = context.FormLabels.ToList();
 				var label = formLabels.FirstOrDefault();
 				Assert.Equal("someValue", label.Value);
+				Assert.Equal(1, label.Index);
+				Assert.IsType<Guid>(label.FormLabelId);
+				Assert.IsType<Guid>(label.FormTemplateId);
 			}
 		}
 
@@ -256,6 +259,9 @@ namespace CharSheet.Test
 				var formInputs = context.FormInputs.ToList();
 				var label = formInputs.FirstOrDefault();
 				Assert.Equal("someValue", label.Value);
+				Assert.Equal(1, label.Index);
+				Assert.IsType<Guid>(label.FormInputGroupId);
+				Assert.IsType<Guid>(label.FormInputId);
 			}
 		}
 	}
