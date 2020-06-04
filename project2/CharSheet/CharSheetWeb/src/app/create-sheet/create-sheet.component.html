@@ -8,6 +8,7 @@
     <button (click)="fetchSheet()">Fetch Sheet</button>
     <br>
 </div>
+<input [(ngModel)]="nameInput">
 <button (click)="saveSheet()">Save Sheet</button>
 <div id='form-boundary' #formBoundary>
     <div class="form-box title-text-form form-template" *ngFor="let form of titleTextElements"

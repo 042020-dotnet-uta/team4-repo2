@@ -17,6 +17,7 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
 
   templateId: string;
   sheetId: string;
+  nameInput: string;
 
   constructor(private apiService: ApiService, private activatedRoute: ActivatedRoute) {
   }
@@ -82,6 +83,7 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
           let sheet = response.body as Sheet;
           this.templateId = null;
           this.sheetId = sheet.sheetId;
+          this.nameInput = sheet.name;
           this.loadSheet(response.body as Sheet);
         }
       })
@@ -95,6 +97,7 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
           let template = response.body as Template;
           this.sheetId = null;
           this.templateId = template.templateId;
+          this.nameInput = template.name;
           this.loadTemplate(response.body as Template);
         }
       });
@@ -102,6 +105,7 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
 
   toModel(): Sheet {
     let sheet = {} as Sheet;
+    sheet.name = this.nameInput
     let forms = Array.from(this.formBoundary.nativeElement.children) as Array<HTMLElement>;
     sheet.formGroups = [];
     forms.forEach(form => {
@@ -128,6 +132,7 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
       this.apiService.postSheet(sheet)
         .subscribe(response => {
           this.sheetId = response.body.sheetId;
+          this.nameInput = response.body.name;
           this.templateId = null;
           console.log(response);
         });

@@ -6,13 +6,13 @@
   <option *ngFor="let type of formTypes" [value]="type.value">{{type.name}}</option>
 </select>
 <button class="btn" (click)="createItem()">Create New Item</button>
-
-
+<input [(ngModel)]="name">
+<button class="btn" (click)="saveTemplate()">Save Template</button>
 <div id='form-boundary' #formBoundary>
   <div class="drag-box title-text-form form-template" *ngFor="let form of titleTextElements"
     cdkDragBoundary="#form-boundary" cdkDrag [style.width.px]="form.width" [style.height.px]="form.height">
     <div class="form-area">
-      <input class="form-title" placeholder="Form Title"/>
+      <input class="form-title" placeholder="Form Title" />
       <textarea class="textarea" disabled>This is placeholder text content.</textarea>
     </div>
     <div class="box-handle" cdkDragHandle>
@@ -49,5 +49,3 @@
     </div>
   </div>
 </div>
-<input type="button" value="Save Character Sheet" class="btn-warning" style="margin-left: 530px;margin-bottom: 10px"
-  (click)="saveTemplate()">
