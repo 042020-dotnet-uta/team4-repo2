@@ -15,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsContainerComponent } from './forms-container/forms-container.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiService } from './api.service';
+import { SheetsComponent } from './sheets/sheets.component';
 
 
 // Client id for the google oauth. This is used for validation of our application to google.
@@ -31,7 +32,8 @@ let config = new AuthServiceConfig([
     AppComponent,
     CreateFormComponent,
     AccessCharSheetsComponent,
-    FormsContainerComponent
+    FormsContainerComponent,
+    SheetsComponent
   ],
   // Injecting the social-login-module during the application startup!
   imports: [
