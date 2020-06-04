@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ApiService, Template, Sheet, FormTemplate, FormGroup } from '../api.service';
 
 @Component({
@@ -7,7 +7,8 @@ import { ApiService, Template, Sheet, FormTemplate, FormGroup } from '../api.ser
   styleUrls: ['./sheets.component.css']
 })
 export class SheetsComponent implements OnInit {
-
+  @ViewChild('formBoundary') formBoundary: ElementRef;
+  
   currentTemplate: Template;
   currentSheet: Sheet;
 
@@ -16,7 +17,7 @@ export class SheetsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  loadTemplate(id: string): void
+  fetchTemplate(id: string): void
   {
     this.apiService.getTemplate(id)
       .subscribe(response => {
@@ -28,7 +29,12 @@ export class SheetsComponent implements OnInit {
       });
   }
 
-  loadSheet(id: string): void
+  loadTempalte()
+  {
+    let formTemplates = this.currentTemplate.formTemplates;
+  }
+
+  fetchSheet(id: string): void
   {
     this.apiService.getSheet(id)
     .subscribe(response => {
