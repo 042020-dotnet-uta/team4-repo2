@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -40,11 +37,13 @@ namespace CharSheet.Api.Controllers
             {
                 try
                 {
+                    this._logger.LogInformation("Validating model", userModel);
                     userModel = await _accountService.RegisterLocal(userModel);
                     return Ok(userModel);
                 }
                 catch
                 {
+                    this._logger.LogError("Invalid model", userModel);
                     return BadRequest();
                 }
             }

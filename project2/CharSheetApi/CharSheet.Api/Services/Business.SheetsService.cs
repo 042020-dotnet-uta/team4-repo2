@@ -1,13 +1,10 @@
 using System;
 using System.Security;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
 using CharSheet.Domain;
-using CharSheet.Data;
 using CharSheet.Api.Models;
 
 namespace CharSheet.Api.Services
@@ -96,8 +93,10 @@ namespace CharSheet.Api.Services
             if (sheetModel.FormGroups == null)
                 throw new InvalidOperationException("Missing form groups.");
             foreach (var formGroup in sheetModel.FormGroups)
-                if (formGroup.FormTemplate.FormTemplateId == null)
-                    throw new InvalidOperationException("Missing form template id.");
+                //This is statement is not necessary because FormTemplateId is the primary key and may not be null
+                //it is already validated via the FormTemplateIdModel
+                /*if (formGroup.FormTemplate.FormTemplateId == null)
+                    throw new InvalidOperationException("Missing form template id.");*/
 
             sheetModel.FormGroups = sheetModel.FormGroups.OrderBy(fg => fg.FormTemplate.FormTemplateId);
 
@@ -113,7 +112,7 @@ namespace CharSheet.Api.Services
                     throw new InvalidOperationException("Form template mismatch.");
 
                 int j;
-                var formInputsCount = formInputGroup.FormInputs.Count();
+                var formInputsCount = formInputGroup.FormInputs.Count;
                 for (j = 0; j < formGroup.FormInputs.Count(); j++)
                 {
                     var input = formGroup.FormInputs.ElementAt(j);
@@ -155,7 +154,7 @@ namespace CharSheet.Api.Services
             await _unitOfWork.SheetRepository.Remove(sheet);
             await _unitOfWork.Save();
             _logger.LogInformation($"Deleted Sheet: {sheet.SheetId}");
-            return;
+            // return; //not needed, function type is void.
         }
         #endregion
 

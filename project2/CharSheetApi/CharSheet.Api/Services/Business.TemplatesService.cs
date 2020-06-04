@@ -1,12 +1,9 @@
 using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
 using CharSheet.Domain;
-using CharSheet.Data;
 using CharSheet.Api.Models;
 
 namespace CharSheet.Api.Services
@@ -99,14 +96,6 @@ namespace CharSheet.Api.Services
             });
         }
 
-        private async Task<FormTemplateModel> GetFormTemplate(object id)
-        {
-            // Load form template from database.
-            var formTemplate = await _unitOfWork.FormTemplateRepository.Find(id);
-            if (formTemplate == null)
-                throw new InvalidOperationException("Form template not found.");
-            return await ToModel(formTemplate);
-        }
         private async Task<TemplateModel> ToModel(Template template)
         {
             var templateModel = new TemplateModel
@@ -126,6 +115,16 @@ namespace CharSheet.Api.Services
 
             return templateModel;
         }
+
+        private async Task<FormTemplateModel> GetFormTemplate(object id)
+        {
+            // Load form template from database.
+            var formTemplate = await _unitOfWork.FormTemplateRepository.Find(id);
+            if (formTemplate == null)
+                throw new InvalidOperationException("Form template not found.");
+            return await ToModel(formTemplate);
+        }
+        
 
         private async Task<Template> ToObject(TemplateModel templateModel)
         {
