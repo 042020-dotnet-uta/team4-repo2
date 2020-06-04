@@ -48,8 +48,8 @@
   color: #000000;
   outline: 0 none;
   background: #dee5ff;
-  padding: 0;
   width: 100%;
+  padding: 10px;
 }
 
 /*End of drag box set up*/
@@ -66,3 +66,27 @@ body {
 /*Resizable CSS layout
     general resizing
 */
+
+.textarea, .form-title {
+  resize: none;
+  box-sizing: border-box;
+}
+
+.form-title {
+  display: block;
+  margin: 0 auto;
+  width: 80%;
+  text-align: center;
+}
+
+.form-area {
+  width: 100%;
+}
+
+.form-template>.textarea:first-child {
+  height: 100%;
+}
+
+.form-area>.form-title::before {
+  content: "\A";
+}

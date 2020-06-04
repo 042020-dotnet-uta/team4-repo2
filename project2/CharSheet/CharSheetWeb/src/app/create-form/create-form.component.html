@@ -11,10 +11,9 @@
 <div id='form-boundary' #formBoundary>
   <div class="drag-box title-text-form form-template" *ngFor="let form of titleTextElements"
     cdkDragBoundary="#form-boundary" cdkDrag [style.width.px]="form.width" [style.height.px]="form.height">
-    <div class="w-100">
+    <div class="form-area">
       <input class="form-title" placeholder="Form Title"/>
-      <br>
-      <textarea class="textarea" style="display: block;">This is placeholder text content.</textarea>
+      <textarea class="textarea" disabled>This is placeholder text content.</textarea>
     </div>
     <div class="box-handle" cdkDragHandle>
       <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
@@ -27,7 +26,7 @@
   </div>
   <div class="drag-box text-form form-template" *ngFor="let form of textElements" cdkDragBoundary="#form-boundary"
     cdkDrag [style.width.px]="form.width" [style.height.px]="form.height">
-    <textarea class="textarea">This is placeholder text content.</textarea>
+    <textarea class="textarea" disabled>This is placeholder text content.</textarea>
     <div class="box-handle" cdkDragHandle>
       <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
         <path
@@ -39,7 +38,7 @@
   </div>
   <div class="drag-box title-form form-template" *ngFor="let form of titleElements" cdkDragBoundary="#form-boundary"
     cdkDrag [style.width.px]="form.width" [style.height.px]="form.height">
-    <input type="text" class="textarea" placeholder="Form Title" />
+    <input type="text" class="form-title" placeholder="Form Title" />
     <div class="box-handle" cdkDragHandle>
       <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
         <path

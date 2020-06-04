@@ -22,7 +22,7 @@ var document;
 export class CreateFormComponent implements OnInit, FormElementArrays {
   @ViewChild('formBoundary') formBoundary: ElementRef;
 
-  width = 300;
+  width = 500;
   height = 100;
   type: string;
 
@@ -36,7 +36,7 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
       name: "Title Box"
     },
     {
-      value:"title-text-form",
+      value: "title-text-form",
       name: "Title and Text"
     }];
 
@@ -52,14 +52,14 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
     let elements = [];
     let newElement = { width: this.width, height: this.height };
     switch (this.type) {
+      case "title-text-form":
+        this.titleTextElements.push(newElement as FormElement);
+        break;
       case "text-form":
         this.textElements.push(newElement as FormElement);
         break;
       case "title-form":
         this.titleElements.push(newElement as FormElement);
-        break;
-      case "title-text-form":
-        this.titleTextElements.push(newElement as FormElement);
         break;
     }
   }
@@ -100,14 +100,18 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
       formTemplate.width = parseInt(style.width, 10);
       formTemplate.height = parseInt(style.height, 10);
 
-      if (classes.includes("text-form")) {
-        formTemplate.title = "";
-        formTemplate.type = "text";
-        formTemplate.labels = [];
+      formTemplate.labels = [];
+
+      if (classes.includes("title-text-form")) {
+        formTemplate.title = (formArea.firstChild as HTMLInputElement).value;
+        formTemplate.type = "title-text"
       } else if (classes.includes("title-form")) {
         formTemplate.title = (formArea as HTMLInputElement).value;
         formTemplate.type = "title";
         formTemplate.labels = [];
+      } else if (classes.includes("text-form")) {
+        formTemplate.title = "";
+        formTemplate.type = "text";
       }
       template.formTemplates.push(formTemplate);
     });

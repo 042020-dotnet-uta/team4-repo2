@@ -1,13 +1,23 @@
-<input [(ngModel)]="templateId" placeholder="Enter Template Id"/>
-<button (click)="fetchTemplate()">Fetch Template</button>
-<button (click)="saveNewSheet()">Save Sheet</button>
+<input [(ngModel)]="templateId" placeholder="Enter Template Id" />
+<button (click)="fetchTemplate()">Fetch Template</button><br>
+<input [(ngModel)]="sheetId" placeholder="Enter Sheet Id" />
+<button (click)="fetchSheet()">Fetch Sheet</button><br>
+<button (click)="saveSheet()">Save Sheet</button>
 <div id='form-boundary' #formBoundary>
+    <div class="form-box title-text-form form-template" *ngFor="let form of titleTextElements"
+        [style.width.px]="form.width" [style.height.px]="form.height" [style.top.px]="form.y" [style.left.px]="form.x"
+        [id]="form.formTemplateId">
+        <div class="form-area">
+            <label class="form-title">{{form.title}}</label>
+            <textarea class="textarea">{{(form.formInputs) ? form.formInputs[0] : "Enter Text Here"}}</textarea>
+        </div>
+    </div>
     <div class="form-box text-form form-template" *ngFor="let form of textElements" [style.width.px]="form.width"
         [style.height.px]="form.height" [style.top.px]="form.y" [style.left.px]="form.x" [id]="form.formTemplateId">
-        <textarea class="textarea">THIS IS PLACEHOLDER</textarea>
+        <textarea class="textarea">{{(form.formInputs) ? form.formInputs[0] : "Enter Text Here"}}</textarea>
     </div>
     <div class="form-box title-form form-template" *ngFor="let form of titleElements" [style.width.px]="form.width"
         [style.height.px]="form.height" [style.top.px]="form.y" [style.left.px]="form.x" [id]="form.formTemplateId">
-        <span>{{form.title}}</span>
+        <label class="title-form">{{form.title}}</label>
     </div>
 </div>
