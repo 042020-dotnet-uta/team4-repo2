@@ -98,7 +98,7 @@ namespace CharSheet.Api.Services
                 /*if (formGroup.FormTemplate.FormTemplateId == null)
                     throw new InvalidOperationException("Missing form template id.");*/
 
-            sheetModel.FormGroups = sheetModel.FormGroups.OrderBy(fg => fg.FormTemplate.FormTemplateId);
+            sheetModel.FormGroups = sheetModel.FormGroups.OrderBy(fg => fg.FormTemplateId);
 
             var deletedInputs = new List<FormInput>();
 
@@ -108,7 +108,7 @@ namespace CharSheet.Api.Services
                 var formInputGroup = sheet.FormInputGroups.ElementAt(i);
 
                 // Verify form templates.
-                if (formGroup.FormTemplate.FormTemplateId != formInputGroup.FormTemplateId)
+                if (formGroup.FormTemplateId != formInputGroup.FormTemplateId)
                     throw new InvalidOperationException("Form template mismatch.");
 
                 int j;

@@ -65,6 +65,11 @@ export class ApiService {
     return this.httpClient.post(this.mainUrl + 'sheets', sheet, { headers, observe: 'response' });
   }
 
+  public putSheet(sheet: Sheet): Observable<any> {
+    const headers = this.setRequestHeaders();
+    return this.httpClient.put(this.mainUrl + `sheets/${sheet.sheetId}`, sheet, { headers, observe: 'response' });
+  }
+
   private setRequestHeaders(): HttpHeaders {
     return new HttpHeaders()
       .set('Content-type', 'application/json')
@@ -97,6 +102,7 @@ export interface FormTemplate {
   height: number;
   width: number;
   labels: string[];
+  formInputs: string[] | null;
 }
 
 export interface Sheet {
@@ -105,5 +111,6 @@ export interface Sheet {
 }
 export interface FormGroup {
   formTemplateId: string;
+  formTemplate: FormTemplate | null;
   formInputs: string[];
 }

@@ -22,7 +22,7 @@ var document;
 export class CreateFormComponent implements OnInit, FormElementArrays {
   @ViewChild('formBoundary') formBoundary: ElementRef;
 
-  width = 300;
+  width = 500;
   height = 100;
   type: string;
 
@@ -36,7 +36,7 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
       name: "Title Box"
     },
     {
-      value:"title-text-form",
+      value: "title-text-form",
       name: "Title and Text"
     }];
 
@@ -112,7 +112,7 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
       } else if (classes.includes("text-form")) {
         formTemplate.title = "";
         formTemplate.type = "text";
-      } 
+      }
       template.formTemplates.push(formTemplate);
     });
     return template;

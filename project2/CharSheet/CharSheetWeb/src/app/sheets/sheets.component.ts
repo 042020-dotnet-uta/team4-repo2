@@ -16,9 +16,7 @@ export class SheetsComponent implements OnInit, AfterViewInit, FormElementArrays
   titleElements = [];
 
   templateId: string;
-  currentTemplate: Template;
   sheetId: string;
-  currentSheet: Sheet;
 
   constructor(private apiService: ApiService, private activatedRoute: ActivatedRoute) {
   }
@@ -26,6 +24,7 @@ export class SheetsComponent implements OnInit, AfterViewInit, FormElementArrays
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(paramsId => {
       this.templateId = paramsId.p1;
+      // this.sheetId = paramsId.p2;
     });
   }
 
@@ -34,49 +33,72 @@ export class SheetsComponent implements OnInit, AfterViewInit, FormElementArrays
       this.fetchTemplate();
   }
 
-  fetchTemplate(): void {
-    this.apiService.getTemplate(this.templateId)
-      .subscribe(response => {
-        if (response.status == 200) {
-          this.currentTemplate = response.body;
-          console.log(response);
-          this.loadTemplate();
-        }
-      });
-  }
-
-  loadTemplate() {
-    let formTemplates = this.currentTemplate.formTemplates;
-
+  loadTemplate(template: Template): void {
     this.textElements.splice(0, this.textElements.length);
     this.titleElements.splice(0, this.titleElements.length);
+    this.titleTextElements.splice(0, this.titleTextElements.length);
+
+    let formTemplates = template.formTemplates;
 
     formTemplates.forEach(formTemplate => {
-      switch (formTemplate.type) {
-        case "title-text":
-          this.titleTextElements.push(formTemplate);
-          break;
-        case "text":
-          this.textElements.push(formTemplate);
-          break;
-        case "title":
-          this.titleElements.push(formTemplate);
-          break;
-      }
+      this.pushForm(formTemplate);
     });
   }
 
-  fetchSheet(id: string): void {
-    this.apiService.getSheet(id)
+  loadSheet(sheet: Sheet): void {
+    this.textElements.splice(0, this.textElements.length);
+    this.titleElements.splice(0, this.titleElements.length);
+    this.titleTextElements.splice(0, this.titleTextElements.length);
+
+    let formGroups = sheet.formGroups;
+
+    formGroups.forEach(formGroup => {
+      formGroup.formTemplate.formInputs = formGroup.formInputs;
+      this.pushForm(formGroup.formTemplate);
+    });
+  }
+
+  pushForm(formTemplate: FormTemplate) {
+    switch (formTemplate.type) {
+      case "title-text":
+        this.titleTextElements.push(formTemplate);
+        break;
+      case "text":
+        this.textElements.push(formTemplate);
+        break;
+      case "title":
+        this.titleElements.push(formTemplate);
+        break;
+    }
+  }
+
+  fetchSheet(): void {
+    this.apiService.getSheet(this.sheetId)
       .subscribe(response => {
         if (response.status == 200) {
-          this.currentSheet = response.body;
-          console.log(this.currentSheet);
+          console.log(response.body);
+          let sheet = response.body as Sheet;
+          this.templateId = null;
+          this.sheetId = sheet.sheetId;
+          this.loadSheet(response.body as Sheet);
         }
       })
   }
 
-  convertToNewModel(): Sheet {
+  fetchTemplate(): void {
+    this.apiService.getTemplate(this.templateId)
+      .subscribe(response => {
+        if (response.status == 200) {
+          console.log(response);
+          let template = response.body as Template;
+          this.sheetId = null;
+          this.templateId = template.templateId;
+          this.loadTemplate(response.body as Template);
+        }
+      });
+  }
+
+  toModel(): Sheet {
     let sheet = {} as Sheet;
     let forms = Array.from(this.formBoundary.nativeElement.children) as Array<HTMLElement>;
     sheet.formGroups = [];
@@ -86,22 +108,31 @@ export class SheetsComponent implements OnInit, AfterViewInit, FormElementArrays
       formGroup.formInputs = [] as string[];
 
       let classes = form.className as string;
-      if (classes.includes("text-form")) {
+      if (classes.includes("title-text-form")) {
+        let input = ((form.firstChild as HTMLElement).querySelector(':nth-child(2)') as HTMLInputElement).value;
+        formGroup.formInputs.push(input);
+      } else if (classes.includes("text-form")) {
         let input = (form.firstChild as HTMLInputElement).value;
         formGroup.formInputs.push(input);
-      sheet.formGroups.push(formGroup);
       }
+      sheet.formGroups.push(formGroup);
     });
     return sheet;
   }
 
-  saveNewSheet() {
-    let sheet: Sheet;
-    if (this.sheetId == null)
-      sheet = this.convertToNewModel();
-    this.apiService.postSheet(sheet)
-      .subscribe(response => {
-        console.log(response);
-      });
+  saveSheet() {
+    let sheet = this.toModel();
+    if (this.sheetId == null) {
+      this.apiService.postSheet(sheet)
+        .subscribe(response => {
+          console.log(response);
+        });
+    } else {
+      sheet.sheetId = this.sheetId;
+      this.apiService.putSheet(sheet)
+        .subscribe(response => {
+          console.log(response);
+        });
+    }
   }
 }

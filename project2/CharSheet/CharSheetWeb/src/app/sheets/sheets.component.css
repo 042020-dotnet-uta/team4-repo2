@@ -1,6 +1,7 @@
 #form-boundary {
     position: relative;
 }
+
 .form-template {
     position: absolute;
 }
@@ -9,7 +10,7 @@
     resize: none;
 }
 
-.text-form > :first-child, .title-form > :first-child {
+.text-form> :first-child, .title-form> :first-child {
     height: 100%;
     width: 100%;
     box-sizing: border-box;
