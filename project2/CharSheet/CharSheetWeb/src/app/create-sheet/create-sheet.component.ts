@@ -12,6 +12,7 @@ import { SavePdfService } from '../print-pdf.service';
 export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementArrays {
   @ViewChild('formBoundary') formBoundary: ElementRef;
 
+  inputsElements = [];
   titleTextElements = [];
   textElements = [];
   titleElements = [];
@@ -42,6 +43,7 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
     this.templateId = template.templateId;
     this.nameInput = null;
 
+    this.inputsElements.splice(0, this.inputsElements.length);
     this.textElements.splice(0, this.textElements.length);
     this.titleElements.splice(0, this.titleElements.length);
     this.titleTextElements.splice(0, this.titleTextElements.length);
@@ -49,6 +51,12 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
     let formTemplates = template.formTemplates;
 
     formTemplates.forEach(formTemplate => {
+      if (formTemplate.type === "inputs") {
+        formTemplate.inputs = [];
+        formTemplate.labels.forEach(label => {
+          formTemplate.inputs.push({ label: label, input: null });
+        });
+      }
       this.pushForm(formTemplate);
     });
   }
@@ -58,6 +66,7 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
     this.sheetId = sheet.sheetId;
     this.nameInput = sheet.name;
 
+    this.inputsElements.splice(0, this.inputsElements.length);
     this.textElements.splice(0, this.textElements.length);
     this.titleElements.splice(0, this.titleElements.length);
     this.titleTextElements.splice(0, this.titleTextElements.length);
@@ -66,12 +75,24 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
 
     formGroups.forEach(formGroup => {
       formGroup.formTemplate.formInputs = formGroup.formInputs;
+
+      if (formGroup.formTemplate.type === "inputs") {
+        formGroup.formTemplate.inputs = [];
+        formGroup.formTemplate.labels.forEach((label, index) => {
+          let input = formGroup.formInputs[index] ? formGroup.formInputs[index] : "";
+          formGroup.formTemplate.inputs.push({ label: label, input: input });
+        });
+      }
+
       this.pushForm(formGroup.formTemplate);
     });
   }
 
   pushForm(formTemplate: FormTemplate) {
     switch (formTemplate.type) {
+      case "inputs":
+        this.inputsElements.push(formTemplate);
+        break;
       case "title-text":
         this.titleTextElements.push(formTemplate);
         break;
@@ -115,7 +136,12 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
       formGroup.formInputs = [] as string[];
 
       let classes = form.className as string;
-      if (classes.includes("title-text-form")) {
+      if (classes.includes("inputs-form")) {
+        let inputForms = Array.from(form.querySelector('.input-container').children);
+        inputForms.forEach(inputForm => {
+          formGroup.formInputs.push((inputForm.querySelector('input') as HTMLInputElement).value);
+        });
+      } else if (classes.includes("title-text-form")) {
         let input = ((form.firstChild as HTMLElement).querySelector(':nth-child(2)') as HTMLInputElement).value;
         formGroup.formInputs.push(input);
       } else if (classes.includes("text-form")) {

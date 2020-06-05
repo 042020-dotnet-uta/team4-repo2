@@ -26,21 +26,23 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
   height = 100;
   type: string;
   nameInput: string;
+  count: number;
 
   formTypes = [
     {
-      value: "text-form",
-      name: "Text Box",
+      value: "text-form", name: "Text Box",
     },
     {
-      value: "title-form",
-      name: "Title Box"
+      value: "title-form", name: "Title Box"
     },
     {
-      value: "title-text-form",
-      name: "Title and Text"
+      value: "title-text-form", name: "Title and Text"
+    },
+    {
+      value: "inputs-form", name: "Input Fields"
     }];
 
+  inputsElements = [];
   titleTextElements = [];
   textElements = [];
   titleElements = [];
@@ -50,9 +52,13 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
   // create a method to be used in the HTML to  push a new dev of the predefined type
   // to the dom and to the page dynamically 
   createItem(): void {
-    let elements = [];
-    let newElement = { width: this.width, height: this.height };
+    let newElement = { width: this.width, height: this.height } as any;
     switch (this.type) {
+      case "inputs-form":
+        newElement.inputs = [] as Array<FormElement>;
+        newElement.inputs.length = this.count;
+        this.inputsElements.push(newElement as FormElement);
+        break;
       case "title-text-form":
         this.titleTextElements.push(newElement as FormElement);
         break;
@@ -107,10 +113,18 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
       if (classes.includes("title-text-form")) {
         formTemplate.title = (formArea.firstChild as HTMLInputElement).value;
         formTemplate.type = "title-text"
+      } else if (classes.includes("inputs-form")) {
+        formTemplate.title = "inputs";
+        formTemplate.type = "inputs";
+        let inputContainer = form.querySelector(".input-container");
+        (Array.from(inputContainer.children)).forEach(input => {
+          let value = (input.firstChild.firstChild as HTMLInputElement).value;
+          formTemplate.labels.push(value ? value : "");
+        });
+        formTemplate.title = (formArea.firstChild as HTMLInputElement).value;
       } else if (classes.includes("title-form")) {
         formTemplate.title = (formArea as HTMLInputElement).value;
         formTemplate.type = "title";
-        formTemplate.labels = [];
       } else if (classes.includes("text-form")) {
         formTemplate.title = "";
         formTemplate.type = "text";
