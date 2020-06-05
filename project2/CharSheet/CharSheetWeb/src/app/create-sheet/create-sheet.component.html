@@ -16,7 +16,7 @@
             Enter a Name!
         </span>
     </div>
-    <div [className]="state ? '' : invisible">
+    <div [className]="state ? '' : 'invisible'">
         <span class="text-warning offset-2">
             {{state}}
         </span>
@@ -31,7 +31,7 @@
             <div class="input-area">
                 <ul class="input-container">
                     <li *ngFor="let input of form.inputs" class="input-row">
-                        <div class="form-label"><label>{{input.label}}</label></div>
+                        <div class="form-label"><label class="temp-form">{{input.label}}</label></div>
                         <div class="form-input"><input [value]="input.input"
                                 placeholder="This is placeholder text content." /></div>
                     </li>
