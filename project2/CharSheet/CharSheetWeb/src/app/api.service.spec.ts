@@ -58,6 +58,11 @@ describe('ApiService', () => {
     expect(object).toBeTruthy();
   });
 
+  it('getTemplatesByUser should return Observable<any>', () => {
+    let object: Observable<any> = service.getTemplatesByUser();
+    expect(object).toBeTruthy();
+  });
+
   it('postTemplate should return Observable<any>', () => {
     let object: Observable<any> = service.postTemplate(<Template>template);
     expect(object).toBeTruthy();
@@ -65,6 +70,16 @@ describe('ApiService', () => {
 
   it('postSheet should return Observable<any>', () => {
     let object: Observable<any> = service.postSheet(<Sheet>sheet);
+    expect(object).toBeTruthy();
+  });
+
+  it('getSheet should return Observable<any>', () => {
+    let object: Observable<any> = service.getSheet('12345');
+    expect(object).toBeTruthy();
+  });
+
+  it('petSheet should return Observable<any>', () => {
+    let object: Observable<any> = service.putSheet(<Sheet>sheet);
     expect(object).toBeTruthy();
   });
 

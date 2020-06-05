@@ -4,6 +4,8 @@ import { CreateFormComponent } from './create-form.component';
 //  import dependecies
 import { RouterTestingModule } from '@angular/router/testing';
 import { ApiService, Template } from '../api.service';
+import { type } from 'os';
+import { Type } from '@angular/core';
 
 describe('CreateFormComponent', () => {
   let component: CreateFormComponent;
@@ -11,7 +13,7 @@ describe('CreateFormComponent', () => {
   let apiMock: any;
  /* let dragSpy: any;
   let titleSpy: any;*/
-  let createSpy: any;
+  let tempSpy: any;
 
   beforeEach(async(() => {
     apiMock = jasmine.createSpyObj('ApiService', ['postTemplate']);
@@ -45,6 +47,14 @@ describe('CreateFormComponent', () => {
     expect(component.height == 100).toBeTruthy();
   });
 
+  it('should have should have undefined "type" property of type string', () => {
+    expect(component.type).toBeUndefined();
+  });
+
+  it('should have should have undefined "nameInput" property of type string', () => {
+    expect(component.nameInput).toBeUndefined();
+  });
+
   it('should have titleElements property', () => {
     expect(component.titleElements).toBeTruthy();
   });
@@ -52,7 +62,25 @@ describe('CreateFormComponent', () => {
   it('should have textElements property', () => {
     expect(component.textElements).toBeTruthy();
   });
- 
+
+  it('convertToModel should return a Template', () => {
+    const template: Template = component.convertToModel();
+    expect(template).toBeTruthy();
+  });
+
+  it('should call createItem', () => {
+    tempSpy = spyOn(component, 'createItem');
+    component.createItem();
+    expect(tempSpy).toHaveBeenCalled();
+  });
+
+  it('should call saveTemplate', () => {
+    tempSpy = spyOn(component, 'saveTemplate');
+    component.saveTemplate();
+    expect(tempSpy).toHaveBeenCalled();
+  });
+
+
   /*it('should call createDragItem', () => {
     dragSpy = spyOn(component, 'createDragItem');
     let drag: any = component.createDragItem();
@@ -78,15 +106,5 @@ describe('CreateFormComponent', () => {
     expect(component.height == 200).toBeTruthy();
   });*/
 
-  it('convertToModel should return a Template', () => {
-    const template: Template = component.convertToModel();
-    expect(template).toBeTruthy();
-  });
 
-  it('should call createItem', () => {
-    createSpy = spyOn(component, 'createItem');
-    component.createItem();
-    expect(createSpy).toHaveBeenCalled();
-  });
- 
 });

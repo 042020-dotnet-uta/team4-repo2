@@ -4,7 +4,7 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 //import { DragDropModule } from '@angular/cdk/drag-drop';
 // imports teh resizing module that allows for "more simple" resizing of divs
 //import { ResizeEvent } from 'angular-resizable-element';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute} from '@angular/router';
 import { ApiService, Template, FormTemplate } from '../api.service';
 import { FormElementArrays, FormElement } from "../shared/form-types";
 

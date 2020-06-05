@@ -13,7 +13,6 @@ export class SavePdfService {
   // Method to capture form and convert to PDF
   public captureScreen(data: HTMLElement) {
     let div = document.getElementById('form-boundary');
-    div
     html2canvas(div, { scrollX: -window.scrollX, scrollY: -window.scrollY }).then(canvas => {
       var pdf = new jspdf('p', 'cm', 'a4');
       var imgData = canvas.toDataURL("image/png");
