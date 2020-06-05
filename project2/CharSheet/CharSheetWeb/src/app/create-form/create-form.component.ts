@@ -27,6 +27,7 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
   type: string;
   nameInput: string;
   count: number;
+  state:string;
 
   formTypes = [
     {
@@ -135,10 +136,11 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
   }
 
   saveTemplate(): void {
+    this.state = "Saving...";
     let template = this.convertToModel();
     this.apiService.postTemplate(template)
       .subscribe(response => {
-        console.log(response)
+        this.state = "Saved Template";
       });
   }
 }

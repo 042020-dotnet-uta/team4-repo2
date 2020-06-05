@@ -20,6 +20,7 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
   templateId: string;
   sheetId: string;
   nameInput: string;
+  state: string;
 
   constructor(private apiService: ApiService, private activatedRoute: ActivatedRoute, private savedPdfService: SavePdfService) {
   }
@@ -106,21 +107,29 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
   }
 
   fetchSheet(): void {
+    this.state = "Loading..."
     this.apiService.getSheet(this.sheetId)
       .subscribe(response => {
         if (response.status == 200) {
           console.log(response.body);
           this.loadSheet(response.body as Sheet);
+          this.state = null;
+        } else {
+          this.state = "Error Loading";
         }
       })
   }
 
   fetchTemplate(): void {
+    this.state = "Loading..."
     this.apiService.getTemplate(this.templateId)
       .subscribe(response => {
         if (response.status == 200) {
           console.log(response);
           this.loadTemplate(response.body as Template);
+          this.state = null;
+        } else {
+          this.state = "Error Loading";
         }
       });
   }
@@ -155,20 +164,30 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
   }
 
   saveSheet(): void {
+    this.state = "Saving Sheet...";
     let sheet = this.toModel();
     if (this.sheetId == null) {
       this.apiService.postSheet(sheet)
         .subscribe(response => {
-          this.sheetId = response.body.sheetId;
-          this.nameInput = response.body.name;
-          this.templateId = null;
           console.log(response);
+          if (response.status == 200 || response.status == 201) {
+            this.sheetId = response.body.sheetId;
+            this.nameInput = response.body.name;
+            this.templateId = null;
+          } else {
+            this.state = "Error Saving"
+          }
         });
     } else {
       sheet.sheetId = this.sheetId;
       this.apiService.putSheet(sheet)
         .subscribe(response => {
           console.log(response);
+          if (response.status == 200 || response.status == 201) {
+            this.state = null;
+          } else {
+            this.state = "Error Saving"
+          }
         });
     }
   }
