@@ -8,7 +8,7 @@
         <button class="col-md-4 offset-1 btn-secondary" (click)="fetchSheet()">Fetch Sheet</button>
     </div>
     <div>
-        <input [(ngModel)]="nameInput" placeholder="Enter Sheet Name" class="col-7" #nameValidation="ngModel">
+        <input [(ngModel)]="nameInput" placeholder="Enter Sheet Name" class="col-7">
         <button (click)="saveSheet()" class="col-md-4 offset-1 btn-secondary">Save Sheet</button>
     </div>
     <div *ngIf="!nameInput">
@@ -16,7 +16,7 @@
             Enter a Name!
         </span>
     </div>
-    <div [className]="state ? '' : 'invisible'">
+    <div>
         <span class="text-warning offset-2">
             {{state}}
         </span>

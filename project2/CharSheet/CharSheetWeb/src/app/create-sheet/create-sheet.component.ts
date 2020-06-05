@@ -107,13 +107,11 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
   }
 
   fetchSheet(): void {
-    this.state = "Loading..."
     this.apiService.getSheet(this.sheetId)
       .subscribe(response => {
         if (response.status == 200) {
           console.log(response.body);
           this.loadSheet(response.body as Sheet);
-          this.state = null;
         } else {
           this.state = "Error Loading";
         }
@@ -121,13 +119,12 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
   }
 
   fetchTemplate(): void {
-    this.state = "Loading..."
+
     this.apiService.getTemplate(this.templateId)
       .subscribe(response => {
         if (response.status == 200) {
           console.log(response);
           this.loadTemplate(response.body as Template);
-          this.state = null;
         } else {
           this.state = "Error Loading";
         }
