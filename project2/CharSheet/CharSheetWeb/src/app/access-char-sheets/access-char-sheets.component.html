@@ -1,18 +1,18 @@
 <div class="container">
    <div class="row">
-      <div class="col-6">
+      <div class="col-6 ">
          <h1>Templates</h1>
-         <ul>
+         <ul class="genBackground">
            <li *ngFor="let template of templatesData" (click)="getSelectedTemplate(template)">
-             <a routerLink="/template/{{template.templateId}}">{{template.templateId}}</a>
+             <a routerLink="/template/{{template.templateId}}" style="color:darkred">{{template.name}}</a>
            </li>
          </ul>
       </div>
       <div class="col-6">
          <h1>Sheets</h1>
-         <ul>
+         <ul class="genBackground">
            <li *ngFor="let sheet of sheetsData" (click)="getSelectedSheet(sheet)">
-             <a routerLink="/sheet/{{sheet.sheetId}}">{{sheet.sheetId}}</a>
+             <a routerLink="/sheet/{{sheet.sheetId}}" style="color:darkred">{{sheet.name}}</a>
            </li>
          </ul>
       </div>
