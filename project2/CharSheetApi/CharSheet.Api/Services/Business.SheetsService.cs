@@ -105,7 +105,7 @@ namespace CharSheet.Api.Services
                 var formInputGroup = sheet.FormInputGroups.ElementAt(i);
 
                 // Verify form templates.
-                if (formGroup.FormTemplate.FormTemplateId != formInputGroup.FormTemplate.FormTemplateId && formGroup.FormTemplateId != formInputGroup.FormTemplate.FormTemplateId)
+                if (formGroup.FormTemplate?.FormTemplateId != formInputGroup.FormTemplate.FormTemplateId && formGroup.FormTemplateId != formInputGroup.FormTemplate.FormTemplateId)
                     throw new InvalidOperationException("Form template mismatch.");
 
                 int j;
