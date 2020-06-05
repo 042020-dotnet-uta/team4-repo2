@@ -5,8 +5,6 @@ import { AuthService, GoogleLoginProvider } from "angularx-social-login";
 import { By } from '@angular/platform-browser';
 import { applySourceSpanToExpressionIfNeeded } from '@angular/compiler/src/output/output_ast';
 import { ApiService } from './api.service';
-import { sign } from 'crypto';
-import { RouterLink, Navigation } from '@angular/router';
 
 describe('AppComponet', () => {
   let component: AppComponent;
@@ -37,7 +35,6 @@ describe('AppComponet', () => {
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
     de = fixture.debugElement;
-    signInSpy = spyOn(component, 'singIn');
     signOutSpy = spyOn(component, 'signOut');
     fixture.detectChanges();
   });
@@ -51,18 +48,14 @@ describe('AppComponet', () => {
     expect(component.title).toContain('Character Sheet Creator');
   });
 
-  it('should have undefined "user" property', () => {
-    expect(component.user).toBeUndefined();
-  });
-
   it('signIn should be called', () => {
+    signInSpy = spyOn(component, 'singIn');
     component.singIn('google');
     expect(signInSpy).toHaveBeenCalled();
   });
 
-  it('signIn should return void', () => {
-    let returnValue: any = component.singIn('Google');
-    expect(returnValue).toBeFalsy();
+  it('should have undefined "user" property', () => {
+    expect(component.user).toBeUndefined();
   });
 
   it('signOut should return void', () => {
