@@ -38,9 +38,6 @@ export class ApiService {
   }
 
   public getTemplatesByUser(): Observable<any> {
-    const headers = new HttpHeaders()
-      .set('Authorization', `Bearer ${this.cookieService.get('access_token')}`)
-      .set('Authenticationtoken', `Bearer ${this.cookieService.get('access_token')}`);
       return this.httpClient.get(this.mainUrl + 'templates?user=true', { observe: 'response' });
   }
 
