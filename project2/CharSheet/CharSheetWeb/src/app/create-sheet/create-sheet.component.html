@@ -20,7 +20,7 @@
                 <ul class="input-container">
                     <li *ngFor="let input of form.inputs" class="input-row">
                         <div class="form-label"><label>{{input.label}}</label></div>
-                        <div class="form-input"><input placeholder="This is placeholder text content." /></div>
+                        <div class="form-input"><input [value]="input.input" placeholder="This is placeholder text content." /></div>
                     </li>
                 </ul>
             </div>
@@ -43,7 +43,7 @@
 
     <div class="form-box title-form form-template" *ngFor="let form of titleElements" [style.width.px]="form.width"
         [style.height.px]="form.height" [style.top.px]="form.y" [style.left.px]="form.x" [id]="form.formTemplateId">
-        <label class="title-form">{{form.title}}</label>
+        <label class="form-title">{{form.title}}</label>
     </div>
 
 </div>

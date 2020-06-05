@@ -139,6 +139,7 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
       if (classes.includes("inputs-form")) {
         let inputForms = Array.from(form.querySelector('.input-container').children);
         inputForms.forEach(inputForm => {
+          formGroup.formInputs
           formGroup.formInputs.push((inputForm.querySelector('input') as HTMLInputElement).value);
         });
       } else if (classes.includes("title-text-form")) {
