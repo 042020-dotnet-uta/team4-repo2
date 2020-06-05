@@ -28,6 +28,10 @@ namespace CharSheet.Api.Controllers
         #region Action Methods
         [HttpGet("")]
         [Authorize]
+        /// <summary>
+        /// Get all sheets by the user.
+        /// </summary>
+        /// <returns>All sheets by the user.</returns>
         public async Task<ActionResult<IEnumerable<SheetModel>>> GetSheets()
         {
             try
@@ -43,6 +47,11 @@ namespace CharSheet.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        /// <summary>
+        /// Get a sheet.
+        /// </summary>
+        /// <param name="id">Sheet id.</param>
+        /// <returns>A sheet.</returns>
         public async Task<ActionResult<SheetModel>> GetSheets(Guid? id)
         {
             try
@@ -62,6 +71,11 @@ namespace CharSheet.Api.Controllers
 
         [HttpPost("")]
         [Authorize]
+        /// <summary>
+        /// Create a sheet if the model state is valid.
+        /// </summary>
+        /// <param name="sheetModel">Sheet model containing all properties of the new sheet object.</param>
+        /// <returns>New sheet model of the sheet.</returns>
         public async Task<ActionResult<SheetModel>> CreateSheet(SheetModel sheetModel)
         {
             if (ModelState.IsValid)
@@ -83,6 +97,12 @@ namespace CharSheet.Api.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
+        /// <summary>
+        /// Update a sheet's properties.
+        /// </summary>
+        /// <param name="id">Sheet id of sheet being updated.</param>
+        /// <param name="sheetModel">Sheet model containing all properties to be updated.</param>
+        /// <returns>Sheet model of the sheet with updated properties.</returns>
         public async Task<ActionResult<SheetModel>> UpdateSheet(Guid? id, SheetModel sheetModel)
         {
             if (ModelState.IsValid)
@@ -110,6 +130,11 @@ namespace CharSheet.Api.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
+        /// <summary>
+        /// Delete a sheet.
+        /// </summary>
+        /// <param name="id">Id of the sheet to be deleted.</param>
+        /// <returns></returns>
         public async Task<ActionResult> DeleteSheet(Guid? id)
         {
             if (id == null)

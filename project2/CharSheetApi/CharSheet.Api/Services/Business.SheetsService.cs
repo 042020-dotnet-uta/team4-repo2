@@ -32,6 +32,11 @@ namespace CharSheet.Api.Services
     public partial class BusinessService : IBusinessService
     {
         #region GET
+        /// <summary>
+        /// Get all sheets by a user.
+        /// </summary>
+        /// <param name="id">User id.</param>
+        /// <returns>All sheets by a user.</returns>
         public async Task<IEnumerable<SheetModel>> GetSheets(object id)
         {
             // Load sheets from database, filter by user id.
@@ -49,6 +54,11 @@ namespace CharSheet.Api.Services
             return sheetModels.ToList();
         }
 
+        /// <summary>
+        /// Get a sheet by id.
+        /// </summary>
+        /// <param name="id">Sheet id.</param>
+        /// <returns>A sheet.</returns>
         public async Task<SheetModel> GetSheet(object id)
         {
             // Load sheet from database.
@@ -62,6 +72,12 @@ namespace CharSheet.Api.Services
         #endregion
 
         #region POST
+        /// <summary>
+        /// Create a new sheet.
+        /// </summary>
+        /// <param name="sheetModel">Sheet model containing the new sheet's properties.</param>
+        /// <param name="userId">Id of the user creating the sheet.</param>
+        /// <returns>Sheet model of the new sheet.</returns>
         public async Task<SheetModel> CreateSheet(SheetModel sheetModel, Guid userId)
         {
             await AuthenticateUser(userId);
@@ -78,6 +94,12 @@ namespace CharSheet.Api.Services
         #endregion
 
         #region PUT
+        /// <summary>
+        /// Update a sheet.
+        /// </summary>
+        /// <param name="sheetModel">Sheet model containing updated sheet properties.</param>
+        /// <param name="userId">Id of the user updating the sheet.</param>
+        /// <returns>Sheet model containing updated properties.</returns>
         public async Task<SheetModel> UpdateSheet(SheetModel sheetModel, Guid userId)
         {
             await AuthenticateUser(userId);
@@ -140,6 +162,12 @@ namespace CharSheet.Api.Services
         #endregion
 
         #region DELETE
+        /// <summary>
+        /// Delete a sheet.
+        /// </summary>
+        /// <param name="id">Id of sheet being deleted.</param>
+        /// <param name="userId">Id of user deleting sheet.</param>
+        /// <returns></returns>
         public async Task DeleteSheet(object id, Guid userId)
         {
             var sheet = await _unitOfWork.SheetRepository.Find(id);
@@ -156,6 +184,11 @@ namespace CharSheet.Api.Services
         #endregion
 
         #region Helpers
+        /// <summary>
+        /// Convert form input group object into model.
+        /// </summary>
+        /// <param name="formInputGroup">Form input group object.</param>
+        /// <returns>Form input group model.</returns>
         private async Task<FormInputGroupModel> ToModel(FormInputGroup formInputGroup)
         {
             var formInputGroupModel = new FormInputGroupModel
@@ -167,6 +200,11 @@ namespace CharSheet.Api.Services
             return formInputGroupModel;
         }
 
+        /// <summary>
+        /// Convert sheet object into model.
+        /// </summary>
+        /// <param name="sheet">Sheet object.</param>
+        /// <returns>Sheet model.</returns>
         private async Task<SheetModel> ToModel(Sheet sheet)
         {
             // Instantiate sheet model.
@@ -189,6 +227,11 @@ namespace CharSheet.Api.Services
             return sheetModel;
         }
 
+        /// <summary>
+        /// Convert sheet model into object.
+        /// </summary>
+        /// <param name="sheetModel">Sheet model.</param>
+        /// <returns>Sheet object.</returns>
         private async Task<Sheet> ToObject(SheetModel sheetModel)
         {
             var sheet = new Sheet

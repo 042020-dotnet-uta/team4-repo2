@@ -173,7 +173,7 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
           } else {
             this.state = "Error Saving"
           }
-        });
+        }, error => this.state = "Error Saving");
     } else {
       sheet.sheetId = this.sheetId;
       this.apiService.putSheet(sheet)
@@ -182,9 +182,12 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
           if (response.status == 200 || response.status == 201) {
             this.state = null;
           } else {
-            this.state = "Error Saving"
+            this.state = "Error Saving";
           }
-        });
+        },
+          error =>
+            this.state = "Error Saving"
+        );
     }
   }
   toPdf(): void {

@@ -7,16 +7,17 @@
     <label class="col-5" style="text-align: right; font-size: 14px; color: white;">Default Width:</label>
     <input [(ngModel)]="width" class="col-6 offset-1 rounded-lg" />
   </div>
+  <div *ngIf="type==='inputs-form'">
+    <label class="col-5" style="text-align: right; font-size: 14px; color: white">Input Fields Count:</label>
+    <input *ngIf="type==='inputs-form'" [(ngModel)]="count" class="col-6 offset-1 rounded-lg"
+      placeholder="Number of Inputs" />
+  </div>
   <div>
     <select class="col-5 rounded-lg" [(ngModel)]="type" id="type-selection">
       <option disabled selected>Select Form Type</option>
       <option *ngFor="let type of formTypes" [value]="type.value">{{type.name}}</option>
     </select>
     <button class="btn-secondary col-6 offset-1" (click)="createItem()">Create New Item</button>
-  </div>
-  <div *ngIf="type==='inputs-form'">
-    <label class="col-6" style="text-align: right; vertical-align: middle;">Input Fields Count:</label>
-    <input *ngIf="type==='inputs-form'" [(ngModel)]="count" placeholder="Number of Inputs" />
   </div>
   <div>
     <input class="col-5 rounded-lg" [(ngModel)]="nameInput" placeholder="Enter Template Name">

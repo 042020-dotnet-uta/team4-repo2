@@ -40,6 +40,7 @@ export class AppComponent {
   signOut(): void {
     this._socioAuthServ.signOut();
     this.user = null;
+    this.cookieService.delete('access_token');
     console.log('User signed out.');
     this.isLoggedIn = false;
   }
