@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 
 import { CreateFormComponent } from './create-form.component';
 //  import dependecies
@@ -11,8 +12,8 @@ describe('CreateFormComponent', () => {
   let component: CreateFormComponent;
   let fixture: ComponentFixture<CreateFormComponent>;
   let apiMock: any;
- /* let dragSpy: any;
-  let titleSpy: any;*/
+  /* let dragSpy: any;
+   let titleSpy: any;*/
   let tempSpy: any;
 
   beforeEach(async(() => {
@@ -20,7 +21,7 @@ describe('CreateFormComponent', () => {
     TestBed.configureTestingModule({
       declarations: [CreateFormComponent],
       providers: [
-        { provide: ApiService, useValue: apiMock},
+        { provide: ApiService, useValue: apiMock },
       ],
       imports: [
         RouterTestingModule

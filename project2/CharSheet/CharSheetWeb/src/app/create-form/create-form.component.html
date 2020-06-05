@@ -19,7 +19,7 @@
     <input *ngIf="type==='inputs-form'" [(ngModel)]="count" placeholder="Number of Inputs" />
   </div>
   <div>
-    <input class="col-5 rounded-lg" [(ngModel)]="nameInput" placeholder="Enter Template Name" #name="ngModel">
+    <input class="col-5 rounded-lg" [(ngModel)]="nameInput" placeholder="Enter Template Name">
     <button class="btn-secondary col-6 offset-1" (click)="saveTemplate()">Save Template</button>
   </div>
   <div *ngIf="!nameInput">
@@ -27,7 +27,7 @@
       Enter a Name!
     </span>
   </div>
-  <div [className]="state ? '' : 'invisible'">
+  <div>
     <span class="text-warning col-3 offset-1" style="text-align: center;">
       {{state}}
     </span>

@@ -119,34 +119,6 @@ describe('AppComponet', () => {
     });
   });
 
-  it('should have Sign out link', () => {
-    const linkDes = de.queryAll(
-      By.css('li')
-    );
-    const createForm: HTMLDListElement = linkDes[3].nativeElement;
-    expect(createForm.textContent).toContain('Sign out');
-  });
-
-  it('signOut should be called when "Sign Out" is clicked, user should be set to null', () => {
-    const linkDes = de.queryAll(
-      By.css('a')
-    );
-    let signOutLink: HTMLLinkElement = linkDes[4].nativeElement;
-    signOutLink.click();
-    fixture.detectChanges();
-    fixture.whenStable().then(() => {
-      expect(signOutSpy).toHaveBeenCalled();
-      expect(component.user).toBeFalsy();
-    });
-  });
-
-  it('should have user div', () => {
-    const linkDes = de.queryAll(
-      By.css('div')
-    );
-    expect(linkDes.length>=2).toBeTruthy();
-  });
-
   it('should contain one header', () => {
     const linkDes = de.queryAll(
       By.css('header')
