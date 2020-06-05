@@ -70,9 +70,10 @@ describe('AppComponet', () => {
     expect(returnValue).toBeFalsy();
   });
 
-  it('signOut should be called', () => {
+  it('signOut should reset properties', () => {
     component.signOut();
-    expect(signOutSpy).toHaveBeenCalled();
+    expect(component.user).toBeFalsy();
+    expect(component.isLoggedIn).toBeFalsy();
   });
 
   it('should have button', () => {

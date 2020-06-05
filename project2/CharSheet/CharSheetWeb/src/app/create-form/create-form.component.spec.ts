@@ -74,6 +74,38 @@ describe('CreateFormComponent', () => {
     expect(tempSpy).toHaveBeenCalled();
   });
 
+  it('createItem case "inputs-form"', () => {
+    component.count = 1;
+    component.type = 'inputs-form';
+    component.createItem();
+    expect(component.inputsElements[0].width).toBe(500);
+    expect(component.inputsElements[0].height).toBe(100);
+  });
+
+  it('createItem case "title-text-form"', () => {
+    component.count = 1;
+    component.type = 'title-text-form';
+    component.createItem();
+    expect(component.titleTextElements[0].width).toBe(500);
+    expect(component.titleTextElements[0].height).toBe(100);
+  });
+
+  it('createItem case "text-form"', () => {
+    component.count = 1;
+    component.type = 'text-form';
+    component.createItem();
+    expect(component.textElements[0].width).toBe(500);
+    expect(component.textElements[0].height).toBe(100);
+  });
+
+  it('createItem case "title-form"', () => {
+    component.count = 1;
+    component.type = 'title-form';
+    component.createItem();
+    expect(component.titleElements[0].width).toBe(500);
+    expect(component.titleElements[0].height).toBe(100);
+  });
+
   it('should call saveTemplate', () => {
     tempSpy = spyOn(component, 'saveTemplate');
     component.saveTemplate();
