@@ -104,6 +104,12 @@ export interface FormTemplate {
   width: number;
   labels: string[];
   formInputs: string[] | null;
+  inputs: Input[] | null;
+}
+
+interface Input {
+  label: string;
+  input: string;
 }
 
 export interface Sheet {
