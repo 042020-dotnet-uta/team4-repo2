@@ -15,12 +15,10 @@ namespace CharSheet.Api.Controllers
     [Route("/api/templates")]
     public class TemplatesController : ControllerBase
     {
-        private readonly ILogger<TemplatesController> _logger;
         private readonly IBusinessService _service;
 
-        public TemplatesController(ILogger<TemplatesController> logger, IBusinessService service)
+        public TemplatesController( IBusinessService service)
         {
-            this._logger = logger;
             this._service = service;
         }
 
@@ -33,7 +31,7 @@ namespace CharSheet.Api.Controllers
                 if (user)
                 {
                     var identity = HttpContext.User.Identity as ClaimsIdentity;
-                    var userId = Guid.Parse(identity.Claims.Where(claim => claim.Type == "Id").First().Value);
+                    var userId = Guid.Parse(identity.Claims.First(claim => claim.Type == "Id").Value);
                     return Ok(await _service.GetTemplates(userId));
                 }
                 return Ok(await _service.GetTemplates());
@@ -65,8 +63,8 @@ namespace CharSheet.Api.Controllers
                 if (ModelState.IsValid)
                 {
                     var identity = HttpContext.User.Identity as ClaimsIdentity;
-                    var userId = Guid.Parse(identity.Claims.Where(claim => claim.Type == "Id").First().Value);
-                    templateModel = await _service.CreateTemplate(templateModel, (Guid)userId);
+                    var userId = Guid.Parse(identity.Claims.First(claim => claim.Type == "Id").Value);
+                    templateModel = await _service.CreateTemplate(templateModel, userId);
                     return CreatedAtAction(nameof(GetTemplates), new { id = templateModel.TemplateId }, templateModel);
                 }
                 else

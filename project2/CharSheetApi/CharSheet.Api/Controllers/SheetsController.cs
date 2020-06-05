@@ -33,7 +33,7 @@ namespace CharSheet.Api.Controllers
             try
             {
                 var identity = HttpContext.User.Identity as ClaimsIdentity;
-                var userId = Guid.Parse(identity.Claims.Where(claim => claim.Type == "Id").First().Value);
+                var userId = Guid.Parse(identity.Claims.First(claim => claim.Type == "Id").Value);
                 return Ok(await _service.GetSheets(userId));
             }
             catch
@@ -69,7 +69,7 @@ namespace CharSheet.Api.Controllers
                 try
                 {
                     var identity = HttpContext.User.Identity as ClaimsIdentity;
-                    var userId = Guid.Parse(identity.Claims.Where(claim => claim.Type == "Id").First().Value);
+                    var userId = Guid.Parse(identity.Claims.First(claim => claim.Type == "Id").Value);
                     sheetModel = await _service.CreateSheet(sheetModel, userId);
                     return CreatedAtAction(nameof(GetSheets), new { id = sheetModel.SheetId }, sheetModel);
                 }
@@ -90,7 +90,7 @@ namespace CharSheet.Api.Controllers
                 if (id == null)
                     return BadRequest();
                 var identity = HttpContext.User.Identity as ClaimsIdentity;
-                var userId = Guid.Parse(identity.Claims.Where(claim => claim.Type == "Id").First().Value);
+                var userId = Guid.Parse(identity.Claims.First(claim => claim.Type == "Id").Value);
                 sheetModel.SheetId = (Guid)id;
                 try
                 {
@@ -117,7 +117,7 @@ namespace CharSheet.Api.Controllers
             try
             {
                 var identity = HttpContext.User.Identity as ClaimsIdentity;
-                var userId = Guid.Parse(identity.Claims.Where(claim => claim.Type == "Id").First().Value);
+                var userId = Guid.Parse(identity.Claims.First(claim => claim.Type == "Id").Value);
                 await _service.DeleteSheet(id, userId);
                 return Ok();
             }
