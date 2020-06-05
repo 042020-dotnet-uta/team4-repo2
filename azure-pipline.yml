@@ -22,6 +22,61 @@ variables:
   buildConfiguration: 'Release'
 
 stages:
+         
+  - stage: 'APITesting'
+    jobs:
+      - job: 'buildjob'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+#configure sonar cloud settings
+          - task: SonarCloudPrepare@1
+            inputs:
+              SonarCloud: 'project1'
+              organization: 'charsheets'
+              scannerMode: 'MSBuild'
+              projectKey: '50c2a04212d795b8c69603b43ceefe4b37e5c7d9'
+              projectName: 'CharacterSheets'
+              extraProperties: |
+                sonar.exclusions=**/Migrations/**,**/obj/**,**/*.dll
+                sonar.branch.name=$(Build.SourceBranchName)
+                sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+                sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml
+                
+#build api project
+          
+          - task: DotNetCoreCLI@2
+            displayName: 'Try Api Build'
+            inputs:
+              arguments: '--configuration $(BuildConfiguration)'
+              projects: '**/*.csproj'
+            
+#run api tests
+          - task: DotNetCoreCLI@2
+            displayName: 'Api testing'
+            inputs:
+              command: 'test'
+              arguments: '--configuration $(BuildConfiguration)
+                /p:CollectCoverage=true 
+                /p:CoverletOutputFormat=opencover 
+                /p:Coverletoutput=$(Build.SourcesDirectory)/TestResults/Coverage 
+                --collect "Codecoverage"
+                --logger trx'
+              projects: '**/*CharSheet.Test.csproj'
+              nobuild: true
+
+#publishes api code coverage in azure devops
+          - task: PublishCodeCoverageResults@1
+            displayName: 'Publish API Code Coverage'
+            inputs:
+              codeCoverageTool: Cobertura
+              summaryFileLocation: '$(Build.SourcesDirectory)/**/*.xml'
+              reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
+          - task: SonarCloudAnalyze@1
+          - task: SonarCloudPublish@1
+            inputs:
+              pollingTimeoutSec: '300'
+
   - stage: 'publish_api'
     jobs:
     - job: 'build_API'
@@ -65,62 +120,7 @@ stages:
                     appType: 'webApp'
                     WebAppName: 'revatureprojectapi'
                     packageForLinux: '$(Pipeline.Workspace)/app'
-                
 
-  - stage: 'APITesting'
-    jobs:
-      - job: 'buildjob'
-        pool:
-          vmImage: 'ubuntu-latest'
-        steps:
-#configure sonar cloud settings
-          - task: SonarCloudPrepare@1
-            inputs:
-              SonarCloud: 'project1'
-              organization: 'charsheets'
-              scannerMode: 'MSBuild'
-              projectKey: '50c2a04212d795b8c69603b43ceefe4b37e5c7d9'
-              projectName: 'CharacterSheets'
-              extraProperties: |
-                sonar.exclusions=**/Migrations/**,**/obj/**,**/*.dll
-                sonar.branch.name=$(Build.SourceBranchName)
-                sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
-                sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/*.xml
-                
-#build project
-          
-          - task: DotNetCoreCLI@2
-            displayName: 'dotnet build'
-            inputs:
-              arguments: '--configuration $(BuildConfiguration)'
-              projects: '**/*.csproj'
-            
-#run tests
-          - task: DotNetCoreCLI@2
-            displayName: 'dotnet testing'
-            inputs:
-              command: 'test'
-              arguments: '--configuration $(BuildConfiguration)
-                /p:CollectCoverage=true 
-                /p:CoverletOutputFormat=opencover 
-                /p:Coverletoutput=$(Build.SourcesDirectory)/TestResults/Coverage 
-                --collect "Codecoverage"
-                --logger trx'
-              projects: '**/*CharSheet.Test.csproj'
-              nobuild: true
-
-#publishes code coverage in azure devops
-          - task: PublishCodeCoverageResults@1
-            displayName: 'Publish Code Coverage'
-            inputs:
-              codeCoverageTool: Cobertura
-              summaryFileLocation: '$(Build.SourcesDirectory)/**/*.xml'
-              reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
-          - task: SonarCloudAnalyze@1
-          - task: SonarCloudPublish@1
-            inputs:
-              pollingTimeoutSec: '300'
-  
   - stage: 'Angular'
     jobs:
     - job: 
@@ -143,7 +143,6 @@ stages:
             sonar.javascript.lcov.reportPaths=$(Build.SourcesDirectory)/project2/CharSheet/CharSheetWeb/coverage/CharSheetWeb/lcov.info
             sonar.exclusions=**/node_modules/**,**/e2e/**,**/*.spec.ts,**/assets,**/environments/**,**/*karma.conf.js,**/*main.ts,**/*app-routing.module.ts,**/*app.module.ts
             
-
 #install node.js
       - task: NodeAndNpmTool@1
         inputs:
@@ -170,16 +169,7 @@ stages:
           project: 'project2/CharSheet/CharSheetWeb'
           custom: 'build --prod'
           DisableAnalytics: false
-      #deploy angular app to azure app service
-      - task: AzureRmWebAppDeployment@4
-        inputs:
-          ConnectionType: 'AzureRM'
-          azureSubscription: 'Azure subscription 1 (c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
-          appType: 'webApp'
-          WebAppName: 'JohnsSite'
-          packageForLinux: 'project2/CharSheet/CharSheetWeb/dist/CharSheetWeb'
-          TakeAppOfflineFlag: true
-          RemoveAdditionalFilesFlag: true
+
 #test angular project
       - task: AngularCLI@0
         inputs:
@@ -187,6 +177,7 @@ stages:
           project: 'project2/CharSheet/CharSheetWeb'
           arguments: '--watch=false --code-coverage --browsers ChromeHeadless'
           DisableAnalytics: false
+
 #run sonar code analysis
       - task: SonarCloudAnalyze@1
 #publish sonar quality gate results
@@ -200,5 +191,16 @@ stages:
           codeCoverageTool: Cobertura
           summaryFileLocation: '$(Build.SourcesDirectory)/**/*lcov.info'
           reportDirectory: '$(Build.SourcesDirectory/project2/CharSheet/CharSheetWeb/coverage/CharSheetWeb'
+
+#deploy angular app to azure app service
+      - task: AzureRmWebAppDeployment@4
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'Azure subscription 1 (c17f80a1-d2ba-47cf-a8c1-ee16399869dd)'
+          appType: 'webApp'
+          WebAppName: 'JohnsSite'
+          packageForLinux: 'project2/CharSheet/CharSheetWeb/dist/CharSheetWeb'
+          TakeAppOfflineFlag: true
+          RemoveAdditionalFilesFlag: true
 
 
