@@ -1,37 +1,37 @@
 <header>
-  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3 nav nav-tabs">
-    <div class="container">
+  <nav
+    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3 nav nav-tabs">
+    <div class="container" style="overflow: hidden;">
       <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">{{title}}</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-              aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <ul class="navbar-nav flex-grow-1 justify-content-start">
         <li class="nav-item">
-          <a routerLink="createForm"  class="nav-link text-white-50"> Create Form</a>
+          <a routerLink="createForm" class="nav-link text-white-50"> Create Form</a>
         </li>
         <li class="nav-item">
           <a routerLink="accessForm" class="nav-link text-white-50">Access Form</a>
         </li>
       </ul>
-      <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-        <ul class="navbar-nav flex-grow-1 justify-content-end">
-
-          <li class="nav-item">
-            <a class="nav-link text-white-50 btn btn-link" *ngIf="!isLoggedIn" button (click)="singIn('Google');">Sign in with Google </a>
-            <p class="nav-link text-white-50" *ngIf="isLoggedIn">{{user.name}}</p>
-            <li *ngIf="isLoggedIn">
-              <img src="{{ user.photoUrl }} " alt="yourImage" style="border-radius: 50%; width: 50px;height: 50px">
-              </li>
-          <li class="nav-item">
-            <a class="nav-link text-white-50 btn btn-link"  (click)="signOut();">Sign out </a>
-          </li>
-        </ul>
-      </div>
+      <ul class="navbar-nav flex-grow-1 justify-content-end">
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <a class="nav-link text-white-50 btn btn-link" *ngIf="!isLoggedIn" button (click)="singIn('Google');">Sign
+            in with Google </a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <span class="nav-link text-white-50" *ngIf="isLoggedIn">{{user.name}}</span>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <img src="{{ user.photoUrl }} " alt="yourImage" style="border-radius: 50%; max-width: 30px; max-height: 30px">
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a class="nav-link text-white-50 btn btn-link" (click)="signOut();">Sign out </a>
+        </li>
+      </ul>
     </div>
   </nav>
 </header>
 
 <router-outlet></router-outlet>
-
-

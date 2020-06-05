@@ -9,7 +9,7 @@
   box-sizing: border-box;
   border: solid 2px #800000;
   display: inline-flex;
-  background: #dee5ff;
+  background: rgb(226, 215, 185);
   z-index: 1;
   position: absolute;
   transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
@@ -23,7 +23,7 @@
   width: 1080px;
   height: 1200px;
   border: solid #800000 2px;
-  background: #e2d7b9;
+  background: rgb(236, 229, 211);
   overflow: hidden;
 }
 
@@ -36,7 +36,7 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  color: #ccc;
+  color: rbg(41, 38, 38);
   cursor: move;
   width: 24px;
   height: 24px;
@@ -47,13 +47,23 @@
   margin: 0;
   color: #000000;
   outline: 0 none;
-  background: #dee5ff;
+  background: rgb(245, 248, 255);
   width: 100%;
   padding: 10px;
   flex: 1;
 }
 
-/*End of drag box set up*/
+.textarea:disabled {
+  background: rgb(226, 215, 185);
+}
+
+#form-boundary textarea, #form-boundary input, #form-boundary .temp-form{
+  font-weight: 600;
+}
+
+#form-boundary * {
+  font-family: Didot, serif;
+}
 
 html, body {
   height: 100%;
@@ -64,10 +74,6 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-/*Resizable CSS layout
-    general resizing
-*/
-
 .textarea, .form-title {
   resize: none;
   box-sizing: border-box;
@@ -75,9 +81,12 @@ body {
 
 .form-title {
   display: block;
-  margin: 0 auto;
+  margin: 0 auto 5px;
   width: 100%;
   text-align: center;
+  color: rgb(108, 35, 29);
+  size: 18px;
+  font-weight: 900;
 }
 
 .form-area {
@@ -121,7 +130,7 @@ body {
   width: 40%;
 }
 
-.form-label> input, .form-label> label{
+.form-label>input, .form-label>label {
   width: 100%;
 }
 
@@ -137,4 +146,30 @@ body {
   margin-left: 10%;
   text-align: left;
   box-sizing: border-box;
+}
+
+.controls {
+  width: 30%;
+  margin: 0 auto;
+  display: flexbox;
+  justify-content: center;
+  flex-grow: column;
+}
+
+.controls>* {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  margin: 10px 0;
+}
+
+.controls>*> {
+  display: flex;
+  vertical-align: middle;
+  flex: 1;
+}
+
+.controls>div>label{
+  float: right;
+  padding-right: 0;
 }
