@@ -37,8 +37,8 @@ describe('CreateFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have default width of 300', () => {
-    expect(component.width == 300).toBeTruthy();
+  it('should have default width of 500', () => {
+    expect(component.width == 500).toBeTruthy();
   });
 
   it('should have default height of 100', () => {
