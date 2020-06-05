@@ -18,7 +18,7 @@ namespace CharSheet.Api.Controllers
     {
         private readonly ILogger<AccountController> _logger;
         private readonly IAccountService _accountService;
-        private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
         public IConfiguration Configuration
         {
             get

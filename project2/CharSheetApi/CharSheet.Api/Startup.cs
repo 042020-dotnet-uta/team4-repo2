@@ -28,7 +28,6 @@ namespace CharSheet.Api
 
             services.AddDbContext<CharSheetContext>(options => options
                 .UseSqlServer(Configuration.GetConnectionString("IdentityDataContextConnection"), ef => ef.MigrationsAssembly("CharSheet.Api")));
-                // .UseInMemoryDatabase("SomeDatabase"));
 
             services.AddCors(options =>
             {
