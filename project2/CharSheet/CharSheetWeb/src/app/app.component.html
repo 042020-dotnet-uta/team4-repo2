@@ -24,7 +24,7 @@
           <span class="nav-link text-white-50" *ngIf="isLoggedIn">{{user.name}}</span>
         </li>
         <li class="nav-item" *ngIf="isLoggedIn">
-          <img src="{{ user.photoUrl }} " style="display: flex; border-radius: 50%; width:30px; height: 30px;">
+          <img src="{{ user.photoUrl }} " alt="yourImage" style="border-radius: 50%; max-width: 30px; max-height: 30px">
         </li>
         <li class="nav-item" *ngIf="isLoggedIn">
           <a class="nav-link text-white-50 btn btn-link" (click)="signOut();">Sign out </a>

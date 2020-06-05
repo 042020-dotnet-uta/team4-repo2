@@ -5,11 +5,14 @@ import { SavePdfService } from './print-pdf.service';
 describe('PrintPdfService', () => {
   let service: SavePdfService;
   let pdfSpy: any;
-  let htmlEl: HTMLElement;
+  let htmlEl: Partial<HTMLElement>;
+  let parentEl: Partial<HTMLElement>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(SavePdfService);
+    parentEl = { id: 'form-boundary' };
+    htmlEl = { parentElement: <HTMLElement>parentEl };
   });
 
   it('should be created', () => {
@@ -18,7 +21,7 @@ describe('PrintPdfService', () => {
 
   it('should call captureScreen', () => {
     pdfSpy = spyOn(service, 'captureScreen');
-    service.captureScreen(htmlEl);
+    service.captureScreen(<HTMLElement>htmlEl);
     expect(pdfSpy).toHaveBeenCalled();
   });
 
