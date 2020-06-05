@@ -141,6 +141,8 @@ export class CreateFormComponent implements OnInit, FormElementArrays {
     this.apiService.postTemplate(template)
       .subscribe(response => {
         this.state = "Saved Template";
+      }, error => {
+        this.state = "Error Saving Template";
       });
   }
 }
