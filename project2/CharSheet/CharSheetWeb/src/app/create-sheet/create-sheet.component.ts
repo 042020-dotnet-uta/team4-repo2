@@ -170,6 +170,7 @@ export class CreateSheetComponent implements OnInit, AfterViewInit, FormElementA
             this.sheetId = response.body.sheetId;
             this.nameInput = response.body.name;
             this.templateId = null;
+            this.state = null;
           } else {
             this.state = "Error Saving"
           }

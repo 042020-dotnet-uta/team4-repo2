@@ -4,7 +4,7 @@
          <h1>Templates</h1>
          <ul class="genBackground">
            <li *ngFor="let template of templatesData" (click)="getSelectedTemplate(template)">
-             <a routerLink="/template/{{template.templateId}}" style="color:darkred">{{template.name}}</a>
+             <a routerLink="/template/{{template.templateId}}" style="color:darkred">{{template.name ? template.name: 'Name Not Found'}}</a>
            </li>
          </ul>
       </div>
@@ -12,7 +12,7 @@
          <h1>Sheets</h1>
          <ul class="genBackground">
            <li *ngFor="let sheet of sheetsData" (click)="getSelectedSheet(sheet)">
-             <a routerLink="/sheet/{{sheet.sheetId}}" style="color:darkred">{{sheet.name}}</a>
+             <a routerLink="/sheet/{{sheet.sheetId}}" style="color:darkred">{{sheet.name ? sheet.name : 'Name Not Found'}}</a>
            </li>
          </ul>
       </div>
