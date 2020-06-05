@@ -80,7 +80,7 @@ namespace CharSheet.Api.Services
         #region PUT
         public async Task<SheetModel> UpdateSheet(SheetModel sheetModel, Guid userId)
         {
-            var user = await AuthenticateUser(userId);
+            await AuthenticateUser(userId);
 
             // Load existing sheet from database.
             var sheet = await _unitOfWork.SheetRepository.Find(sheetModel.SheetId);

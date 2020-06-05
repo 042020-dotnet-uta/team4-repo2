@@ -115,17 +115,7 @@ namespace CharSheet.Api.Services
             templateModel.FormTemplates = formTemplateModels.ToList();
 
             return templateModel;
-        }
-
-        private async Task<FormTemplateModel> GetFormTemplate(object id)
-        {
-            // Load form template from database.
-            var formTemplate = await _unitOfWork.FormTemplateRepository.Find(id);
-            if (formTemplate == null)
-                throw new InvalidOperationException("Form template not found.");
-            return await ToModel(formTemplate);
-        }
-        
+        }  
 
         private async Task<Template> ToObject(TemplateModel templateModel)
         {

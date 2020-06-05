@@ -13,7 +13,7 @@ namespace CharSheet.Data.Repositories
         internal CharSheetContext _context { get; set; }
         internal DbSet<TEntity> dbSet { get; set; }
 
-        public GenericRepository(CharSheetContext context)
+        protected GenericRepository(CharSheetContext context)
         {
             this._context = context;
             this.dbSet = _context.Set<TEntity>();
@@ -41,7 +41,7 @@ namespace CharSheet.Data.Repositories
             return await dbSet.FindAsync(id);
         }
 
-        public async virtual Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = null)
+        public async virtual Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
         {
             IQueryable<TEntity> query = dbSet;
 
@@ -50,7 +50,7 @@ namespace CharSheet.Data.Repositories
                 query = query.Where(filter);
             }
 
-            if (includeProperties != null)
+            if (!string.IsNullOrEmpty(includeProperties))
             {
                 foreach (var includeProperty in includeProperties.Split
                 (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))

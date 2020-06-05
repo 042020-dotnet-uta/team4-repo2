@@ -98,7 +98,7 @@ namespace CharSheet.Api.Services
         public async Task<UserModel> LoginLocal(UserModel userModel)
         {
             // Find usern by username.
-            var user = (await _unitOfWork.UserRepository.Get(user => user.Username == userModel.Username, null, "Login")).ToList().FirstOrDefault();
+            var user = (await _unitOfWork.UserRepository.Get(user => user.Username == userModel.Username, null, "Login")).AsEnumerable().FirstOrDefault();
             if (user != null)
             {
                 // Hash password input.

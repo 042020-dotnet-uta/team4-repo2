@@ -17,14 +17,19 @@ namespace CharSheet.Api.Controllers
     public class AccountController : ControllerBase
     {
         private readonly ILogger<AccountController> _logger;
-        private readonly IBusinessService _businessService;
         private readonly IAccountService _accountService;
-        public IConfiguration _configuration;
+        private IConfiguration _configuration;
+        public IConfiguration Configuration
+        {
+            get
+            {
+                return _configuration;
+            }
+        }
 
-        public AccountController(ILogger<AccountController> logger, IBusinessService service, IAccountService account, IConfiguration configuration)
+        public AccountController(ILogger<AccountController> logger, IAccountService account, IConfiguration configuration)
         {
             this._logger = logger;
-            this._businessService = service;
             this._accountService = account;
             this._configuration = configuration;
         }
@@ -89,7 +94,7 @@ namespace CharSheet.Api.Controllers
         public string GetAccessToken(UserModel userModel)
         {
             var claims = new[] {
-                new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
+                new Claim(JwtRegisteredClaimNames.Sub, Configuration["Jwt:Subject"]),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                 new Claim("Id", userModel.UserId.ToString()),
@@ -97,10 +102,10 @@ namespace CharSheet.Api.Controllers
                 new Claim("Email", userModel.Email)
             };
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], _configuration["Jwt:Audience"], claims, expires: DateTime.UtcNow.AddDays(1), signingCredentials: credentials);
+            var token = new JwtSecurityToken(Configuration["Jwt:Issuer"], Configuration["Jwt:Audience"], claims, expires: DateTime.UtcNow.AddDays(1), signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
