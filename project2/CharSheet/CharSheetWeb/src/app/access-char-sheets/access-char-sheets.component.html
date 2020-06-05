@@ -2,15 +2,19 @@
    <div class="row">
       <div class="col-6">
          <h1>Templates</h1>
-         <li *ngFor="let template of templatesData" (click)="getSelectedTemplate(template)">
-            <a routerLink="/template/{{template.templateId}}">{{template.templateId}}</a>
-         </li>
+         <ul>
+           <li *ngFor="let template of templatesData" (click)="getSelectedTemplate(template)">
+             <a routerLink="/template/{{template.templateId}}">{{template.templateId}}</a>
+           </li>
+         </ul>
       </div>
       <div class="col-6">
          <h1>Sheets</h1>
-         <li *ngFor="let sheet of sheetsData" (click)="getSelectedSheet(sheet)">
-            <a routerLink="/sheet/{{sheet.sheetId}}">{{sheet.sheetId}}</a>
-         </li>
+         <ul>
+           <li *ngFor="let sheet of sheetsData" (click)="getSelectedSheet(sheet)">
+             <a routerLink="/sheet/{{sheet.sheetId}}">{{sheet.sheetId}}</a>
+           </li>
+         </ul>
       </div>
    </div>
 </div>
