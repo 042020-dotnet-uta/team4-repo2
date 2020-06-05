@@ -51,7 +51,7 @@ describe('AppComponet', () => {
     expect(component.title).toContain('Character Sheet Creator');
   });
 
-  it('should have undefined user property', () => {
+  it('should have undefined "user" property', () => {
     expect(component.user).toBeUndefined();
   });
 

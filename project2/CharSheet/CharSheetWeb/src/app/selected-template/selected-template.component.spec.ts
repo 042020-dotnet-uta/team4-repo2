@@ -37,12 +37,4 @@ describe('SelectedTemplateComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should contain undefined template property', () => {
-    expect(component.template).toBeUndefined();
-  });
-
-  it('should contain undefined id property', () => {
-    expect(component.id).toBeUndefined();
-  });
-
 });
