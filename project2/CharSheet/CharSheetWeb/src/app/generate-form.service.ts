@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as $ from 'jquery';
 import 'jqueryui';
 
-import { FormTemplate } from './shared/form-template';
+import { FormTemplate } from './api.service';
 
 @Injectable({
   providedIn: 'root'

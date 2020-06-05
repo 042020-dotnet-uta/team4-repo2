@@ -2,7 +2,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CreateSheetComponent } from './create-sheet.component';
 import { ApiService, Template, Sheet, } from '../api.service';
-import {  HttpClientTestingModule} from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import {RouterTestingModule} from '@angular/router/testing'
 
 describe('CreateSheetComponent', () => {
   let component: CreateSheetComponent;
@@ -10,6 +11,7 @@ describe('CreateSheetComponent', () => {
   let fetchTemplateSpy: any;
   let loadTemplateSpy: any;
   let fetchSheetSpy: any;
+  let templateStub: Partial<Template>;
   
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -18,10 +20,12 @@ describe('CreateSheetComponent', () => {
         ApiService,
       ],
       imports: [
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule
       ]
     })
-    .compileComponents();
+      .compileComponents();
+    templateStub = { name: "testTemplate" };
   }));
 
   beforeEach(() => {
@@ -46,16 +50,8 @@ describe('CreateSheetComponent', () => {
     expect(component.templateId).toBeUndefined();
   });
 
-  it('should have undefined currentTemplate property', () => {
-    expect(component.currentTemplate).toBeUndefined();
-  });
-
   it('should have undefined sheetId property', () => {
     expect(component.sheetId).toBeUndefined();
-  });
-
-  it('should have undefined currentSheet property', () => {
-    expect(component.currentSheet).toBeUndefined();
   });
 
   it('should call fetchTemplate', () => {
@@ -66,13 +62,13 @@ describe('CreateSheetComponent', () => {
 
   it('should call loadTemplate', () => {
     loadTemplateSpy = spyOn(component, 'loadTemplate');
-    component.loadTemplate();
+    component.loadTemplate(<Template>templateStub);
     expect(loadTemplateSpy).toHaveBeenCalled();
   });
 
   it('should call fetchSheet', () => {
     fetchSheetSpy = spyOn(component, 'fetchSheet');
-    component.fetchSheet('12345');
+    component.fetchSheet();
     expect(fetchSheetSpy).toHaveBeenCalled();
   });
 

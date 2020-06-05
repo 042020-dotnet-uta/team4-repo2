@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PrintPdfService } from './print-pdf.service';
+import { SavePdfService } from './print-pdf.service';
 
 describe('PrintPdfService', () => {
-  let service: PrintPdfService;
+  let service: SavePdfService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(PrintPdfService);
+    service = TestBed.inject(SavePdfService);
   });
 
   it('should be created', () => {
