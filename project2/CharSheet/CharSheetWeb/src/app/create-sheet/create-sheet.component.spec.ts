@@ -3,7 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateSheetComponent } from './create-sheet.component';
 import { ApiService, Template, Sheet, FormGroup, FormTemplate } from '../api.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import {RouterTestingModule} from '@angular/router/testing'
+import { RouterTestingModule } from '@angular/router/testing';
+import { SavePdfService } from '../print-pdf.service';
 
 describe('CreateSheetComponent', () => {
   let component: CreateSheetComponent;
@@ -22,6 +23,7 @@ describe('CreateSheetComponent', () => {
       declarations: [CreateSheetComponent],
       providers: [
         ApiService,
+        SavePdfService
       ],
       imports: [
         HttpClientTestingModule,
@@ -29,8 +31,8 @@ describe('CreateSheetComponent', () => {
       ]
     })
       .compileComponents();
-    templateStub = { name: 'testTemplate' };
-    formTemplateStub = {formInputs: ["123456"]}
+    formTemplateStub = { formInputs: ["123456"] , type: "inputs", labels: ["testLabel"]}
+    templateStub = { name: 'testTemplate' , templateId: "12345", formTemplates: [<FormTemplate>formTemplateStub]};
     formGroupStub = { formTemplateId: "12345", formInputs: ["12345"], formTemplate: <FormTemplate>formTemplateStub };
     sheetStub = {name: 'testSheet', sheetId: '12345', formGroups: [<FormGroup>formGroupStub]};
   }));
@@ -63,6 +65,7 @@ describe('CreateSheetComponent', () => {
 
   it('should call fetchTemplate', () => {
     fetchTemplateSpy = spyOn(component, 'fetchTemplate');
+    component.templateId = "12345";
     component.fetchTemplate();
     expect(fetchTemplateSpy).toHaveBeenCalled();
   });
@@ -73,8 +76,16 @@ describe('CreateSheetComponent', () => {
     expect(loadTemplateSpy).toHaveBeenCalled();
   });
 
+  it('loadTemplate should set properties', () => {
+    component.loadTemplate(<Template>templateStub);
+    expect(component.templateId).toBe("12345");
+    expect(component.sheetId).toBeNull();
+    expect(component.nameInput).toBeNull();
+  });
+
   it('should call fetchSheet', () => {
     fetchSheetSpy = spyOn(component, 'fetchSheet');
+    component.sheetId = "12345";
     component.fetchSheet();
     expect(fetchSheetSpy).toHaveBeenCalled();
   });
@@ -83,7 +94,7 @@ describe('CreateSheetComponent', () => {
     tempSpy = spyOn(component, 'loadSheet');
     component.loadSheet(<Sheet>sheetStub);
     expect(tempSpy).toHaveBeenCalled();
-  });
+  });  
 
   it('loadSheet should set templateId to null', () => {
     component.loadSheet(<Sheet>sheetStub);
@@ -92,9 +103,10 @@ describe('CreateSheetComponent', () => {
     expect(component.nameInput).toBe("testSheet");
   });
 
-  it('should call toModel', () => {
+  it('toModel should return type Sheet', () => {
     tempSpy = spyOn(component, 'toModel');
-    component.toModel();
+    component.nameInput = "testNameInput";
+    let result: any = component.toModel();
     expect(tempSpy).toHaveBeenCalled();
   });
 
@@ -102,6 +114,16 @@ describe('CreateSheetComponent', () => {
     tempSpy = spyOn(component, 'saveSheet');
     component.saveSheet();
     expect(tempSpy).toHaveBeenCalled();
+  });
+
+  it('saveSheet should', () => {
+    tempSpy = spyOn(component, 'saveSheet');
+    component.sheetId = '12345';
+    component.saveSheet();
+    expect(tempSpy).toHaveBeenCalled();
+    component.sheetId = null;
+    component.saveSheet();
+    expect(tempSpy).toHaveBeenCalledTimes(2);
   });
 
   it('should call toPdf', () => {
@@ -128,6 +150,12 @@ describe('CreateSheetComponent', () => {
     tempSpy = spyOn(component, 'pushForm');
     component.pushForm(<FormTemplate>formTemplateStub);
     expect(tempSpy).toHaveBeenCalled();
+  });
+
+  it('pushForm inputsElements should push when formTemplate.type is "inputs"', () => {
+    formTemplateStub.type = "inputs";
+    component.pushForm(<FormTemplate>formTemplateStub);
+    expect(component.inputsElements[0]).toEqual(<FormTemplate>formTemplateStub);
   });
 
   it('pushForm titleTextElements should push when formTemplate.type is "title-text"', () => {

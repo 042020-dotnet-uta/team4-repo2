@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AccessCharSheetsComponent } from './access-char-sheets.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ApiService, Template, Sheet} from '../api.service';
+import { ApiService, Template, Sheet, FormTemplate } from '../api.service';
 
 describe('AccessCharSheetsComponent', () => {
   let component: AccessCharSheetsComponent;
@@ -11,6 +11,7 @@ describe('AccessCharSheetsComponent', () => {
   let templateStub: Partial<Template>;
   let sheetStub: Partial<Sheet>;
   let tempSpy: any;
+  let formTemplateStub: Partial<FormTemplate>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -26,7 +27,8 @@ describe('AccessCharSheetsComponent', () => {
       ]
     })
       .compileComponents();
-    templateStub = { name : "testTemplate" };
+    formTemplateStub = { title: "formTemplate" }
+    templateStub = { name: "testTemplate", templateId: "12345", formTemplates: [<FormTemplate>formTemplateStub]};
     sheetStub = { name: "testSheet" };
   }));
 
@@ -56,16 +58,18 @@ describe('AccessCharSheetsComponent', () => {
     expect(component.sheetsData).toBeUndefined();
   });
 
-  it('should call getSelectedTemplate', () => {
+  it('getSelectedTemplate should set selectedTemplate', () => {
     tempSpy = spyOn(component, "getSelectedTemplate");
     component.getSelectedTemplate(<Template>templateStub);
     expect(tempSpy).toHaveBeenCalled();
+    expect(component.selectedTemplate).toBeNull();
   });
 
-  it('should call getSelectedSheet', () => {
+  it('getSelectedSheet should set selectedSheet', () => {
     tempSpy = spyOn(component, "getSelectedSheet");
     component.getSelectedSheet(<Sheet>sheetStub);
     expect(tempSpy).toHaveBeenCalled();
+    expect(component.selectedSheet).toBeNull();
   });
 
 
